@@ -38,7 +38,11 @@ public class TypeFace {
 		}
 	}
 	
-	public int extractNumbersFromImage(BufferedImage img) {
+	public int extractNumbersFromImage(BufferedImage img,File saveLoc) {
+		if (!saveLoc.exists()) {
+			saveLoc.mkdirs();
+		}
+		
 		int midY = img.getHeight()/2;
 		int X = 0;
 		
@@ -127,12 +131,7 @@ public class TypeFace {
 					} else {
 						numberImg = ImageUtils.toBufferedImage(numberImg.getScaledInstance(WIDTH, -1, Image.SCALE_FAST));
 					}
-					try {
-						ImageIO.write(numberImg,"png",new File("number_"+System.currentTimeMillis()+".png"));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					System.out.println(numberImg.getWidth()+"x"+numberImg.getHeight());
+					//System.out.println(numberImg.getWidth()+"x"+numberImg.getHeight());
 					int[] hits = new int[NUMBER_COUNT];
 					double highestRatio = 0;
 					int highest = 0;
@@ -154,7 +153,12 @@ public class TypeFace {
 							}
 						}
 					}
-					System.out.println("Matches closest to "+((highest+1)%NUMBER_COUNT)+" with "+highestRatio);
+					try {
+						ImageIO.write(numberImg,"png",new File(saveLoc,((highest+1)%NUMBER_COUNT)+".png"));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					//System.out.println("Matches closest to "+((highest+1)%NUMBER_COUNT)+" with "+highestRatio);
 					extractedNumbers+=Integer.toString((highest+1)%NUMBER_COUNT);
 					state=4;
 				}break;
@@ -179,7 +183,7 @@ public class TypeFace {
 			}
 			X++;
 		}
-		System.out.println("Got "+extractedNumbers);
+		//System.out.println("Got "+extractedNumbers);
 		if (extractedNumbers.length()==0) {
 			return -1;
 		} else {

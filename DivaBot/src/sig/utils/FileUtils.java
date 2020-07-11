@@ -298,11 +298,43 @@ public class FileUtils {
 	       }
 	  }
 	  
+	  public static void copyFileDir(File sourcedir, File destdir) throws IOException {
+	    FileChannel sourceChannel = null;
+	    FileChannel destChannel = null;
+	    destdir.mkdirs();
+	    try {
+	    	for (String name : sourcedir.list()) {
+	    		File f = new File(sourcedir,name);
+		        sourceChannel = new FileInputStream(f).getChannel();
+		        destChannel = new FileOutputStream(new File(destdir,name)).getChannel();
+		        destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+		           sourceChannel.close();
+		           destChannel.close();
+		       	}
+	    	}
+	    finally{
+	    	
+	    }
+	  }
+	  
+	  public static void deleteFile(File filename) {
+		  File file = filename;
+		  if (file.exists()) {
+			  //System.out.println("Trying to delete "+file);
+			  if (file.isDirectory()) {
+				  for (String name : file.list()) {
+					  File f = new File(file,name);
+					  deleteFile(f);
+				  }
+			  }
+			  file.delete();
+			  //System.out.println(file+" deleted");
+		  }
+	  }
+	  
 	  public static void deleteFile(String filename) {
 		  File file = new File(filename);
-		  if (file.exists()) {
-			  file.delete();
-		  }
+		  deleteFile(file);
 	  }
 	  
 

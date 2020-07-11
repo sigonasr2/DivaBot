@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,6 +29,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+
+import sig.utils.FileUtils;
+import sig.utils.SoundUtils;
 
 public class MyRobot{
 
@@ -50,6 +54,7 @@ public class MyRobot{
 	Color PIX_CLOSE_ACTIVE_ON_MOUSE;
 	HashMap<Character, Integer> KEYMAP;
 	ArrayList<Integer> randKeys;
+	List<Result> results = new ArrayList<Result>();
 	GraphicsEnvironment grEnv;
 	GraphicsDevice grDevice;
 	JPanel drawPanel;
@@ -66,8 +71,12 @@ public class MyRobot{
     
     int lastcool,lastfine,lastsafe,lastsad,lastworst;
     float lastpercent;
+    long lastSongSelectTime = System.currentTimeMillis();
     
     static TypeFace typeface1,typeface2; 
+    
+    boolean eyeTrackingSceneOn=true;
+    boolean recordingResults=false;
 	
 	public static void main(String[] args) {
 	    new MyRobot().go();
@@ -76,9 +85,9 @@ public class MyRobot{
 	void BotMain() {
 		Timer t = new Timer();
 		t.scheduleAtFixedRate(new TimerTask() {
-
 					@Override
 					public void run() {
+						
 						if (isOnSongSelect()) {
 							GetCurrentSong();
 							GetCurrentDifficulty();
@@ -86,35 +95,74 @@ public class MyRobot{
 							if (selectedSong!=null && difficulty!=null) {
 								System.out.println("On Song Select Screen: Current Song-"+selectedSong.title+" Diff:"+difficulty);
 							}
+							lastSongSelectTime = System.currentTimeMillis();
 						} else {
+							selectedSong=new SongData("test",new Color[] {});
+							difficulty="EXEX";
 							if ((selectedSong!=null && difficulty!=null) /*|| true*/) {
 								//Look for the results screen.
 								//602,217 254,254,254
 								//602,260 16,222,202
 								//901,460 220-255,220-255,160-220
-								if (OnResultsScreen() && !recordedResults) {
+								
+								if (OnResultsScreen() && !recordedResults && !recordingResults && results.size()==0) {
+									lastSongSelectTime=System.currentTimeMillis();
+									//1885,761
+									if (eyeTrackingSceneOn) {
+										eyeTrackingSceneOn=false;
+										gotoxy(800,64);
+										click();
+										gotoxy(1870,761);
+										click();
+									}
 								    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,451,115,26))));
 								    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,484,115,26))));
 								    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,518,115,26))));
 								    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,553,115,26))));
 								    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26))));
 								    //System.out.println(typeface2.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1428,361,128,30))));
-									int cool = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,451,115,26)));
-									int fine = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,484,115,26)));
-									int safe = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,518,115,26)));
-									int sad = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,553,115,26)));
-									int worst = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26)));
+									File tmp = new File("tmp");
+									if (tmp.exists()) {
+										FileUtils.deleteFile(tmp);
+									} else {
+										tmp.mkdir();
+									}
+									int cool = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,451,115,26)),new File(tmp,"cool"));
+									int fine = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,484,115,26)),new File(tmp,"fine"));
+									int safe = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,518,115,26)),new File(tmp,"safe"));
+									int sad = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,553,115,26)),new File(tmp,"sad"));
+									int worst = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26)),new File(tmp,"worst"));
 									/*try {
 										ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26)),"png",new File("worst.png"));
 									} catch (IOException e) {
 										e.printStackTrace();
 									}*/
-									float percent = (float)typeface2.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1428,361,128,30)))/100f;
+									float percent = (float)typeface2.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1428,361,128,30)),new File(tmp,"percent"))/100f;
 									if (cool==-1 || fine==-1 || safe==-1 || sad==-1 || worst==-1 || percent==-0.01f) {
 										System.out.println("Waiting for results to populate...");
 									} else 
 									if (cool!=lastcool || lastfine!=fine || lastsafe!=safe || lastsad!=sad || lastworst!=worst || lastpercent!=percent){
 										System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+cool+"/"+fine+"/"+safe+"/"+sad+"/"+worst+" "+percent+"%");
+										File songFolder = new File(selectedSong.title+"/"+difficulty);
+										if (!songFolder.exists()) {
+											songFolder.mkdirs();
+										}
+										File[] songFolderFiles = songFolder.listFiles();
+										int playId = songFolderFiles.length;
+										File playFolder = new File(selectedSong.title+"/"+difficulty+"/"+playId);
+										playFolder.mkdir();
+										try {
+											FileUtils.copyFileDir(new File(tmp,"cool"), new File(playFolder,"cool"));
+											FileUtils.copyFileDir(new File(tmp,"fine"), new File(playFolder,"fine"));
+											FileUtils.copyFileDir(new File(tmp,"safe"), new File(playFolder,"safe"));
+											FileUtils.copyFileDir(new File(tmp,"sad"), new File(playFolder,"sad"));
+											FileUtils.copyFileDir(new File(tmp,"worst"), new File(playFolder,"worst"));
+											FileUtils.copyFileDir(new File(tmp,"percent"), new File(playFolder,"percent"));
+											//FileUtils.deleteFile(tmp);
+											ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(418,204,1227,690)),"png",new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+cool+"_"+fine+"_"+safe+"_"+sad+"_"+worst+"_"+percent+".png"));
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
 										recordedResults=true;
 										lastcool=cool;
 										lastfine=fine;
@@ -122,8 +170,72 @@ public class MyRobot{
 										lastsad=sad;
 										lastworst=worst;
 										lastpercent=percent;
+										results.add(new Result(selectedSong.title,difficulty,cool,fine,safe,sad,worst,percent));
+										SoundUtils.playSound("collect_item.wav");
+										if (!eyeTrackingSceneOn) {
+											eyeTrackingSceneOn=true;
+											gotoxy(800,64);
+											click();
+											gotoxy(1870,761);
+											click();
+										}
 									}
-								} else 
+									} else {
+										if (results.size()>0 && System.currentTimeMillis()-5000>lastSongSelectTime) {
+											recordingResults=true;
+											MYROBOT.setAutoDelay(0);
+											MYROBOT.keyPress(KeyEvent.VK_ALT);
+											MYROBOT.keyPress(KeyEvent.VK_TAB);
+											MYROBOT.keyRelease(KeyEvent.VK_ALT);
+											MYROBOT.setAutoDelay(250);
+											MYROBOT.keyRelease(KeyEvent.VK_TAB);
+											sleep(2000);
+											boolean first=true;
+											for (Result r  : results) {
+												if (!first) {
+													sleep(5000);
+												} else {
+													first=false;
+												}
+												type(r.songName);
+												MYROBOT.keyPress(KeyEvent.VK_TAB);
+												type(Integer.toString(r.cool));
+												MYROBOT.keyPress(KeyEvent.VK_TAB);
+												type(Integer.toString(r.fine));
+												MYROBOT.keyPress(KeyEvent.VK_TAB);
+												type(Integer.toString(r.safe));
+												MYROBOT.keyPress(KeyEvent.VK_TAB);
+												type(Integer.toString(r.sad));
+												MYROBOT.keyPress(KeyEvent.VK_TAB);
+												type(Integer.toString(r.worst));
+												MYROBOT.keyPress(KeyEvent.VK_TAB);
+												type(r.difficulty);
+												MYROBOT.keyPress(KeyEvent.VK_TAB);
+												type(Float.toString(r.percent));
+												MYROBOT.keyPress(KeyEvent.VK_TAB);
+												MYROBOT.keyRelease(KeyEvent.VK_TAB);
+												MYROBOT.setAutoDelay(0);
+												MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+												MYROBOT.keyPress(KeyEvent.VK_ALT);
+												MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+												MYROBOT.keyPress(KeyEvent.VK_1);
+												MYROBOT.keyRelease(KeyEvent.VK_1);
+												MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+												MYROBOT.keyRelease(KeyEvent.VK_ALT);
+												MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+											}
+											results.clear();
+											sleep(1000);
+											MYROBOT.setAutoDelay(0);
+											MYROBOT.keyPress(KeyEvent.VK_ALT);
+											MYROBOT.keyPress(KeyEvent.VK_TAB);
+											MYROBOT.keyRelease(KeyEvent.VK_ALT);
+											MYROBOT.setAutoDelay(250);
+											MYROBOT.keyRelease(KeyEvent.VK_TAB);
+											recordingResults=false;
+										}
+									}
+								} else {
 								if (!OnResultsScreen() && recordedResults) {
 									recordedResults=false;
 								}
@@ -264,7 +376,7 @@ public class MyRobot{
        		    p.getGraphics().drawImage(bufferedImage, 0, 0, f);
             }
          });
-	    f.setVisible(true);
+	    //f.setVisible(true);
 	    f.setSize(400, 400);
 	    title = new JTextField();
 	    title.setSize(200,100);
@@ -554,7 +666,7 @@ public class MyRobot{
 	    MYROBOT.setAutoDelay(TYPE_DELAY);
 	    char[] letter = letters.toCharArray();
 	    for (int i = 0; i < letter.length; i++) {
-	        System.out.print(letter[i]);
+	        //System.out.print(letter[i]);
 	        try {
 	            if ((Character.isLowerCase(letter[i])) || (Character.isDigit(letter[i]))) {
 	                MYROBOT.keyPress(KEYMAP.get(letter[i]));
@@ -1003,6 +1115,10 @@ public class MyRobot{
 	void catchTitleBar() {
 	    gotoButton("CLOSE");
 	    gotoxy(X - 150, Y);
+	}
+	
+	void pressKey(int keyCode) {
+		manuPress(keyCode);
 	}
 	
 	void pressKey(String keyName) {

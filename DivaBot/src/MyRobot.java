@@ -97,8 +97,8 @@ public class MyRobot{
 							}
 							lastSongSelectTime = System.currentTimeMillis();
 						} else {
-							selectedSong=new SongData("test",new Color[] {});
-							difficulty="EXEX";
+							/*selectedSong=new SongData("test",new Color[] {});
+							difficulty="EXEX";*/
 							if ((selectedSong!=null && difficulty!=null) /*|| true*/) {
 								//Look for the results screen.
 								//602,217 254,254,254

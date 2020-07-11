@@ -1,8 +1,12 @@
 import java.awt.Color;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -13,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -31,14 +36,14 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
 import sig.utils.FileUtils;
+import sig.utils.ImageUtils;
 import sig.utils.SoundUtils;
 
 public class MyRobot{
-
 	Robot MYROBOT;
 	Color SCREEN[][];
 	static SongData SONGS[];
-	static String SONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨 ","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","Packaged","Palette","Freely Tomorrow","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","1/6 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalgic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANO*GIRL","夢喰い白黒バク"};
+	static String SONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨 ","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","Packaged","Palette","Freely Tomorrow","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","1/6 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalgic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク"};
 	int SCREEN_X;
 	int SCREEN_Y;
 	int WINDOW_X;
@@ -107,7 +112,6 @@ public class MyRobot{
 								
 								if (OnResultsScreen() && !recordedResults && !recordingResults && results.size()==0) {
 									lastSongSelectTime=System.currentTimeMillis();
-									//1885,761
 									if (eyeTrackingSceneOn) {
 										eyeTrackingSceneOn=false;
 										gotoxy(800,64);
@@ -115,6 +119,7 @@ public class MyRobot{
 										gotoxy(1870,761);
 										click();
 									}
+									//1885,761
 								    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,451,115,26))));
 								    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,484,115,26))));
 								    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,518,115,26))));
@@ -141,7 +146,7 @@ public class MyRobot{
 									if (cool==-1 || fine==-1 || safe==-1 || sad==-1 || worst==-1 || percent==-0.01f) {
 										System.out.println("Waiting for results to populate...");
 									} else 
-									if (cool!=lastcool || lastfine!=fine || lastsafe!=safe || lastsad!=sad || lastworst!=worst || lastpercent!=percent){
+									if (cool!=lastcool || lastfine!=fine || lastsafe!=safe || lastsad!=sad || lastworst!=worst /*|| lastpercent!=percent*/){
 										System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+cool+"/"+fine+"/"+safe+"/"+sad+"/"+worst+" "+percent+"%");
 										File songFolder = new File(selectedSong.title+"/"+difficulty);
 										if (!songFolder.exists()) {
@@ -180,72 +185,79 @@ public class MyRobot{
 											click();
 										}
 									}
-									} else {
-										if (results.size()>0 && System.currentTimeMillis()-5000>lastSongSelectTime) {
-											recordingResults=true;
-											MYROBOT.setAutoDelay(0);
-											MYROBOT.keyPress(KeyEvent.VK_ALT);
-											MYROBOT.keyPress(KeyEvent.VK_TAB);
-											MYROBOT.keyRelease(KeyEvent.VK_ALT);
-											MYROBOT.setAutoDelay(250);
-											MYROBOT.keyRelease(KeyEvent.VK_TAB);
-											sleep(2000);
-											boolean first=true;
-											for (Result r  : results) {
-												if (!first) {
-													sleep(5000);
-												} else {
-													first=false;
-												}
-												type(r.songName);
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												type(Integer.toString(r.cool));
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												type(Integer.toString(r.fine));
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												type(Integer.toString(r.safe));
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												type(Integer.toString(r.sad));
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												type(Integer.toString(r.worst));
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												type(r.difficulty);
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												type(Float.toString(r.percent));
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												MYROBOT.keyRelease(KeyEvent.VK_TAB);
-												MYROBOT.setAutoDelay(0);
-												MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-												MYROBOT.keyPress(KeyEvent.VK_ALT);
-												MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-												MYROBOT.keyPress(KeyEvent.VK_1);
-												MYROBOT.keyRelease(KeyEvent.VK_1);
-												MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
-												MYROBOT.keyRelease(KeyEvent.VK_ALT);
-												MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-											}
-											results.clear();
-											sleep(1000);
-											MYROBOT.setAutoDelay(0);
-											MYROBOT.keyPress(KeyEvent.VK_ALT);
-											MYROBOT.keyPress(KeyEvent.VK_TAB);
-											MYROBOT.keyRelease(KeyEvent.VK_ALT);
-											MYROBOT.setAutoDelay(250);
-											MYROBOT.keyRelease(KeyEvent.VK_TAB);
-											recordingResults=false;
-										}
-									}
 								} else {
-								if (!OnResultsScreen() && recordedResults) {
-									recordedResults=false;
+									if (results.size()>0 && System.currentTimeMillis()-5000>lastSongSelectTime) {
+										recordingResults=true;
+										MYROBOT.setAutoDelay(0);
+										MYROBOT.keyPress(KeyEvent.VK_ALT);
+										MYROBOT.keyPress(KeyEvent.VK_TAB);
+										MYROBOT.keyRelease(KeyEvent.VK_ALT);
+										MYROBOT.setAutoDelay(5000);
+										MYROBOT.keyRelease(KeyEvent.VK_TAB);
+										boolean first=true;
+										for (Result r  : results) {
+											if (!first) {
+												MYROBOT.setAutoDelay(5000);
+											} else {
+												first=false;
+												MYROBOT.setAutoDelay(100);
+												TYPE_DELAY=50;
+											}
+											StringSelection selection = new StringSelection((r.songName.equalsIgnoreCase("PIANOGIRL"))?"PIANO*GIRL":r.songName);
+										    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+										    clipboard.setContents(selection, selection);
+											MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+											MYROBOT.keyPress(KeyEvent.VK_V);
+											MYROBOT.keyRelease(KeyEvent.VK_V);
+											MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+											MYROBOT.setAutoDelay(100);
+											MYROBOT.keyPress(KeyEvent.VK_TAB);
+											type(Integer.toString(r.cool));
+											MYROBOT.keyPress(KeyEvent.VK_TAB);
+											type(Integer.toString(r.fine));
+											MYROBOT.keyPress(KeyEvent.VK_TAB);
+											type(Integer.toString(r.safe));
+											MYROBOT.keyPress(KeyEvent.VK_TAB);
+											type(Integer.toString(r.sad));
+											MYROBOT.keyPress(KeyEvent.VK_TAB);
+											type(Integer.toString(r.worst));
+											MYROBOT.keyPress(KeyEvent.VK_TAB);
+											type(r.difficulty);
+											MYROBOT.keyPress(KeyEvent.VK_TAB);
+											type(Float.toString(r.percent));
+											MYROBOT.keyPress(KeyEvent.VK_TAB);
+											MYROBOT.keyRelease(KeyEvent.VK_TAB);
+											MYROBOT.setAutoDelay(0);
+											MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+											MYROBOT.keyPress(KeyEvent.VK_ALT);
+											MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+											MYROBOT.keyPress(KeyEvent.VK_1);
+											MYROBOT.keyRelease(KeyEvent.VK_1);
+											MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+											MYROBOT.keyRelease(KeyEvent.VK_ALT);
+											MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+										}
+										results.clear();
+										sleep(1000);
+										MYROBOT.setAutoDelay(0);
+										MYROBOT.keyPress(KeyEvent.VK_ALT);
+										MYROBOT.keyPress(KeyEvent.VK_TAB);
+										MYROBOT.keyRelease(KeyEvent.VK_ALT);
+										MYROBOT.setAutoDelay(250);
+										MYROBOT.keyRelease(KeyEvent.VK_TAB);
+										recordingResults=false;
+									}
+									if (!OnResultsScreen() && recordedResults) {
+										recordedResults=false;
+									}
 								}
 							}
 						}
-					    //572,453 
-					    //Red: 100-200, Blue: 200-255 Purple (EXEX)
-					    //Red: 150-255, Green: < 50 Blue: < 50 (EX)
-					    //Red: 175-225, Green: 135-175 Blue: < 50 (Hard)
-					}
+				    //572,453 
+				    //Red: 100-200, Blue: 200-255 Purple (EXEX)
+				    //Red: 150-255, Green: < 50 Blue: < 50 (EX)
+				    //Red: 175-225, Green: 135-175 Blue: < 50 (Hard)
+				}
 					
 					private boolean OnResultsScreen() {
 						Color c1 = new Color(MYROBOT.createScreenCapture(new Rectangle(602,217,2,2)).getRGB(0, 0));
@@ -413,7 +425,66 @@ public class MyRobot{
 	    //p.getGraphics().drawImage(MYROBOT.createScreenCapture(new Rectangle(1205,553,160,26)), 0, i+=26, f);
 	    //p.getGraphics().drawImage(MYROBOT.createScreenCapture(new Rectangle(1205,583,160,26)), 0, i+=26, f);
 	    //p.getGraphics().drawImage(MYROBOT.createScreenCapture(new Rectangle(1428,361,128,30)), 0, i+=26, f);
+	    
+	    RunTests();
+	    
 	    BotMain();
+	}
+	
+	void RunTests() {
+		
+		//418,204
+		/*int cool = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,451,115,26)),new File(tmp,"cool"));
+		int fine = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,484,115,26)),new File(tmp,"fine"));
+		int safe = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,518,115,26)),new File(tmp,"safe"));
+		int sad = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,553,115,26)),new File(tmp,"sad"));
+		int worst = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26)),new File(tmp,"worst"));
+
+		float percent = (float)typeface2.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1428,361,128,30)),new File(tmp,"percent"))/100f;*/
+		
+		selectedSong=new SongData("test",new Color[] {});
+		difficulty="EXEX";
+		RunTest("shake it!_EXplay_568_88_8_4_7_96.03.png",580,80,0,4,7,95.03f);
+		RunTest("え？あぁ、そう。_EXEXplay_499_121_11_9_43_77.11.png",439,121,11,5,43,77.11f);
+		RunTest("サマーアイドル_EXplay_959_56_19_5_10_81.32.png",363,58,15,5,10,84.32f);
+		RunTest("テレカクシ思春期_EXplay_44_108_7_4_18_81.8.png",447,109,7,4,16,84.80f);
+		RunTest("どういうことなの！？_EXplay_449_85_3_0_3_95.01.png",448,85,2,0,3,95.01f);
+		RunTest("天樂_EXplay_361_58_9_4_11_92.67.png",351,56,8,4,11,92.67f);
+		RunTest("番凩_EXEXplay_41_110_1_10_21_77.76.png",431,110,17,10,31,77.79f);
+		RunTest("結ンデ開イテ羅刹ト骸_EXEXplay_47_123_10_5_46_74.19.png",471,123,10,5,46,74.19f);
+	}
+	
+	void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent) {
+		System.out.println("Running test "+_img);
+		long startTime = System.currentTimeMillis();
+		String testdir="testsuite";
+		Point offset = new Point(418,204);
+		File tmp = new File("tmp");
+		if (tmp.exists()) {
+			FileUtils.deleteFile(tmp);
+		} else {
+			tmp.mkdir();
+		}
+		BufferedImage img=null;
+		try {
+			img = ImageIO.read(new File(testdir,_img));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		int cool = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,451-offset.y,115,26)),new File(tmp,"cool"));
+		int fine = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,484-offset.y,115,26)),new File(tmp,"fine"));
+		int safe = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,518-offset.y,115,26)),new File(tmp,"safe"));
+		int sad = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,553-offset.y,115,26)),new File(tmp,"sad"));
+		int worst = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,583-offset.y,115,26)),new File(tmp,"worst"));
+		float percent = (float)typeface2.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1428-offset.x,361-offset.y,128,30)),new File(tmp,"percent"))/100f;
+		
+		assert cool == _cool : "Expected cool count to be "+_cool+", got "+cool;
+		assert fine == _fine : "Expected fine count to be "+_fine+", got "+fine;
+		assert safe == _safe : "Expected safe count to be "+_safe+", got "+safe;
+		assert sad == _sad : "Expected sad count to be "+_sad+", got "+sad;
+		assert worst == _worst : "Expected worst count to be "+_worst+", got "+worst;
+		assert percent == _percent : "Expected percent to be "+_percent+", got "+percent;
+		System.out.println(" Passed ("+(System.currentTimeMillis()-startTime)+"ms)!");
 	}
 	
 	boolean isOnSongSelect() {

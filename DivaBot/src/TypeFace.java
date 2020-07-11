@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import sig.utils.FileUtils;
 import sig.utils.ImageUtils;
 
 public class TypeFace {
@@ -23,7 +24,13 @@ public class TypeFace {
 	int red_minthreshold = 0;
 	int blue_maxthreshold = 255;
 	int green_maxthreshold = 150;
-	int red_maxthreshold = 100;
+	int red_maxthreshold = 126;
+	int blue_fillminthreshold = 75;
+	int green_fillminthreshold = 0;
+	int red_fillminthreshold = 0;
+	int blue_fillmaxthreshold = 255;
+	int green_fillmaxthreshold = 150;
+	int red_fillmaxthreshold = 100;
 	boolean darkFillCheck = true;
 	Color[][] numbers = new Color[WIDTH*HEIGHT][NUMBER_COUNT];
 	BufferedImage baseImg;
@@ -54,7 +61,8 @@ public class TypeFace {
 		
 		final boolean DEBUG_IMG = false;
 		
-		
+
+		int iterations=0;
 		while (X<img.getWidth()) {
 			boolean success=true;
 			Color p = new Color(img.getRGB(X, midY),true);
@@ -66,14 +74,6 @@ public class TypeFace {
 							p.getRed()>red_minthreshold && p.getRed()<red_maxthreshold) {
 						//We found a dark pixel.
 						state=1;
-						if (darkFillCheck) {
-							success = fillDark(img,X,midY,0,0);
-							if (!success) {
-								//We're done.
-								X=img.getWidth();
-								break;
-							}
-						}
 						if (DEBUG_IMG) {
 							try {
 								BufferedImage img2 = ImageUtils.copyBufferedImage(img);
@@ -81,6 +81,14 @@ public class TypeFace {
 								ImageIO.write(img2,"png",new File("stage1_"+System.currentTimeMillis()+".png"));
 							} catch (IOException e) {
 								e.printStackTrace();
+							}
+						}
+						if (darkFillCheck) {
+							success = fillDark(img,X,midY,0,0);
+							if (!success) {
+								//We're done.
+								X=img.getWidth();
+								break;
 							}
 						}
 					}
@@ -126,39 +134,45 @@ public class TypeFace {
 				}break;
 				case 3:{
 					//Figure out which number in the typeface it best represents.
-					if (numberImg.getHeight()>numberImg.getWidth()) {
-						numberImg = ImageUtils.toBufferedImage(numberImg.getScaledInstance(-1, HEIGHT, Image.SCALE_FAST));
-					} else {
-						numberImg = ImageUtils.toBufferedImage(numberImg.getScaledInstance(WIDTH, -1, Image.SCALE_FAST));
-					}
+					numberImg = ImageUtils.toBufferedImage(numberImg.getScaledInstance(WIDTH, HEIGHT, Image.SCALE_FAST));
 					//System.out.println(numberImg.getWidth()+"x"+numberImg.getHeight());
 					int[] hits = new int[NUMBER_COUNT];
 					double highestRatio = 0;
 					int highest = 0;
 					for (int k=0;k<NUMBER_COUNT;k++) {
+						BufferedImage img2 = ImageUtils.copyBufferedImage(numberImg);
 						for (int i=0;i<WIDTH;i++) {
 							for (int j=0;j<HEIGHT;j++) {
 								if (i<numberImg.getWidth() &&
 										j<numberImg.getHeight()) {
 									Color pixel = new Color(numberImg.getRGB(i, j));
-									if (numbers[i*HEIGHT+j][k].getRed()==pixel.getRed() && numbers[i*HEIGHT+j][k].getRed()==pixel.getGreen() && numbers[i*HEIGHT+j][k].getBlue()==pixel.getBlue()) {
+									if (numbers[i*HEIGHT+j][k].getRed()==pixel.getRed() && numbers[i*HEIGHT+j][k].getGreen()==pixel.getGreen() && numbers[i*HEIGHT+j][k].getBlue()==pixel.getBlue()) {
 										hits[k]++;
 										//System.out.println("Hit for "+((k+1)%NUMBER_COUNT)+"! "+hits[k] + "/"+numbers[i*HEIGHT+j][k]+"/"+pixel);
 										if ((double)hits[k]/(WIDTH*HEIGHT)>highestRatio) {
-											highestRatio = (double)(hits[k])/(WIDTH*HEIGHT);
+											highestRatio= (double)(hits[k])/(WIDTH*HEIGHT);
 											highest=k;
 										}
+									} else {
+										if (pixel.equals(Color.WHITE)) {
+											img2.setRGB(i, j, Color.BLUE.getRGB());
+										} else {
+											img2.setRGB(i, j, Color.RED.getRGB());
+										}
+										//FileUtils.logToFile("Pixel difference: "+numbers[i*HEIGHT+j][k]+"/"+pixel, new File(saveLoc,(iterations)+".txt").getPath());
 									}
 								}
 							}
 						}
-					}
-					try {
-						ImageIO.write(numberImg,"png",new File(saveLoc,((highest+1)%NUMBER_COUNT)+".png"));
-					} catch (IOException e) {
-						e.printStackTrace();
+						FileUtils.logToFile(((k+1)%NUMBER_COUNT)+":"+((double)(hits[k])/(WIDTH*HEIGHT)), new File(saveLoc,(iterations)+".txt").getPath());
+						try {
+							ImageIO.write(img2,"png",new File(saveLoc,(iterations)+"_"+((k+1)%NUMBER_COUNT)+".png"));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
 					//System.out.println("Matches closest to "+((highest+1)%NUMBER_COUNT)+" with "+highestRatio);
+					iterations++;
 					extractedNumbers+=Integer.toString((highest+1)%NUMBER_COUNT);
 					state=4;
 				}break;
@@ -197,9 +211,9 @@ public class TypeFace {
 		Color p = null;
 		if (startX+x+1<img.getWidth()) {
 			p = new Color(img.getRGB(startX+x+1, startY+y));
-			if (p.getBlue()>blue_minthreshold && p.getBlue()<blue_maxthreshold &&
-					p.getGreen()>green_minthreshold && p.getGreen()<green_maxthreshold &&
-					p.getRed()>red_minthreshold && p.getRed()<red_maxthreshold) {
+			if (p.getBlue()>blue_fillminthreshold && p.getBlue()<blue_fillmaxthreshold &&
+					p.getGreen()>green_fillminthreshold && p.getGreen()<green_fillmaxthreshold &&
+					p.getRed()>red_fillminthreshold && p.getRed()<red_fillmaxthreshold) {
 				fillDark(img,startX,startY,x+1,y);
 			}
 		} else {
@@ -207,9 +221,9 @@ public class TypeFace {
 		}
 		if (startX+x-1>0) {
 			p = new Color(img.getRGB(startX+x-1, startY+y));
-			if (p.getBlue()>blue_minthreshold && p.getBlue()<blue_maxthreshold &&
-					p.getGreen()>green_minthreshold && p.getGreen()<green_maxthreshold &&
-					p.getRed()>red_minthreshold && p.getRed()<red_maxthreshold) {
+			if (p.getBlue()>blue_fillminthreshold && p.getBlue()<blue_fillmaxthreshold &&
+					p.getGreen()>green_fillminthreshold && p.getGreen()<green_fillmaxthreshold &&
+					p.getRed()>red_fillminthreshold && p.getRed()<red_fillmaxthreshold) {
 				fillDark(img,startX,startY,x-1,y);
 			}
 		} else {
@@ -217,9 +231,9 @@ public class TypeFace {
 		}
 		if (startY+y+1<img.getHeight()) {
 			p = new Color(img.getRGB(startX+x, startY+y+1));
-			if (p.getBlue()>blue_minthreshold && p.getBlue()<blue_maxthreshold &&
-					p.getGreen()>green_minthreshold && p.getGreen()<green_maxthreshold &&
-					p.getRed()>red_minthreshold && p.getRed()<red_maxthreshold) {
+			if (p.getBlue()>blue_fillminthreshold && p.getBlue()<blue_fillmaxthreshold &&
+					p.getGreen()>green_fillminthreshold && p.getGreen()<green_fillmaxthreshold &&
+					p.getRed()>red_fillminthreshold && p.getRed()<red_fillmaxthreshold) {
 				fillDark(img,startX,startY,x,y+1);
 			}
 		} else {
@@ -227,9 +241,9 @@ public class TypeFace {
 		}
 		if (startY+y-1>0) {
 			p = new Color(img.getRGB(startX+x, startY+y-1));
-			if (p.getBlue()>blue_minthreshold && p.getBlue()<blue_maxthreshold &&
-					p.getGreen()>green_minthreshold && p.getGreen()<green_maxthreshold &&
-					p.getRed()>red_minthreshold && p.getRed()<red_maxthreshold) {
+			if (p.getBlue()>blue_fillminthreshold && p.getBlue()<blue_fillmaxthreshold &&
+					p.getGreen()>green_fillminthreshold && p.getGreen()<green_fillmaxthreshold &&
+					p.getRed()>red_fillminthreshold && p.getRed()<red_fillmaxthreshold) {
 				fillDark(img,startX,startY,x,y-1);
 			}
 		} else {
@@ -301,7 +315,7 @@ public class TypeFace {
 			int offsetX = 0;
 			int finalHeight = maxY-minY+1;
 			int offsetY = 0;
-			if (finalWidth > finalHeight) {
+			/*if (finalWidth > finalHeight) {
 				//Add padding for height.
 				offsetY += (finalWidth-finalHeight)/2;
 				finalHeight+= offsetY*2;
@@ -310,7 +324,7 @@ public class TypeFace {
 				//Add padding for width.
 				offsetX += (finalHeight-finalWidth)/2;
 				finalWidth+= offsetX*2;
-			}
+			}*/
 			
 			BufferedImage bufferedImage = new BufferedImage(finalWidth, finalHeight,
 		            BufferedImage.TYPE_INT_RGB);

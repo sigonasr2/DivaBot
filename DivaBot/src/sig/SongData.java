@@ -1,3 +1,4 @@
+package sig;
 import java.awt.Color;
 
 import sig.utils.FileUtils;

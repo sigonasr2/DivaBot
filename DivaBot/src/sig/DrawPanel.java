@@ -1,15 +1,19 @@
+package sig;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.font.TextAttribute;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.AttributedString;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -20,6 +24,7 @@ import org.json.JSONObject;
 
 import sig.utils.DrawUtils;
 import sig.utils.FileUtils;
+import sig.utils.TextUtils;
 
 public class DrawPanel extends JPanel{
 	String difficulty;
@@ -42,6 +47,10 @@ public class DrawPanel extends JPanel{
     long ratingTime = System.currentTimeMillis()-10000;
     int lastRating = -1;
     Thread t = null;
+    boolean scrolling = false;
+    int scrollX = 0;
+    int scrollSpd = 2;
+    Timer scrollTimer = new Timer();
 	
 	DrawPanel() {
 		try {
@@ -50,6 +59,18 @@ public class DrawPanel extends JPanel{
 			exextreme = ImageIO.read(new File("exex.png"));
 			extreme = ImageIO.read(new File("ex.png"));
 			hard = ImageIO.read(new File("hd.png"));
+			
+
+			Timer t = new Timer();
+			t.scheduleAtFixedRate(new TimerTask() {
+				@Override
+				public void run() {
+					if (MyRobot.p.scrolling) {
+						MyRobot.p.scrollX-=MyRobot.p.scrollSpd;
+						MyRobot.p.repaint();
+					}
+				}
+			},0,20);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -92,6 +113,14 @@ public class DrawPanel extends JPanel{
 					lastRating = overallrating;
 					overallrating = (int)obj.getDouble("rating");
 					if (lastRating<overallrating) {ratingTime=System.currentTimeMillis();}*/
+					String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate)":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():""+"     Overall Rating: "+overallrating);
+					Rectangle2D bounds = TextUtils.calculateStringBoundsFont(text, programFont);
+					if (bounds.getWidth()>1345) {
+						scrolling=true;
+					} else {
+						scrolling=false;
+					}
+					scrollX = 0;
 					MyRobot.p.repaint();
 					} catch (JSONException | IOException e) {
 					e.printStackTrace();
@@ -109,23 +138,30 @@ public class DrawPanel extends JPanel{
                 RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 		g.setColor(new Color(0,255,0));
 		g.fillRect(0, 0, 1400, 100);
-		g.setFont(programFont);
-		g.drawImage(bar, 0, 0, this);
-		if (ratingTime>System.currentTimeMillis()-10000) {
-			DrawUtils.drawOutlineText(g, programFont, 32, 36, 3, new Color(220,220,255,(int)Math.min(((System.currentTimeMillis()-ratingTime))/5,255)), new Color(0,0,0,64), "Rating up! "+lastRating+" -> "+overallrating);
-		} else {
-			DrawUtils.drawOutlineText(g, programFont, 32, 36, 3, Color.WHITE, new Color(0,0,0,64), songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+(int)((Math.floor((float)passes/plays)*100))+"% pass rate)":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():"     Overall Rating: "+overallrating));
-		}
-		switch (difficulty) {
-			case "H":{
-				g.drawImage(hard,0,0,20,51,this);
-			}break;
-			case "EX":{
-				g.drawImage(extreme,0,0,20,51,this);
-			}break;
-			case "EXEX":{
-				g.drawImage(exextreme,0,0,20,51,this);
-			}break;
+		if (!MyRobot.isOnSongSelect()) {
+			g.setFont(programFont);
+			g.drawImage(bar, 0, 0, this);
+			if (ratingTime>System.currentTimeMillis()-10000) {
+				DrawUtils.drawOutlineText(g, programFont, 32, 36, 3, new Color(220,220,255,(int)Math.min(((System.currentTimeMillis()-ratingTime))/5,255)), new Color(0,0,0,64), "Rating up! "+lastRating+" -> "+overallrating);
+			} else {
+				String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate)":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():""+"     Overall Rating: "+overallrating);
+				Rectangle2D bounds = TextUtils.calculateStringBoundsFont(text, programFont);
+				if (scrollX<-bounds.getWidth()-100) {
+					scrollX=(int)bounds.getWidth()+100;
+				}
+				DrawUtils.drawOutlineText(g, programFont, 32+scrollX, 36, 3, Color.WHITE, new Color(0,0,0,64) , text);
+			}
+			switch (difficulty) {
+				case "H":{
+					g.drawImage(hard,0,0,20,51,this);
+				}break;
+				case "EX":{
+					g.drawImage(extreme,0,0,20,51,this);
+				}break;
+				case "EXEX":{
+					g.drawImage(exextreme,0,0,20,51,this);
+				}break;
+			}
 		}
 		//as.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         //g.drawString(songname, 24, 32);

@@ -1,3 +1,4 @@
+package sig;
 
 public class Result {
 	String songName;

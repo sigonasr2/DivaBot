@@ -31,7 +31,7 @@ public class TypeFace {
 	int red_fillminthreshold = 0;
 	int blue_fillmaxthreshold = 255;
 	int green_fillmaxthreshold = 150;
-	int red_fillmaxthreshold = 100;
+	int red_fillmaxthreshold = 107;
 	boolean darkFillCheck = true;
 	Color[][] numbers = new Color[WIDTH*HEIGHT][NUMBER_COUNT];
 	BufferedImage baseImg;
@@ -60,7 +60,7 @@ public class TypeFace {
 		
 		BufferedImage numberImg = null;
 		
-		final boolean DEBUG_IMG = false;
+		final boolean DEBUG_IMG = true;
 		
 
 		int iterations=0;
@@ -77,7 +77,7 @@ public class TypeFace {
 						state=1;
 						if (DEBUG_IMG) {
 							try {
-								BufferedImage img2 = ImageUtils.copyBufferedImage(img);
+								BufferedImage img2 = ImageUtils.toCompatibleImage(ImageUtils.copyBufferedImage(img));
 								img2.setRGB(X, midY, Color.RED.getRGB());
 								ImageIO.write(img2,"png",new File("stage1_"+System.currentTimeMillis()+".png"));
 							} catch (IOException e) {
@@ -100,7 +100,7 @@ public class TypeFace {
 						state=2;
 						if (DEBUG_IMG) {
 							try {
-								BufferedImage img2 = ImageUtils.copyBufferedImage(img);
+								BufferedImage img2 = ImageUtils.toCompatibleImage(ImageUtils.copyBufferedImage(img));
 								img2.setRGB(X, midY, Color.RED.getRGB());
 								ImageIO.write(img2,"png",new File("stage2_"+System.currentTimeMillis()+".png"));
 							} catch (IOException e) {
@@ -124,7 +124,7 @@ public class TypeFace {
 						state=3;
 						if (DEBUG_IMG) {
 							try {
-								BufferedImage img2 = ImageUtils.copyBufferedImage(img);
+								BufferedImage img2 = ImageUtils.toCompatibleImage(ImageUtils.copyBufferedImage(img));
 								img2.setRGB(X, midY, Color.RED.getRGB());
 								ImageIO.write(img2,"png",new File("stage3_"+System.currentTimeMillis()+".png"));
 							} catch (IOException e) {
@@ -135,13 +135,13 @@ public class TypeFace {
 				}break;
 				case 3:{
 					//Figure out which number in the typeface it best represents.
-					numberImg = ImageUtils.toBufferedImage(numberImg.getScaledInstance(WIDTH, HEIGHT, Image.SCALE_FAST));
+					numberImg = ImageUtils.toCompatibleImage(ImageUtils.toBufferedImage(numberImg.getScaledInstance(WIDTH, HEIGHT, Image.SCALE_FAST)));
 					//System.out.println(numberImg.getWidth()+"x"+numberImg.getHeight());
 					int[] hits = new int[NUMBER_COUNT];
 					double highestRatio = 0;
 					int highest = 0;
 					for (int k=0;k<NUMBER_COUNT;k++) {
-						BufferedImage img2 = ImageUtils.copyBufferedImage(numberImg);
+						BufferedImage img2 = ImageUtils.toCompatibleImage(ImageUtils.copyBufferedImage(numberImg));
 						for (int i=0;i<WIDTH;i++) {
 							for (int j=0;j<HEIGHT;j++) {
 								if (i<numberImg.getWidth() &&
@@ -186,7 +186,7 @@ public class TypeFace {
 						state=0;
 						if (DEBUG_IMG) {
 							try {
-								BufferedImage img2 = ImageUtils.copyBufferedImage(img);
+								BufferedImage img2 = ImageUtils.toCompatibleImage(ImageUtils.copyBufferedImage(img));
 								img2.setRGB(X, midY, Color.RED.getRGB());
 								ImageIO.write(img2,"png",new File("stage4_"+System.currentTimeMillis()+".png"));
 							} catch (IOException e) {
@@ -327,8 +327,8 @@ public class TypeFace {
 				finalWidth+= offsetX*2;
 			}*/
 			
-			BufferedImage bufferedImage = new BufferedImage(finalWidth, finalHeight,
-		            BufferedImage.TYPE_INT_RGB);
+			BufferedImage bufferedImage = ImageUtils.toCompatibleImage(new BufferedImage(finalWidth, finalHeight,
+		            BufferedImage.TYPE_INT_RGB));
 			Graphics2D graphics = bufferedImage.createGraphics();
 			graphics.setPaint ( new Color ( 255, 255, 255 ) );
 			graphics.fillRect ( 0, 0, bufferedImage.getWidth(), bufferedImage.getHeight() );

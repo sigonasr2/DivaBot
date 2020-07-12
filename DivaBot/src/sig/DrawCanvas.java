@@ -1,9 +1,11 @@
 package sig;
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.font.TextAttribute;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -24,9 +26,10 @@ import org.json.JSONObject;
 
 import sig.utils.DrawUtils;
 import sig.utils.FileUtils;
+import sig.utils.ImageUtils;
 import sig.utils.TextUtils;
 
-public class DrawPanel extends JPanel{
+public class DrawCanvas extends JPanel{
 	String difficulty;
 	String panelText;
 	Font programFont = new Font("Open Sans Condensed", Font.PLAIN, 32);
@@ -51,26 +54,35 @@ public class DrawPanel extends JPanel{
     int scrollX = 0;
     int scrollSpd = 2;
     Timer scrollTimer = new Timer();
+    BufferedImage doubleBuffer=null,firstBuffer=null;
+    boolean targetBuffer=false;
 	
-	DrawPanel() {
+	DrawCanvas() {
+		
 		try {
-			bar = ImageIO.read(new File("divabar.png"));
-			overallbar = ImageIO.read(new File("overlaybar.png"));
-			exextreme = ImageIO.read(new File("exex.png"));
-			extreme = ImageIO.read(new File("ex.png"));
-			hard = ImageIO.read(new File("hd.png"));
+			bar = ImageUtils.toCompatibleImage(ImageIO.read(new File("divabar.png")));
+			overallbar = ImageUtils.toCompatibleImage(ImageIO.read(new File("overlaybar.png")));
+			exextreme = ImageUtils.toCompatibleImage(ImageIO.read(new File("exex.png")));
+			extreme = ImageUtils.toCompatibleImage(ImageIO.read(new File("ex.png")));
+			hard = ImageUtils.toCompatibleImage(ImageIO.read(new File("hd.png")));
 			
 
-			Timer t = new Timer();
-			t.scheduleAtFixedRate(new TimerTask() {
-				@Override
+			Thread t = new Thread() {
 				public void run() {
-					if (MyRobot.p.scrolling) {
-						MyRobot.p.scrollX-=MyRobot.p.scrollSpd;
-						MyRobot.p.repaint();
+					while (true) {
+						if (MyRobot.p.scrolling) {
+							MyRobot.p.scrollX-=MyRobot.p.scrollSpd;
+						}
+						MyRobot.p.repaint(0, 0, 1400, 100);
+						try {
+							Thread.sleep(20);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
 				}
-			},0,20);
+			};
+			t.start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -86,7 +98,7 @@ public class DrawPanel extends JPanel{
 		passes=0;
 		fcCount=0;
 		artist="";
-		this.repaint();
+		this.repaint(0,0,1400,100);
 		if (t!=null && t.isAlive()) {
 			t.stop();
 		}
@@ -112,8 +124,9 @@ public class DrawPanel extends JPanel{
 					/*obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/sigonasr2");
 					lastRating = overallrating;
 					overallrating = (int)obj.getDouble("rating");
-					if (lastRating<overallrating) {ratingTime=System.currentTimeMillis();}*/
-					String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate)":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():""+"     Overall Rating: "+overallrating);
+					if (lastRating<overallrating) {ratingTime=System.currentTimeMillis();}
+					*/
+					String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate)":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():"")+"     Overall Rating: "+overallrating;
 					Rectangle2D bounds = TextUtils.calculateStringBoundsFont(text, programFont);
 					if (bounds.getWidth()>1345) {
 						scrolling=true;
@@ -121,7 +134,7 @@ public class DrawPanel extends JPanel{
 						scrolling=false;
 					}
 					scrollX = 0;
-					MyRobot.p.repaint();
+					MyRobot.p.repaint(0,0,1400,100);
 					} catch (JSONException | IOException e) {
 					e.printStackTrace();
 				}
@@ -130,41 +143,44 @@ public class DrawPanel extends JPanel{
 		t.start();
 	}
 	
-	protected void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+		Graphics2D g2 = (Graphics2D)g;
+		long startTime = System.currentTimeMillis();
+		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		((Graphics2D)g).setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
                 RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-		g.setColor(new Color(0,255,0));
-		g.fillRect(0, 0, 1400, 100);
-		if (!MyRobot.isOnSongSelect()) {
-			g.setFont(programFont);
-			g.drawImage(bar, 0, 0, this);
+		g2.setColor(new Color(0,255,0));
+		g2.fillRect(0, 0, 1400, 100);
+		//if (!MyRobot.isOnSongSelect()) {
+			//g2.setFont(programFont);
+			g2.drawImage(bar, 0, 0,null);
 			if (ratingTime>System.currentTimeMillis()-10000) {
 				DrawUtils.drawOutlineText(g, programFont, 32, 36, 3, new Color(220,220,255,(int)Math.min(((System.currentTimeMillis()-ratingTime))/5,255)), new Color(0,0,0,64), "Rating up! "+lastRating+" -> "+overallrating);
 			} else {
-				String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate)":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():""+"     Overall Rating: "+overallrating);
+				String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate)":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():"")+"     Overall Rating: "+overallrating;
 				Rectangle2D bounds = TextUtils.calculateStringBoundsFont(text, programFont);
 				if (scrollX<-bounds.getWidth()-100) {
 					scrollX=(int)bounds.getWidth()+100;
 				}
-				DrawUtils.drawOutlineText(g, programFont, 32+scrollX, 36, 3, Color.WHITE, new Color(0,0,0,64) , text);
+				DrawUtils.drawOutlineText(g2, programFont, 32+scrollX, 36, 3, Color.WHITE, new Color(0,0,0,64), text);
 			}
 			switch (difficulty) {
 				case "H":{
-					g.drawImage(hard,0,0,20,51,this);
+					g2.drawImage(hard,0,0,20,51,null);
 				}break;
 				case "EX":{
-					g.drawImage(extreme,0,0,20,51,this);
+					g2.drawImage(extreme,0,0,20,51,null);
 				}break;
 				case "EXEX":{
-					g.drawImage(exextreme,0,0,20,51,this);
+					g2.drawImage(exextreme,0,0,20,51,null);
 				}break;
 			}
-		}
+		//}
 		//as.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
-        //g.drawString(songname, 24, 32);
-		g.drawImage(overallbar, 1349, 0, this);
+        //g2.drawString(songname, 24, 32);
+		g2.drawImage(overallbar, 1349, 0,null);
+		//System.out.println(System.currentTimeMillis()-startTime+"ms");
 	}
 }

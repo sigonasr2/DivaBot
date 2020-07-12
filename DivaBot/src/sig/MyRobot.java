@@ -94,7 +94,7 @@ public class MyRobot{
 	static JTextField title;
 	final int WIDTH = 200;
 	final int HEIGHT = 5;
-    public static DrawPanel p;
+    public static DrawCanvas p;
     static int currentSong = 0;
     static SongData selectedSong = null;
     static String difficulty = "H"; //H=Hard EX=Extreme EXEX=Extra Extreme
@@ -102,6 +102,7 @@ public class MyRobot{
     
     int lastcool,lastfine,lastsafe,lastsad,lastworst;
     float lastpercent;
+    boolean lastfail;
     long lastSongSelectTime = System.currentTimeMillis();
     
     static TypeFace typeface1,typeface2; 
@@ -113,6 +114,8 @@ public class MyRobot{
     boolean recordingResults=false;
     long lastReportedEyeTrackingTime = System.currentTimeMillis();
     
+    boolean overlayHidden=false;
+    static boolean onSongSelect=false;
     
 	
 	public static void main(String[] args) {
@@ -122,12 +125,19 @@ public class MyRobot{
 	boolean EyeTrackingIsOn() {
 		//1888,760
 		if (System.currentTimeMillis()-5000>lastReportedEyeTrackingTime) {
-			BufferedImage img = MYROBOT.createScreenCapture(new Rectangle(1871,760,1,1));
+			BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(1866,759,1,1)));
 			Color pixel = new Color(img.getRGB(0, 0));
 			lastReportedEyeTrackingTime=System.currentTimeMillis();
 			eyeTrackingSceneOn=pixel.getRed()<60 && pixel.getGreen()<60 && pixel.getBlue()<60;
 		}
 		return eyeTrackingSceneOn;
+	}
+
+	boolean textFailPixel(BufferedImage img) {
+		Color failPixel = new Color(img.getRGB(0, 0));
+		//System.out.println(failPixel);
+		//r=128,g=5,b=232
+		return failPixel.getRed()>=50 && failPixel.getRed()<=150 && failPixel.getGreen()>=50 && failPixel.getGreen()<=150 && failPixel.getBlue()>=50 && failPixel.getBlue()<=150;
 	}
 	
 	void BotMain() {
@@ -145,8 +155,11 @@ public class MyRobot{
 		t.scheduleAtFixedRate(new TimerTask() {
 					@Override
 					public void run() {
-						
-						if (isOnSongSelect()) {
+						if (checkSongSelect()) {
+							if (!overlayHidden) {
+								overlayHidden=true;
+								p.repaint(0, 0, 1400, 100);
+							}
 							GetCurrentSong();
 							GetCurrentDifficulty();
 							recordedResults=false;
@@ -160,6 +173,10 @@ public class MyRobot{
 							}
 							lastSongSelectTime = System.currentTimeMillis();
 						} else {
+							if (overlayHidden) {
+								overlayHidden=false;
+								p.repaint(0, 0, 1400, 100);
+							}
 							/*selectedSong=new SongData("test",new Color[] {});
 							difficulty="EXEX";*/
 							if ((selectedSong!=null && difficulty!=null) /*|| true*/) {
@@ -172,6 +189,7 @@ public class MyRobot{
 									lastSongSelectTime=System.currentTimeMillis();
 									if (EyeTrackingIsOn()) {
 										eyeTrackingSceneOn=false;
+										lastReportedEyeTrackingTime=System.currentTimeMillis();
 										gotoxy(800,64);
 										click();
 										gotoxy(1870,761);
@@ -195,6 +213,8 @@ public class MyRobot{
 									int safe = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,518,115,26)),new File(tmp,"safe"));
 									int sad = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,553,115,26)),new File(tmp,"sad"));
 									int worst = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26)),new File(tmp,"worst"));
+									
+									boolean fail = textFailPixel(MYROBOT.createScreenCapture(new Rectangle(952,385,1,1))); 
 									/*try {
 										ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26)),"png",new File("worst.png"));
 									} catch (IOException e) {
@@ -204,7 +224,7 @@ public class MyRobot{
 									if (cool==-1 || fine==-1 || safe==-1 || sad==-1 || worst==-1 || percent==-0.01f) {
 										System.out.println("Waiting for results to populate...");
 									} else 
-									if (cool!=lastcool || lastfine!=fine || lastsafe!=safe || lastsad!=sad || lastworst!=worst /*|| lastpercent!=percent*/){
+									if (fail!=lastfail || cool!=lastcool || lastfine!=fine || lastsafe!=safe || lastsad!=sad || lastworst!=worst /*|| lastpercent!=percent*/){
 										System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+cool+"/"+fine+"/"+safe+"/"+sad+"/"+worst+" "+percent+"%");
 										File songFolder = new File(selectedSong.title+"/"+difficulty);
 										if (!songFolder.exists()) {
@@ -233,10 +253,13 @@ public class MyRobot{
 										lastsad=sad;
 										lastworst=worst;
 										lastpercent=percent;
-										results.add(new Result(selectedSong.title,difficulty,cool,fine,safe,sad,worst,percent));
+										lastfail=fail;
+										
+										results.add(new Result(selectedSong.title,difficulty,cool,fine,safe,sad,worst,percent,fail));
 										SoundUtils.playSound("collect_item.wav");
 										if (!EyeTrackingIsOn()) {
 											eyeTrackingSceneOn=true;
+											lastReportedEyeTrackingTime=System.currentTimeMillis();
 											gotoxy(800,64);
 											click();
 											gotoxy(1870,761);
@@ -263,6 +286,7 @@ public class MyRobot{
 											params.add(new BasicNameValuePair("sad", Integer.toString(r.sad)));
 											params.add(new BasicNameValuePair("worst", Integer.toString(r.worst)));
 											params.add(new BasicNameValuePair("percent", Float.toString(r.percent)));
+											params.add(new BasicNameValuePair("fail", Boolean.toString(r.fail)));
 											try {
 												httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 											} catch (UnsupportedEncodingException e) {
@@ -296,9 +320,8 @@ public class MyRobot{
 											p.lastRating = p.overallrating;
 											p.overallrating = (int)obj.getDouble("rating");
 											if (p.lastRating<p.overallrating) {p.ratingTime=System.currentTimeMillis();}
-										} catch (JSONException e) {
-											e.printStackTrace();
-										} catch (IOException e) {
+											p.pullData(selectedSong.title, difficulty);
+										} catch (JSONException | IOException e) {
 											e.printStackTrace();
 										}
 										/*MYROBOT.setAutoDelay(0);
@@ -374,8 +397,8 @@ public class MyRobot{
 				}
 					
 					private boolean OnResultsScreen() {
-						Color c1 = new Color(MYROBOT.createScreenCapture(new Rectangle(602,217,2,2)).getRGB(0, 0));
-						Color c2 = new Color(MYROBOT.createScreenCapture(new Rectangle(602,260,2,2)).getRGB(0, 0));
+						Color c1 = new Color(MYROBOT.createScreenCapture(new Rectangle(449,434,2,2)).getRGB(0, 0));
+						Color c2 = new Color(MYROBOT.createScreenCapture(new Rectangle(449,400,2,2)).getRGB(0, 0));
 						Color c3 = new Color(MYROBOT.createScreenCapture(new Rectangle(901,460,2,2)).getRGB(0, 0));
 						return c1.getRed()>=254 && c1.getGreen()>=254 && c1.getBlue()>=254 && c2.getRed()==16 && c2.getGreen()==222 && c2.getBlue()==202 &&
 								c3.getRed()>=220 && c3.getRed()<=255 && c3.getGreen()>=220 && c3.getGreen()<=255 && c3.getBlue()>=160 && c3.getBlue()<=220;
@@ -395,7 +418,7 @@ public class MyRobot{
 						}
 					}
 					private void GetCurrentSong() {
-						BufferedImage img = MYROBOT.createScreenCapture(new Rectangle(460,426,WIDTH,HEIGHT));
+						BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(460,426,WIDTH,HEIGHT)));
 						Color[] col = new Color[WIDTH*HEIGHT];
 						for (int i=0;i<WIDTH;i++) {
 							for (int j=0;j<HEIGHT;j++) {
@@ -435,19 +458,17 @@ public class MyRobot{
 		 System.setProperty("awt.useSystemAAFontSettings","on");
 	    JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        p = new DrawPanel();
-        p.difficulty="EX";
-        p.songname = "39みゅーじっく！";
+        p = new DrawCanvas();
+        p.difficulty="EXEX";
+        p.songname = "Dear";
         int condition = JComponent.WHEN_IN_FOCUSED_WINDOW;
-        InputMap inputMap = p.getInputMap(condition);
-        ActionMap actionMap = p.getActionMap();
         BufferedImage img1 = null;
         BufferedImage img2 = null;
         typeface1 = null;
         typeface2=null;
         try {
-			 img1 = ImageIO.read(new File("typeface1.png"));
-			 img2 = ImageIO.read(new File("typeface2.png"));
+			 img1 = ImageUtils.toCompatibleImage(ImageIO.read(new File("typeface1.png")));
+			 img2 = ImageUtils.toCompatibleImage(ImageIO.read(new File("typeface2.png")));
 			 typeface1 = new TypeFace(img1);
 			 typeface2 = new TypeFace(img2);
 			 typeface2.green_minthreshold=typeface2.blue_minthreshold=100;
@@ -460,10 +481,10 @@ public class MyRobot{
         /*inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "Press"); //DEBUG KEYS.
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "Identifier");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "Toggle");*/
-        actionMap.put("Press", new AbstractAction() {
+        /*actionMap.put("Press", new AbstractAction() {
            @Override
            public void actionPerformed(ActionEvent e) {
-       			BufferedImage img = MYROBOT.createScreenCapture(new Rectangle(460,426,WIDTH,HEIGHT));
+       			BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(460,426,WIDTH,HEIGHT)));
        			Color[] col = new Color[WIDTH*HEIGHT];
        			for (int i=0;i<WIDTH;i++) {
        				for (int j=0;j<HEIGHT;j++) {
@@ -479,7 +500,7 @@ public class MyRobot{
         actionMap.put("Identifier", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-       			BufferedImage img = MYROBOT.createScreenCapture(new Rectangle(460,426,WIDTH,HEIGHT));
+       			BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(460,426,WIDTH,HEIGHT)));
        			Color[] col = new Color[WIDTH*HEIGHT];
        			for (int i=0;i<WIDTH;i++) {
        				for (int j=0;j<HEIGHT;j++) {
@@ -495,8 +516,8 @@ public class MyRobot{
             public void actionPerformed(ActionEvent e) {
        			currentSong++;
        			SongData s = SongData.getByTitle(SONGNAMES[currentSong]);
-       		    BufferedImage bufferedImage = new BufferedImage(WIDTH, HEIGHT,
-       		            BufferedImage.TYPE_INT_RGB);
+       		    BufferedImage bufferedImage = ImageUtils.toCompatibleImage(new BufferedImage(WIDTH, HEIGHT,
+       		            BufferedImage.TYPE_INT_RGB));
        		    for (int i=0;i<WIDTH;i++) {
        		    	for (int j=0;j<HEIGHT;j++) {
        		    		bufferedImage.setRGB(i, j, s.songCode[i*HEIGHT+j].getRGB());
@@ -504,7 +525,7 @@ public class MyRobot{
        		    }
        		    p.getGraphics().drawImage(bufferedImage, 0, 0, f);
             }
-         });
+         });*/
 	    f.setVisible(true);
 	    f.setSize(1416, 51+48);
 	    f.add(p);
@@ -564,17 +585,19 @@ public class MyRobot{
 		
 		selectedSong=new SongData("packaged",new Color[] {});
 		difficulty="EXEX";
-		RunTest("shake it!_EXplay_568_88_8_4_7_96.03.png",580,80,0,4,7,95.03f);
-		RunTest("え？あぁ、そう。_EXEXplay_499_121_11_9_43_77.11.png",439,121,11,5,43,77.11f);
-		RunTest("サマーアイドル_EXplay_959_56_19_5_10_81.32.png",363,58,15,5,10,84.32f);
-		RunTest("テレカクシ思春期_EXplay_44_108_7_4_18_81.8.png",447,109,7,4,16,84.80f);
-		RunTest("どういうことなの！？_EXplay_449_85_3_0_3_95.01.png",448,85,2,0,3,95.01f);
-		RunTest("天樂_EXplay_361_58_9_4_11_92.67.png",351,56,8,4,11,92.67f);
-		RunTest("番凩_EXEXplay_41_110_1_10_21_77.76.png",431,110,17,10,31,77.79f);
-		RunTest("結ンデ開イテ羅刹ト骸_EXEXplay_47_123_10_5_46_74.19.png",471,123,10,5,46,74.19f);
+		RunTest("shake it!_EXplay_568_88_8_4_7_96.03.png",580,80,0,4,7,95.03f,false);
+		RunTest("え？あぁ、そう。_EXEXplay_499_121_11_9_43_77.11.png",439,121,11,5,43,77.11f,false);
+		RunTest("サマーアイドル_EXplay_959_56_19_5_10_81.32.png",363,58,15,5,10,84.32f,false);
+		RunTest("テレカクシ思春期_EXplay_44_108_7_4_18_81.8.png",447,109,7,4,16,84.80f,false);
+		RunTest("どういうことなの！？_EXplay_449_85_3_0_3_95.01.png",448,85,2,0,3,95.01f,false);
+		RunTest("天樂_EXplay_361_58_9_4_11_92.67.png",351,56,8,4,11,92.67f,false);
+		RunTest("番凩_EXEXplay_41_110_1_10_21_77.76.png",431,110,17,10,31,77.79f,false);
+		RunTest("結ンデ開イテ羅刹ト骸_EXEXplay_47_123_10_5_46_74.19.png",471,123,10,5,46,74.19f,false);
+		RunTest("エイリアンエイリアン_EXplay_505_278_3_0_5_89.19.png",505,218,3,0,5,89.19f,false);
+		RunTest("アンハッピーリフレイン_EXEXplay_716_163_15_6_64_72.69.png",716,163,15,6,64,72.69f,true);
 	}
 	
-	void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent) {
+	void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,boolean _fail) {
 		System.out.println("Running test "+_img);
 		long startTime = System.currentTimeMillis();
 		String testdir="testsuite";
@@ -597,6 +620,7 @@ public class MyRobot{
 		int sad = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,553-offset.y,115,26)),new File(tmp,"sad"));
 		int worst = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,583-offset.y,115,26)),new File(tmp,"worst"));
 		float percent = (float)typeface2.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1428-offset.x,361-offset.y,128,30)),new File(tmp,"percent"))/100f;
+		boolean fail = textFailPixel(ImageUtils.cropImage(img, new Rectangle(952-offset.x,385-offset.y,1,1))); ;
 		
 		assert cool == _cool : "Expected cool count to be "+_cool+", got "+cool;
 		assert fine == _fine : "Expected fine count to be "+_fine+", got "+fine;
@@ -604,15 +628,22 @@ public class MyRobot{
 		assert sad == _sad : "Expected sad count to be "+_sad+", got "+sad;
 		assert worst == _worst : "Expected worst count to be "+_worst+", got "+worst;
 		assert percent == _percent : "Expected percent to be "+_percent+", got "+percent;
+		assert fail == _fail : "Expected fail to be "+_fail+", got "+fail;
 		System.out.println(" Passed ("+(System.currentTimeMillis()-startTime)+"ms)!");
 	}
 	
-	public static boolean isOnSongSelect() {
+	public static boolean checkSongSelect() {
 		Color c = new Color(MYROBOT.createScreenCapture(new Rectangle(1255,824,20,20)).getRGB(10, 10));
-		return c.getRed()==43 && c.getGreen()==88 && c.getBlue()==213;
+		onSongSelect = c.getRed()==43 && c.getGreen()==88 && c.getBlue()==213;
+		return onSongSelect;
+	}
+	
+	public static boolean isOnSongSelect() {
+		return onSongSelect;
 	}
 	
 	void initialize() {
+		System.setProperty("sun.java2d.opengl", "True");
 	    grEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
 	    grDevice = grEnv.getDefaultScreenDevice();
 	    updateScreenInfo();

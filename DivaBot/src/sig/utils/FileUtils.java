@@ -303,15 +303,17 @@ public class FileUtils {
 	    FileChannel destChannel = null;
 	    destdir.mkdirs();
 	    try {
-	    	for (String name : sourcedir.list()) {
-	    		File f = new File(sourcedir,name);
-		        sourceChannel = new FileInputStream(f).getChannel();
-		        destChannel = new FileOutputStream(new File(destdir,name)).getChannel();
-		        destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-		           sourceChannel.close();
-		           destChannel.close();
-		       	}
-	    	}
+	    	if (sourcedir.exists()) {
+		    	for (String name : sourcedir.list()) {
+		    		File f = new File(sourcedir,name);
+			        sourceChannel = new FileInputStream(f).getChannel();
+			        destChannel = new FileOutputStream(new File(destdir,name)).getChannel();
+			        destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+			           sourceChannel.close();
+			           destChannel.close();
+			       	}
+		    	}
+		    }
 	    finally{
 	    	
 	    }

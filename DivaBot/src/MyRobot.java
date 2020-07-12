@@ -13,13 +13,24 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,6 +46,16 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
 import sig.utils.FileUtils;
 import sig.utils.ImageUtils;
 import sig.utils.SoundUtils;
@@ -43,7 +64,7 @@ public class MyRobot{
 	Robot MYROBOT;
 	Color SCREEN[][];
 	static SongData SONGS[];
-	static String SONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨 ","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","Packaged","Palette","Freely Tomorrow","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","1/6 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalgic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク"};
+	static String SONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","packaged","Palette","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","1/6 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク"};
 	int SCREEN_X;
 	int SCREEN_Y;
 	int WINDOW_X;
@@ -82,9 +103,21 @@ public class MyRobot{
     
     boolean eyeTrackingSceneOn=true;
     boolean recordingResults=false;
+    long lastReportedEyeTrackingTime = System.currentTimeMillis();
 	
 	public static void main(String[] args) {
 	    new MyRobot().go();
+	}
+	
+	boolean EyeTrackingIsOn() {
+		//1888,760
+		if (System.currentTimeMillis()-5000>lastReportedEyeTrackingTime) {
+			BufferedImage img = MYROBOT.createScreenCapture(new Rectangle(1871,760,1,1));
+			Color pixel = new Color(img.getRGB(0, 0));
+			lastReportedEyeTrackingTime=System.currentTimeMillis();
+			eyeTrackingSceneOn=pixel.getRed()<60 && pixel.getGreen()<60 && pixel.getBlue()<60;
+		}
+		return eyeTrackingSceneOn;
 	}
 	
 	void BotMain() {
@@ -112,7 +145,7 @@ public class MyRobot{
 								
 								if (OnResultsScreen() && !recordedResults && !recordingResults && results.size()==0) {
 									lastSongSelectTime=System.currentTimeMillis();
-									if (eyeTrackingSceneOn) {
+									if (EyeTrackingIsOn()) {
 										eyeTrackingSceneOn=false;
 										gotoxy(800,64);
 										click();
@@ -177,7 +210,7 @@ public class MyRobot{
 										lastpercent=percent;
 										results.add(new Result(selectedSong.title,difficulty,cool,fine,safe,sad,worst,percent));
 										SoundUtils.playSound("collect_item.wav");
-										if (!eyeTrackingSceneOn) {
+										if (!EyeTrackingIsOn()) {
 											eyeTrackingSceneOn=true;
 											gotoxy(800,64);
 											click();
@@ -186,9 +219,53 @@ public class MyRobot{
 										}
 									}
 								} else {
-									if (results.size()>0 && System.currentTimeMillis()-5000>lastSongSelectTime) {
+									if (results.size()>0) {
 										recordingResults=true;
-										MYROBOT.setAutoDelay(0);
+										for (Result r  : results) {
+											r.songName=r.songName.equalsIgnoreCase("PIANOGIRL")?"PIANO*GIRL":r.songName;
+											HttpClient httpclient = HttpClients.createDefault();
+											HttpPost httppost = new HttpPost("http://45.33.13.215:4501/submit");
+
+											// Request parameters and other properties.
+											List<NameValuePair> params = new ArrayList<NameValuePair>();
+											params.add(new BasicNameValuePair("song", r.songName));
+											params.add(new BasicNameValuePair("username", "sigonasr2"));
+											params.add(new BasicNameValuePair("authentication_token", "sig"));
+											params.add(new BasicNameValuePair("difficulty", r.difficulty));
+											params.add(new BasicNameValuePair("cool", Integer.toString(r.cool)));
+											params.add(new BasicNameValuePair("fine", Integer.toString(r.fine)));
+											params.add(new BasicNameValuePair("safe", Integer.toString(r.safe)));
+											params.add(new BasicNameValuePair("sad", Integer.toString(r.sad)));
+											params.add(new BasicNameValuePair("worst", Integer.toString(r.worst)));
+											params.add(new BasicNameValuePair("percent", Float.toString(r.percent)));
+											try {
+												httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+											} catch (UnsupportedEncodingException e) {
+												e.printStackTrace();
+											}
+
+											//Execute and get the response.
+											HttpResponse response = null;
+											try {
+												response = httpclient.execute(httppost);
+											} catch (IOException e) {
+												e.printStackTrace();
+											}
+											HttpEntity entity = response.getEntity();
+
+											if (entity != null) {
+											    try (InputStream instream = entity.getContent()) {
+											    	Scanner s = new Scanner(instream).useDelimiter("\\A");
+											    	String result = s.hasNext() ? s.next() : "";
+											    	System.out.println(result);
+											    	instream.close();
+											    } catch (UnsupportedOperationException | IOException e) {
+													e.printStackTrace();
+												}
+											}
+										}
+										results.clear();
+										/*MYROBOT.setAutoDelay(0);
 										MYROBOT.keyPress(KeyEvent.VK_ALT);
 										MYROBOT.keyPress(KeyEvent.VK_TAB);
 										MYROBOT.keyRelease(KeyEvent.VK_ALT);
@@ -245,6 +322,7 @@ public class MyRobot{
 										MYROBOT.keyRelease(KeyEvent.VK_ALT);
 										MYROBOT.setAutoDelay(250);
 										MYROBOT.keyRelease(KeyEvent.VK_TAB);
+										*/
 										recordingResults=false;
 									}
 									if (!OnResultsScreen() && recordedResults) {
@@ -442,7 +520,7 @@ public class MyRobot{
 
 		float percent = (float)typeface2.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1428,361,128,30)),new File(tmp,"percent"))/100f;*/
 		
-		selectedSong=new SongData("test",new Color[] {});
+		selectedSong=new SongData("packaged",new Color[] {});
 		difficulty="EXEX";
 		RunTest("shake it!_EXplay_568_88_8_4_7_96.03.png",580,80,0,4,7,95.03f);
 		RunTest("え？あぁ、そう。_EXEXplay_499_121_11_9_43_77.11.png",439,121,11,5,43,77.11f);

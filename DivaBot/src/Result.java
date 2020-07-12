@@ -14,4 +14,8 @@ public class Result {
 		this.worst=worst;
 		this.percent=percent;
 	}
+	public String display() {
+		return new StringBuilder(Integer.toString(cool)).append("/").append(fine)
+				.append("/").append(safe).append("/").append(sad).append("/").append(worst).append("   ").append(percent).append("%").toString();
+	}
 }

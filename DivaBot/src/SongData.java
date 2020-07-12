@@ -29,7 +29,7 @@ public class SongData {
 				}
 			}
 			if (matched/(double)s.songCode.length>=TOLERANCE) {
-				System.out.println(matched+"/"+s.songCode.length+" pixels matched for song "+s.title);
+				//System.out.println(matched+"/"+s.songCode.length+" pixels matched for song "+s.title);
 				return s;
 			} else {
 				//System.out.println(matched+"/"+s.songCode.length+" pixels matched for song "+s.title);

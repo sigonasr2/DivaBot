@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
@@ -12,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Dictionary;
@@ -54,6 +57,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import sig.utils.FileUtils;
@@ -89,7 +93,7 @@ public class MyRobot{
 	static JTextField title;
 	final int WIDTH = 200;
 	final int HEIGHT = 5;
-    
+    static DrawPanel p;
     static int currentSong = 0;
     static SongData selectedSong = null;
     static String difficulty = "H"; //H=Hard EX=Extreme EXEX=Extra Extreme
@@ -101,9 +105,14 @@ public class MyRobot{
     
     static TypeFace typeface1,typeface2; 
     
+    
+    String prevSongTitle = "";
+    String prevDifficulty = "";
     boolean eyeTrackingSceneOn=true;
     boolean recordingResults=false;
     long lastReportedEyeTrackingTime = System.currentTimeMillis();
+    
+    
 	
 	public static void main(String[] args) {
 	    new MyRobot().go();
@@ -121,6 +130,16 @@ public class MyRobot{
 	}
 	
 	void BotMain() {
+		try {
+			JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/sigonasr2");
+			p.lastRating = p.overallrating;
+			p.overallrating = (int)obj.getDouble("rating");
+			if (p.lastRating<p.overallrating) {p.ratingTime=System.currentTimeMillis();}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Timer t = new Timer();
 		t.scheduleAtFixedRate(new TimerTask() {
 					@Override
@@ -131,7 +150,12 @@ public class MyRobot{
 							GetCurrentDifficulty();
 							recordedResults=false;
 							if (selectedSong!=null && difficulty!=null) {
-								System.out.println("On Song Select Screen: Current Song-"+selectedSong.title+" Diff:"+difficulty);
+								if (!prevSongTitle.equalsIgnoreCase(selectedSong.title) || !prevDifficulty.equalsIgnoreCase(difficulty)) {
+									System.out.println("On Song Select Screen: Current Song-"+selectedSong.title+" Diff:"+difficulty);
+									p.pullData(selectedSong.title,difficulty);
+									prevSongTitle=selectedSong.title;
+									prevDifficulty=difficulty;
+								}
 							}
 							lastSongSelectTime = System.currentTimeMillis();
 						} else {
@@ -265,6 +289,17 @@ public class MyRobot{
 											}
 										}
 										results.clear();
+
+										try {
+											JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/sigonasr2");
+											p.lastRating = p.overallrating;
+											p.overallrating = (int)obj.getDouble("rating");
+											if (p.lastRating<p.overallrating) {p.ratingTime=System.currentTimeMillis();}
+										} catch (JSONException e) {
+											e.printStackTrace();
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
 										/*MYROBOT.setAutoDelay(0);
 										MYROBOT.keyPress(KeyEvent.VK_ALT);
 										MYROBOT.keyPress(KeyEvent.VK_TAB);
@@ -396,9 +431,12 @@ public class MyRobot{
 	    //System.out.println(Arrays.deepToString(SCREEN));
 	    //460,426
 	    //Screen = new Color[]
+		 System.setProperty("awt.useSystemAAFontSettings","on");
 	    JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel p = (JPanel)f.getContentPane();
+        p = new DrawPanel();
+        p.difficulty="EX";
+        p.songname = "39みゅーじっく！";
         int condition = JComponent.WHEN_IN_FOCUSED_WINDOW;
         InputMap inputMap = p.getInputMap(condition);
         ActionMap actionMap = p.getActionMap();
@@ -466,8 +504,10 @@ public class MyRobot{
        		    p.getGraphics().drawImage(bufferedImage, 0, 0, f);
             }
          });
-	    //f.setVisible(true);
-	    f.setSize(400, 400);
+	    f.setVisible(true);
+	    f.setSize(1416, 51+48);
+	    f.add(p);
+	    f.setTitle("DivaBot");
 	    title = new JTextField();
 	    title.setSize(200,100);
 	    title.setText((currentSong>=SONGNAMES.length)?"DONE!":SONGNAMES[currentSong]);
@@ -504,8 +544,9 @@ public class MyRobot{
 	    //p.getGraphics().drawImage(MYROBOT.createScreenCapture(new Rectangle(1205,583,160,26)), 0, i+=26, f);
 	    //p.getGraphics().drawImage(MYROBOT.createScreenCapture(new Rectangle(1428,361,128,30)), 0, i+=26, f);
 	    
+	    //p.getGraphics().fillRect(0, 0, 1349, 51);
+	   
 	    RunTests();
-	    
 	    BotMain();
 	}
 	

@@ -13,6 +13,7 @@ import java.io.Reader;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
@@ -21,13 +22,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import sig.sigIRC;
-import sig.modules.RabiRaceModule;
-import sig.modules.ChatLog.ChatLogMessage;
 
 public class FileUtils {
 	public static String[] readFromFile(String filename) {
@@ -212,33 +212,46 @@ public class FileUtils {
 	  }
 
 	  public static JSONObject readJsonFromUrl(String url, String file, boolean writeToFile) throws IOException, JSONException {
-	    InputStream is = new URL(url).openStream();
 	    try {
+		  InputStream is = new URL(url).openStream();
 	      BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 	      String jsonText = readAll(rd);
 	      if (writeToFile) {
 	    	  writetoFile(new String[]{jsonText},file);
 	      }
 	      JSONObject json = new JSONObject(jsonText);
-	      return json;
-	    } finally {
 	      is.close();
+	      return json;
+	    } catch (IOException e) {
+	    	return new JSONObject("{}");
 	    }
 	  }
 
 	  public static JSONArray readJsonArrayFromUrl(String url, String file, boolean writeToFile) throws IOException, JSONException {
-	    InputStream is = new URL(url).openStream();
-	    try {
-	      BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-	      String jsonText = readAll(rd);
-	      if (writeToFile) {
-	    	  writetoFile(new String[]{jsonText},file);
-	      }
-	      JSONArray json = new JSONArray(jsonText);
-	      return json;
-	    } finally {
-	      is.close();
-	    }
+		  URL obj = new URL(url);
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+			con.setRequestMethod("GET");
+			int responseCode = con.getResponseCode();
+			System.out.println("GET Response Code :: " + responseCode);
+			if (responseCode == HttpURLConnection.HTTP_OK) { // success
+				BufferedReader in = new BufferedReader(new InputStreamReader(
+						con.getInputStream()));
+				String inputLine;
+				StringBuffer response = new StringBuffer();
+
+				while ((inputLine = in.readLine()) != null) {
+					response.append(inputLine);
+				}
+				in.close();
+
+				// print result
+				System.out.println(response);
+				
+				return new JSONArray(response.toString());
+			} else {
+				System.out.println("GET request not worked");
+				return new JSONArray("[]");
+			}
 	  }
 	  
 	  public static void logToFile(String message, String filename) {

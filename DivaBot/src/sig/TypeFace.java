@@ -60,7 +60,7 @@ public class TypeFace {
 		
 		BufferedImage numberImg = null;
 		
-		final boolean DEBUG_IMG = true;
+		final boolean DEBUG_IMG = false;
 		
 
 		int iterations=0;

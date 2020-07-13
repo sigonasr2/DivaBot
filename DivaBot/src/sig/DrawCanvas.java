@@ -89,7 +89,7 @@ public class DrawCanvas extends JPanel{
 	}
 	
 	public void pullData(String songname,String difficulty) {
-		this.songname=(songname.equalsIgnoreCase("PIANOGIRL")?"PIANO*GIRL":songname);
+		this.songname=(songname.equalsIgnoreCase("PIANOGIRL")?"PIANO*GIRL":(songname.equalsIgnoreCase("16 -out of the gravity-"))?"1/6 -out of the gravity-":songname);
 		this.difficulty=difficulty;
 		romanizedname="";
 		englishname="";

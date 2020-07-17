@@ -56,7 +56,6 @@ public class DrawCanvas extends JPanel{
     Timer scrollTimer = new Timer();
     BufferedImage doubleBuffer=null,firstBuffer=null;
     boolean targetBuffer=false;
-	
 	DrawCanvas() {
 		
 		try {
@@ -126,7 +125,7 @@ public class DrawCanvas extends JPanel{
 					overallrating = (int)obj.getDouble("rating");
 					if (lastRating<overallrating) {ratingTime=System.currentTimeMillis();}
 					*/
-					String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate)":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():"")+"     Overall Rating: "+overallrating;
+					String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate"+((fcCount>0)?"  -  "+fcCount+" FC"+(fcCount==1?"":"s")+"    "+((int)(Math.floor(((float)fcCount)/plays*100)))+"% FC rate":"")+")":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():"")+"     Overall Rating: "+overallrating;
 					Rectangle2D bounds = TextUtils.calculateStringBoundsFont(text, programFont);
 					if (bounds.getWidth()>1345) {
 						scrolling=true;
@@ -159,7 +158,7 @@ public class DrawCanvas extends JPanel{
 			if (ratingTime>System.currentTimeMillis()-10000) {
 				DrawUtils.drawOutlineText(g, programFont, 32, 36, 3, new Color(220,220,255,(int)Math.min(((System.currentTimeMillis()-ratingTime))/5,255)), new Color(0,0,0,64), "Rating up! "+lastRating+" -> "+overallrating);
 			} else {
-				String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate)":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():"")+"     Overall Rating: "+overallrating;
+				String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate"+((fcCount>0)?"  -  "+fcCount+" FC"+(fcCount==1?"":"s")+"    "+((int)(Math.floor(((float)fcCount)/plays*100)))+"% FC rate":"")+")":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():"")+"     Overall Rating: "+overallrating;
 				Rectangle2D bounds = TextUtils.calculateStringBoundsFont(text, programFont);
 				if (scrollX<-bounds.getWidth()-100) {
 					scrollX=(int)bounds.getWidth()+100;

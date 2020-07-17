@@ -21,25 +21,16 @@ public class JavaUtils {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(this.getClass().getName()+"(");
-		boolean first=false;
+		boolean first=true;
 		for (Field f : this.getClass().getDeclaredFields()) {
 			if (!first) {
-				try {
-					sb.append(f.getName()+"="+f.get(this));
-					first=true;
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
-			} else {
-				try {
-					sb.append(","+f.getName()+"="+f.get(this));
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
+				sb.append(",");
+			}
+			try {
+				sb.append(f.getName()+"="+f.get(this));
+				first=false;
+			} catch (IllegalArgumentException|IllegalAccessException e) {
+				e.printStackTrace();
 			}
 		}
 		sb.append(")");

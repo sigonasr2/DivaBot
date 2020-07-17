@@ -69,7 +69,8 @@ public class MyRobot{
 	static Robot MYROBOT;
 	Color SCREEN[][];
 	static SongData SONGS[];
-	static String SONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","packaged","Palette","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク"};
+	static String SONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","packaged","Palette","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失 -DEAD END-","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク","ブレス・ユア・ブレス","恋は戦争","あなたの歌姫","Starduster","StargazeR","リンリンシグナル","Rosary Pale","多重未来のカルテット～QUARTET THEME～","LIKE THE WIND","AFTER BURNER"};
+	static String NEWSONGS[] = new String[] {};
 	int SCREEN_X;
 	int SCREEN_Y;
 	int WINDOW_X;
@@ -125,7 +126,7 @@ public class MyRobot{
 	boolean EyeTrackingIsOn() {
 		//1888,760
 		if (System.currentTimeMillis()-5000>lastReportedEyeTrackingTime) {
-			BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(1866,706,1,1)));
+			BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(1865,724,1,1)));
 			Color pixel = new Color(img.getRGB(0, 0));
 			lastReportedEyeTrackingTime=System.currentTimeMillis();
 			eyeTrackingSceneOn=pixel.getRed()<60 && pixel.getGreen()<60 && pixel.getBlue()<60;
@@ -192,7 +193,7 @@ public class MyRobot{
 										lastReportedEyeTrackingTime=System.currentTimeMillis();
 										gotoxy(800,64);
 										click();
-										gotoxy(1870,706);
+										gotoxy(1870,724);
 										click();
 									}
 									//1885,761
@@ -262,7 +263,7 @@ public class MyRobot{
 											lastReportedEyeTrackingTime=System.currentTimeMillis();
 											gotoxy(800,64);
 											click();
-											gotoxy(1870,706);
+											gotoxy(1870,724);
 											click();
 										}
 									}
@@ -477,7 +478,26 @@ public class MyRobot{
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-
+        
+        /*InputMap inputMap = p.getInputMap(condition);
+        ActionMap actionMap = p.getActionMap();
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "Press");
+        actionMap.put("Press", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+        			BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(460,426,WIDTH,HEIGHT)));
+        			Color[] col = new Color[WIDTH*HEIGHT];
+        			for (int i=0;i<WIDTH;i++) {
+        				for (int j=0;j<HEIGHT;j++) {
+        					col[i*HEIGHT+j]=new Color(img.getRGB(i,j),true);
+        				}
+        			}
+        			SongData.saveSongToFile(NEWSONGS[currentSong],col);
+        		    SongData.loadSongsFromFile();
+        			System.out.println((++currentSong>=NEWSONGS.length)?"DONE!":NEWSONGS[currentSong]);
+         	   //System.out.println(title.getText());
+            }
+         });*/
         /*inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "Press"); //DEBUG KEYS.
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "Identifier");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "Toggle");*/
@@ -583,8 +603,8 @@ public class MyRobot{
 
 		float percent = (float)typeface2.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1428,361,128,30)),new File(tmp,"percent"))/100f;*/
 		
-		selectedSong=new SongData("packaged",new Color[] {});
-		difficulty="EXEX";
+		selectedSong=new SongData("LIKE THE WIND",new Color[] {});
+		difficulty="H";
 		RunTest("shake it!_EXplay_568_88_8_4_7_96.03.png",580,80,0,4,7,95.03f,false);
 		RunTest("え？あぁ、そう。_EXEXplay_499_121_11_9_43_77.11.png",439,121,11,5,43,77.11f,false);
 		RunTest("サマーアイドル_EXplay_959_56_19_5_10_81.32.png",363,58,15,5,10,84.32f,false);

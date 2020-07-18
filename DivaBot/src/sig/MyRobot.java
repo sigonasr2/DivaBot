@@ -126,7 +126,7 @@ public class MyRobot{
 	boolean EyeTrackingIsOn() {
 		//1888,760
 		if (System.currentTimeMillis()-5000>lastReportedEyeTrackingTime) {
-			BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(1865,724,1,1)));
+			BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(1865,760,1,1)));
 			Color pixel = new Color(img.getRGB(0, 0));
 			lastReportedEyeTrackingTime=System.currentTimeMillis();
 			eyeTrackingSceneOn=pixel.getRed()<60 && pixel.getGreen()<60 && pixel.getBlue()<60;
@@ -170,6 +170,12 @@ public class MyRobot{
 									p.pullData(selectedSong.title,difficulty);
 									prevSongTitle=selectedSong.title;
 									prevDifficulty=difficulty;
+									MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+									MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+									MYROBOT.keyPress(KeyEvent.VK_F11);
+									MYROBOT.keyRelease(KeyEvent.VK_F11);
+									MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+									MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
 								}
 							}
 							lastSongSelectTime = System.currentTimeMillis();
@@ -188,14 +194,15 @@ public class MyRobot{
 								
 								if (OnResultsScreen() && !recordedResults && !recordingResults && results.size()==0) {
 									lastSongSelectTime=System.currentTimeMillis();
-									if (EyeTrackingIsOn()) {
-										eyeTrackingSceneOn=false;
-										lastReportedEyeTrackingTime=System.currentTimeMillis();
-										gotoxy(800,64);
-										click();
-										gotoxy(1870,724);
-										click();
-									}
+									gotoxy(800,64);
+									click();
+									MYROBOT.setAutoDelay(0);
+									MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+									MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+									MYROBOT.keyPress(KeyEvent.VK_F12);
+									MYROBOT.keyRelease(KeyEvent.VK_F12);
+									MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+									MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
 									//1885,761
 								    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,451,115,26))));
 								    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,484,115,26))));
@@ -258,14 +265,15 @@ public class MyRobot{
 										
 										results.add(new Result(selectedSong.title,difficulty,cool,fine,safe,sad,worst,percent,fail));
 										SoundUtils.playSound("collect_item.wav");
-										if (!EyeTrackingIsOn()) {
-											eyeTrackingSceneOn=true;
-											lastReportedEyeTrackingTime=System.currentTimeMillis();
-											gotoxy(800,64);
-											click();
-											gotoxy(1870,724);
-											click();
-										}
+										gotoxy(800,64);
+										click();
+										MYROBOT.setAutoDelay(0);
+										MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+										MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+										MYROBOT.keyPress(KeyEvent.VK_F11);
+										MYROBOT.keyRelease(KeyEvent.VK_F11);
+										MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+										MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
 									}
 								} else {
 									if (results.size()>0) {

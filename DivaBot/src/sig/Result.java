@@ -1,12 +1,16 @@
 package sig;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+
 public class Result {
 	String songName;
 	String difficulty;
 	int cool,fine,safe,sad,worst;
 	float percent;
 	boolean fail;
-	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent) {
+	File f;
+	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent,File f) {
 		this.songName=song;
 		this.difficulty=diff;
 		this.cool=cool;
@@ -15,9 +19,10 @@ public class Result {
 		this.sad=sad;
 		this.worst=worst;
 		this.percent=percent;
+		this.f=f;
 	}
-	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent,boolean fail) {
-		this(song,diff,cool,fine,safe,sad,worst,percent);
+	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent,boolean fail,File f) {
+		this(song,diff,cool,fine,safe,sad,worst,percent,f);
 		this.fail=fail;
 	}
 	public String display() {

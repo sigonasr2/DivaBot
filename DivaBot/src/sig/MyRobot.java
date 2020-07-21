@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Robot;
@@ -38,7 +39,12 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
+import javax.imageio.stream.FileImageOutputStream;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -235,6 +241,8 @@ public class MyRobot{
 									} else 
 									if (fail!=lastfail || cool!=lastcool || lastfine!=fine || lastsafe!=safe || lastsad!=sad || lastworst!=worst /*|| lastpercent!=percent*/){
 										System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+cool+"/"+fine+"/"+safe+"/"+sad+"/"+worst+" "+percent+"%");
+										
+										System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+cool+"/"+fine+"/"+safe+"/"+sad+"/"+worst+" "+percent+"%");
 										File songFolder = new File(selectedSong.title+"/"+difficulty);
 										if (!songFolder.exists()) {
 											songFolder.mkdirs();
@@ -243,7 +251,6 @@ public class MyRobot{
 										int playId = songFolderFiles.length;
 										File playFolder = new File(selectedSong.title+"/"+difficulty+"/"+playId);
 										playFolder.mkdir();
-										File f = new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+cool+"_"+fine+"_"+safe+"_"+sad+"_"+worst+"_"+percent+".png");
 										try {
 											/*FileUtils.copyFileDir(new File(tmp,"cool"), new File(playFolder,"cool"));
 											FileUtils.copyFileDir(new File(tmp,"fine"), new File(playFolder,"fine"));
@@ -252,20 +259,21 @@ public class MyRobot{
 											FileUtils.copyFileDir(new File(tmp,"worst"), new File(playFolder,"worst"));
 											FileUtils.copyFileDir(new File(tmp,"percent"), new File(playFolder,"percent"));*/
 											//FileUtils.deleteFile(tmp);
-											ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(418,204,1227,690)),"png",f);
-											recordedResults=true;
-											lastcool=cool;
-											lastfine=fine;
-											lastsafe=safe;
-											lastsad=sad;
-											lastworst=worst;
-											lastpercent=percent;
-											lastfail=fail;
-											
-											results.add(new Result(selectedSong.title,difficulty,cool,fine,safe,sad,worst,percent,fail,f));
+											ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(418,204,1227,690)),"png",new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+cool+"_"+fine+"_"+safe+"_"+sad+"_"+worst+"_"+percent+".png"));
 										} catch (IOException e) {
 											e.printStackTrace();
 										}
+										recordedResults=true;
+										lastcool=cool;
+										lastfine=fine;
+										lastsafe=safe;
+										lastsad=sad;
+										lastworst=worst;
+										lastpercent=percent;
+										lastfail=fail;
+										
+										results.add(new Result(selectedSong.title,difficulty,cool,fine,safe,sad,worst,percent,fail));
+										SoundUtils.playSound("collect_item.wav");
 										gotoxy(800,64);
 										click();
 										MYROBOT.setAutoDelay(0);
@@ -280,27 +288,61 @@ public class MyRobot{
 									if (results.size()>0) {
 										recordingResults=true;
 										for (Result r  : results) {
-											new Thread() {
-												public void run() {
-													HashMap<String,String> s = new HashMap<>();
-													s.put("username","sigonasr2");
-													s.put("authentication_token","sig");
-													WebUtils.POSTimage("http://projectdivar.com/upload", r.f, s);
-													SoundUtils.playSound("collect_item.wav");
+											r.songName=r.songName.equalsIgnoreCase("PIANOGIRL")?"PIANO*GIRL":(r.songName.equalsIgnoreCase("16 -out of the gravity-"))?"1/6 -out of the gravity-":r.songName;
+											HttpClient httpclient = HttpClients.createDefault();
+											HttpPost httppost = new HttpPost("http://45.33.13.215:4501/submit");
 
-													try {
-														JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/sigonasr2");
-														p.lastRating = p.overallrating;
-														p.overallrating = (int)obj.getDouble("rating");
-														if (p.lastRating<p.overallrating) {p.ratingTime=System.currentTimeMillis();}
-														p.pullData(selectedSong.title, difficulty);
-													} catch (JSONException | IOException e) {
-														e.printStackTrace();
-													}
+											// Request parameters and other properties.
+											List<NameValuePair> params = new ArrayList<NameValuePair>();
+											params.add(new BasicNameValuePair("song", r.songName));
+											params.add(new BasicNameValuePair("username", "sigonasr2"));
+											params.add(new BasicNameValuePair("authentication_token", "sig"));
+											params.add(new BasicNameValuePair("difficulty", r.difficulty));
+											params.add(new BasicNameValuePair("cool", Integer.toString(r.cool)));
+											params.add(new BasicNameValuePair("fine", Integer.toString(r.fine)));
+											params.add(new BasicNameValuePair("safe", Integer.toString(r.safe)));
+											params.add(new BasicNameValuePair("sad", Integer.toString(r.sad)));
+											params.add(new BasicNameValuePair("worst", Integer.toString(r.worst)));
+											params.add(new BasicNameValuePair("percent", Float.toString(r.percent)));
+											params.add(new BasicNameValuePair("fail", Boolean.toString(r.fail)));
+											params.add(new BasicNameValuePair("mod", "HS"));
+											try {
+												httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+											} catch (UnsupportedEncodingException e) {
+												e.printStackTrace();
+											}
+
+											//Execute and get the response.
+											HttpResponse response = null;
+											try {
+												response = httpclient.execute(httppost);
+											} catch (IOException e) {
+												e.printStackTrace();
+											}
+											HttpEntity entity = response.getEntity();
+
+											if (entity != null) {
+											    try (InputStream instream = entity.getContent()) {
+											    	Scanner s = new Scanner(instream).useDelimiter("\\A");
+											    	String result = s.hasNext() ? s.next() : "";
+											    	System.out.println(result);
+											    	instream.close();
+											    } catch (UnsupportedOperationException | IOException e) {
+													e.printStackTrace();
 												}
-											}.start();
+											}
 										}
 										results.clear();
+
+										try {
+											JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/sigonasr2");
+											p.lastRating = p.overallrating;
+											p.overallrating = (int)obj.getDouble("rating");
+											if (p.lastRating<p.overallrating) {p.ratingTime=System.currentTimeMillis();}
+											p.pullData(selectedSong.title, difficulty);
+										} catch (JSONException | IOException e) {
+											e.printStackTrace();
+										}
 										/*MYROBOT.setAutoDelay(0);
 										MYROBOT.keyPress(KeyEvent.VK_ALT);
 										MYROBOT.keyPress(KeyEvent.VK_TAB);

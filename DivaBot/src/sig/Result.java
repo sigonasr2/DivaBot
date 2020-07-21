@@ -9,8 +9,7 @@ public class Result {
 	int cool,fine,safe,sad,worst;
 	float percent;
 	boolean fail;
-	File f;
-	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent,File f) {
+	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent) {
 		this.songName=song;
 		this.difficulty=diff;
 		this.cool=cool;
@@ -19,10 +18,9 @@ public class Result {
 		this.sad=sad;
 		this.worst=worst;
 		this.percent=percent;
-		this.f=f;
 	}
-	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent,boolean fail,File f) {
-		this(song,diff,cool,fine,safe,sad,worst,percent,f);
+	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent,boolean fail) {
+		this(song,diff,cool,fine,safe,sad,worst,percent);
 		this.fail=fail;
 	}
 	public String display() {

@@ -161,10 +161,15 @@ public class DrawCanvas extends JPanel{
 				String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate"+((fcCount>0)?"  -  "+fcCount+" FC"+(fcCount==1?"":"s")+"    "+((int)(Math.floor(((float)fcCount)/plays*100)))+"% FC rate":"")+")":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():"")+"     Overall Rating: "+overallrating;
 				Rectangle2D bounds = TextUtils.calculateStringBoundsFont(text, programFont);
 				if (scrollX<-bounds.getWidth()-100) {
-					scrollX=(int)bounds.getWidth()+100;
+					scrollX=0;
 				}
 				DrawUtils.drawOutlineText(g2, programFont, 32+scrollX, 36, 3, Color.WHITE, new Color(0,0,0,64), text);
+				if (scrolling) {
+					DrawUtils.drawOutlineText(g2, programFont, 32+scrollX+(int)bounds.getWidth()+100, 36, 3, Color.WHITE, new Color(0,0,0,64), text);
+				}
 			}
+			
+			 
 			switch (difficulty) {
 				case "H":{
 					g2.drawImage(hard,0,0,20,51,null);

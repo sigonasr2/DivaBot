@@ -1,6 +1,7 @@
 package sig;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
@@ -76,7 +77,8 @@ public class MyRobot{
 	static CustomRobot MYROBOT;
 	Color SCREEN[][];
 	static SongData SONGS[];
-	static String SONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","packaged","Palette","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失 -DEAD END-","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク","ブレス・ユア・ブレス","恋は戦争","あなたの歌姫","Starduster","StargazeR","リンリンシグナル","Rosary Pale","多重未来のカルテット～QUARTET THEME～","LIKE THE WIND","AFTER BURNER"};
+	//static String SONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","packaged","Palette","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失 -DEAD END-","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク","ブレス・ユア・ブレス","恋は戦争","あなたの歌姫","Starduster","StargazeR","リンリンシグナル","Rosary Pale","多重未来のカルテット～QUARTET THEME～","LIKE THE WIND","AFTER BURNER"};
+	static SongInfo SONGNAMES[] = new SongInfo[] {};
 	static String NEWSONGS[] = new String[] {};
 	int SCREEN_X;
 	int SCREEN_Y;
@@ -126,7 +128,12 @@ public class MyRobot{
     static boolean onSongSelect=false;
     
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JSONException, IOException, FontFormatException {
+		JSONObject obj = FileUtils.readJsonFromUrl("http://www.projectdivar.com/songs");
+		SONGNAMES = new SongInfo[JSONObject.getNames(obj).length];
+		for (String key : JSONObject.getNames(obj)) {
+			SONGNAMES[Integer.parseInt(key)-1] = new SongInfo(obj.getJSONObject(key));
+		}
 	    new MyRobot().go();
 	}
 	
@@ -154,6 +161,7 @@ public class MyRobot{
 			p.lastRating = p.overallrating;
 			p.overallrating = (int)obj.getDouble("rating");
 			if (p.lastRating<p.overallrating) {p.ratingTime=System.currentTimeMillis();}
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -167,7 +175,7 @@ public class MyRobot{
 							if (checkSongSelect()) {
 								if (!overlayHidden) {
 									overlayHidden=true;
-									p.repaint(0, 0, 1400, 100);
+									p.repaint(0, 0, 1400, 1000);
 								}
 								GetCurrentSong();
 								GetCurrentDifficulty();
@@ -190,7 +198,7 @@ public class MyRobot{
 							} else {
 								if (overlayHidden) {
 									overlayHidden=false;
-									p.repaint(0, 0, 1400, 100);
+									p.repaint(0, 0, 1400, 1000);
 								}
 								/*selectedSong=new SongData("test",new Color[] {});
 								difficulty="EXEX";*/
@@ -462,7 +470,7 @@ public class MyRobot{
                 50);
 	}
 	
-	void go() {
+	void go() throws FontFormatException, IOException {
 	    initialize();        
 	    //gotoxy(100, 100);
 	    SCREEN = new Color[SCREEN_X][SCREEN_Y];
@@ -573,13 +581,13 @@ public class MyRobot{
             }
          });*/
 	    f.setVisible(true);
-	    f.setSize(1416, 51+48);
+	    f.setSize(1362, 1036);
 	    f.add(p);
 	    f.setTitle("DivaBot");
 	    title = new JTextField();
 	    title.setSize(200,100);
-	    title.setText((currentSong>=SONGNAMES.length)?"DONE!":SONGNAMES[currentSong]);
-	    SongData s = SongData.getByTitle(SONGNAMES[currentSong]);
+	    title.setText((currentSong>=SONGNAMES.length)?"DONE!":SONGNAMES[currentSong].name);
+	    SongData s = SongData.getByTitle(SONGNAMES[currentSong].name);
 	    /*BufferedImage bufferedImage = new BufferedImage(TypeFace.WIDTH, TypeFace.HEIGHT,
 	            BufferedImage.TYPE_INT_RGB);
 	    for (int i=0;i<TypeFace.WIDTH;i++) {
@@ -681,7 +689,7 @@ public class MyRobot{
 	public static boolean checkSongSelect() throws IOException {
 		Color c = new Color(MYROBOT.createScreenCapture(new Rectangle(1255,824,20,20)).getRGB(10, 10));
 		onSongSelect = c.getRed()==43 && c.getGreen()==88 && c.getBlue()==213;
-		System.out.println(onSongSelect+"/"+c);
+		//System.out.println(onSongSelect+"/"+c);
 		return onSongSelect;
 	}
 	

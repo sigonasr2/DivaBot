@@ -2,6 +2,7 @@ package sig;
 import java.awt.Color;
 
 import sig.utils.FileUtils;
+import sig.utils.ImageUtils;
 
 public class SongData {
 	String title;
@@ -22,21 +23,20 @@ public class SongData {
 	}
 	
 	public static SongData compareData(Color[] data) {
+		int closestDistance = Integer.MAX_VALUE; 
+		SongData closestSong = null;
 		for (SongData s : MyRobot.SONGS) {
-			int matched = 0;
+			int distance = 0;
 			for (int i=0;i<s.songCode.length;i++) {
-				if (data[i].equals(s.songCode[i])) {
-					matched++;
-				}
+				distance += ImageUtils.distanceToColor(s.songCode[i],data[i]);
 			}
-			if (matched/(double)s.songCode.length>=TOLERANCE) {
+			if (distance<closestDistance) {
 				//System.out.println(matched+"/"+s.songCode.length+" pixels matched for song "+s.title);
-				return s;
-			} else {
-				//System.out.println(matched+"/"+s.songCode.length+" pixels matched for song "+s.title);
+				closestSong=s;
+				closestDistance=distance;
 			}
 		}
-		return null;
+		return closestSong;
 	}
 	
 	public static void saveSongToFile(String title, Color[] data) {

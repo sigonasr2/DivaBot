@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.font.TextAttribute;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -29,7 +31,7 @@ import sig.utils.FileUtils;
 import sig.utils.ImageUtils;
 import sig.utils.TextUtils;
 
-public class DrawCanvas extends JPanel{
+public class DrawCanvas extends JPanel implements KeyListener{
 	String difficulty;
 	String panelText;
 	Font programFont = new Font("Open Sans Condensed", Font.PLAIN, 32);
@@ -186,5 +188,22 @@ public class DrawCanvas extends JPanel{
         //g2.drawString(songname, 24, 32);
 		g2.drawImage(overallbar, 1349, 0,null);
 		//System.out.println(System.currentTimeMillis()-startTime+"ms");
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		System.out.println(e.getKeyChar());
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

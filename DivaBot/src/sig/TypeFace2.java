@@ -25,30 +25,7 @@ public class TypeFace2 {
 	}
 	
 	public int[] getAllData(BufferedImage img) throws IOException {
-		BufferedImage img2 = ImageUtils.toBufferedImage(img.getScaledInstance(1280, 720, Image.SCALE_AREA_AVERAGING));
-		int[] finalNumbers = new int[5];
-		
-		Rectangle[] ranges = new Rectangle[] {
-				//These coords are in regard to the old screenshot sizes.
-				new Rectangle(866,262,100,20), //33 pixels per line.
-				new Rectangle(866,296,100,20),
-				new Rectangle(866,331,100,20),
-				new Rectangle(866,366,100,20),
-				new Rectangle(866,400,100,20),
-		};
-		
-		for (int i=0;i<ranges.length;i++) {
-			Rectangle r = ranges[i];
-
-			System.out.println("Image "+i+":");
-			File temp = new File("rectangle"+i+".png");
-			ImageIO.write(img2.getSubimage(r.x,r.y,r.width,r.height),"png",temp);
-			
-			finalNumbers[i]=extractNumbersFromImage(img2.getSubimage(
-					r.x,r.y,r.width,r.height),false);
-			
-		}
-		return finalNumbers;
+		return getAllData(img,false);
 	}
 	
 	public int extractNumbersFromImage(BufferedImage img) throws IOException {
@@ -134,5 +111,32 @@ public class TypeFace2 {
 		} else {
 			return Integer.parseInt(total);
 		}
+	}
+
+	public int[] getAllData(BufferedImage img, boolean debug) throws IOException {
+		BufferedImage img2 = ImageUtils.toBufferedImage(img.getScaledInstance(1280, 720, Image.SCALE_SMOOTH));
+		int[] finalNumbers = new int[5];
+		
+		Rectangle[] ranges = new Rectangle[] {
+				//These coords are in regard to the old screenshot sizes.
+				new Rectangle(866,262,100,20), //33 pixels per line.
+				new Rectangle(866,296,100,20),
+				new Rectangle(866,331,100,20),
+				new Rectangle(866,366,100,20),
+				new Rectangle(866,400,100,20),
+		};
+		
+		for (int i=0;i<ranges.length;i++) {
+			Rectangle r = ranges[i];
+
+			System.out.println("Image "+i+":");
+			File temp = new File("rectangle"+i+".png");
+			ImageIO.write(img2.getSubimage(r.x,r.y,r.width,r.height),"png",temp);
+			
+			finalNumbers[i]=extractNumbersFromImage(img2.getSubimage(
+					r.x,r.y,r.width,r.height),debug);
+			
+		}
+		return finalNumbers;
 	}
 }

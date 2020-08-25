@@ -40,4 +40,7 @@ public class CustomRobot extends Robot{
 		return currentScreen.getSubimage((int)((r.x-418)*(894d/1227)), (int)((r.y-204)*(503d/690)), (int)Math.ceil(r.width*(894d/1227)), (int)Math.ceil(r.height*(503d/690)));
 		//return  super.createScreenCapture(new Rectangle(r.x-418,r.y-204,912-18,586-83));
 	}
+	public synchronized BufferedImage createScoreScreenCapture() {
+		return scoreCurrentScreen;
+	}
 }

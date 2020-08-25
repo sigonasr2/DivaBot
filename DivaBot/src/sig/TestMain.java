@@ -20,9 +20,9 @@ public class TestMain {
 		/*Thread.sleep(3000);
 		r.refreshScoreScreen();
 		ImageIO.write(r.scoreCurrentScreen,"png",new File("testimage.png"));*/
-		System.out.println(Arrays.toString(font.getAllData(ImageIO.read(new File("testimage.png")))));
+		/*System.out.println(Arrays.toString(font.getAllData(ImageIO.read(new File("testimage.png")))));
 		System.out.println(Arrays.toString(font.getAllData(ImageIO.read(new File("testimage2.png")))));
 		System.out.println(Arrays.toString(font.getAllData(ImageIO.read(new File("testimage3.png")))));
-		System.out.println(Arrays.toString(font.getAllData(ImageIO.read(new File("testimage4.png")))));
+		System.out.println(Arrays.toString(font.getAllData(ImageIO.read(new File("testimage4.png")))));*/
 	}
 }

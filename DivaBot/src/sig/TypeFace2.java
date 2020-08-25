@@ -17,15 +17,297 @@ import sig.utils.ImageUtils;
 public class TypeFace2 {
 	BufferedImage img;
 	BufferedImage font;
+	BufferedImage percentfont;
 	int xpointer = 99;
+	int ypointer = 0;
 	public static final int THRESHOLD = 30000;
 	
-	public TypeFace2(BufferedImage font) {
+	public TypeFace2(BufferedImage font,BufferedImage percentfont) {
 		this.font=font;
+		this.percentfont = percentfont;
+		
+		File debugdir = new File("debug");
+		debugdir.mkdirs();
 	}
 	
-	public int[] getAllData(BufferedImage img) throws IOException {
+	public Result getAllData(BufferedImage img) throws IOException {
 		return getAllData(img,false);
+	}
+
+	public Result getAllData(BufferedImage img, boolean debug) throws IOException {
+		BufferedImage img2 = ImageUtils.toBufferedImage(img.getScaledInstance(1280, 720, Image.SCALE_SMOOTH));
+		Result result = new Result("","",-1,-1,-1,-1,-1,-1f);
+		int[] finalNumbers = new int[5];
+		
+		Rectangle[] ranges = new Rectangle[] {
+				//These coords are in regard to the old screenshot sizes.
+				new Rectangle(866,262,100,20), //33 pixels per line.
+				new Rectangle(866,296,100,20),
+				new Rectangle(866,331,100,20),
+				new Rectangle(866,366,100,20),
+				new Rectangle(866,400,100,20),
+		};
+		
+		for (int i=0;i<ranges.length;i++) {
+			Rectangle r = ranges[i];
+
+			//System.out.println("Image "+i+":");
+			File temp = new File("rectangle"+i+".png");
+			ImageIO.write(img2.getSubimage(r.x,r.y,r.width,r.height),"png",temp);
+			
+			finalNumbers[i]=extractNumbersFromImage(img2.getSubimage(
+					r.x,r.y,r.width,r.height),debug);
+			
+		}
+		result.cool = finalNumbers[0];
+		result.fine = finalNumbers[1];
+		result.safe = finalNumbers[2];
+		result.sad = finalNumbers[3];
+		result.worst = finalNumbers[4];
+		
+		float percent = extractPercentFromImage(img2,debug);
+		
+		result.percent=percent;
+		// result.percent = ??
+		return result;
+	}
+	
+	public float extractPercentFromImage(BufferedImage img) throws IOException {
+		return extractPercentFromImage(img,false);
+	}
+	
+	public float extractPercentFromImage(BufferedImage img,boolean debug) throws IOException {
+		//1180,167
+		//second part: 1123
+		String decimal = "";
+		String integer = "";
+		xpointer=1180;
+		ypointer=165;
+		BufferedImage test = null;
+		
+		trialloop:
+		while (ypointer<168) {
+			xpointer=1180;
+			while (xpointer>1132) {
+				int foundIndex = -1;
+				for (int i=0;i<10;i++) {
+					if (debug) {
+						test = new BufferedImage(24,29,BufferedImage.TYPE_INT_ARGB);
+					}
+					boolean ruleBreak=false;
+					
+					colorloop:
+					for (int x=0;x<24;x++) {
+						for (int y=0;y<29;y++) {
+							Color fontCol = new Color(percentfont.getRGB(x+i*24,y));
+							Color pixelCol = new Color(img.getRGB(xpointer-24+x+1, y+ypointer));
+							/*if (fontCol.equals(Color.RED) && pixelCol.getRed()<50
+									 && pixelCol.getGreen()<150 && pixelCol.getBlue()>150) {
+								//Breaks a rule.
+								ruleBreak=true;
+								if (!debug) {
+									break colorloop;
+								} else {
+									test.setRGB(x, y, Color.RED.getRGB());
+								}
+							} else
+							if (fontCol.equals(Color.GREEN) && (pixelCol.getRed()>50
+									 || pixelCol.getGreen()>170 || pixelCol.getBlue()<150)) {
+								//Breaks a rule.
+								ruleBreak=true;
+								if (!debug) {
+									break colorloop;
+								} else {
+									test.setRGB(x, y, Color.GREEN.getRGB());
+								}
+							} else
+							if (debug) {
+								test.setRGB(x, y, pixelCol.getRGB());
+							}*/
+							
+							if (fontCol.equals(Color.RED)) {
+								if (pixelCol.getRed()>=200
+									 && pixelCol.getGreen()>=200 && pixelCol.getBlue()>=200) {
+									if (debug) {
+										test.setRGB(x, y, pixelCol.getRGB());
+									}
+								} else {
+									ruleBreak=true;
+									if (!debug) {
+										break colorloop;
+									} else {
+										test.setRGB(x, y, Color.RED.getRGB());
+									}
+								}
+							} else 
+							if (fontCol.equals(Color.GREEN)) {
+								if ((pixelCol.getRed()<75
+										 && pixelCol.getGreen()<170 && pixelCol.getBlue()>130)) {
+									if (debug) {
+										test.setRGB(x, y, pixelCol.getRGB());
+									}
+								} else {
+									ruleBreak=true;
+									if (!debug) {
+										break colorloop;
+									} else {
+										test.setRGB(x, y, Color.GREEN.getRGB());
+									}
+								}
+							} else {
+								if (debug) {
+									test.setRGB(x, y, img.getRGB(xpointer-24+x+1, y+ypointer));
+								}
+							}
+						}
+					}
+					if (!ruleBreak) {
+						foundIndex=i;
+						if (debug) {
+							System.out.println("Passes as "+((foundIndex+1)%10));
+						}
+					} else 
+					if (debug) {
+						ImageIO.write(test,"png",new File("debug",System.nanoTime()+"_"+((i+1)%10)+".png"));
+					}
+				}
+				
+				if (foundIndex!=-1) {
+					//System.out.println("  Closest Match: Index "+((shortestIndex+1)%10)+" ("+shortestDistance+")");
+					if (decimal.equals("")) {
+						decimal = Integer.toString((foundIndex+1)%10); 
+					} else {
+						decimal = Integer.toString((foundIndex+1)%10)+decimal;
+					}
+					if (debug) {
+						System.out.println("Input as "+((foundIndex+1)%10));
+						System.out.println("-------------");
+					}
+					xpointer-=24;
+				} else {
+					//Try shifting the xpointer slowly to the right and try again.
+					xpointer--;
+				}
+			}
+			if (decimal.length()>0) {
+				break trialloop;
+			}
+			ypointer++;
+		}
+
+		xpointer=1123;
+		ypointer=165;
+		trialloop:
+		while (ypointer<168) {
+			xpointer=1123;
+			while (xpointer>1051) {
+				int foundIndex = -1;
+				for (int i=0;i<10;i++) {
+					if (debug) {
+						test = new BufferedImage(24,29,BufferedImage.TYPE_INT_ARGB);
+					}
+					boolean ruleBreak=false;
+					
+					colorloop:
+					for (int x=0;x<24;x++) {
+						for (int y=0;y<29;y++) {
+							Color fontCol = new Color(percentfont.getRGB(x+i*24,y));
+							Color pixelCol = new Color(img.getRGB(xpointer-24+x+1, y+ypointer));
+							/*if (fontCol.equals(Color.RED) && pixelCol.getRed()<50
+									 && pixelCol.getGreen()<150 && pixelCol.getBlue()>150) {
+								//Breaks a rule.
+								ruleBreak=true;
+								if (!debug) {
+									break colorloop;
+								} else {
+									test.setRGB(x, y, Color.RED.getRGB());
+								}
+							} else
+							if (fontCol.equals(Color.GREEN) && (pixelCol.getRed()>50
+									 || pixelCol.getGreen()>170 || pixelCol.getBlue()<150)) {
+								//Breaks a rule.
+								ruleBreak=true;
+								if (!debug) {
+									break colorloop;
+								} else {
+									test.setRGB(x, y, Color.GREEN.getRGB());
+								}
+							} else
+							if (debug) {
+								test.setRGB(x, y, pixelCol.getRGB());
+							}*/
+							
+							if (fontCol.equals(Color.RED)) {
+								if (pixelCol.getRed()>=200
+									 && pixelCol.getGreen()>=200 && pixelCol.getBlue()>=200) {
+									if (debug) {
+										test.setRGB(x, y, pixelCol.getRGB());
+									}
+								} else {
+									ruleBreak=true;
+									if (!debug) {
+										break colorloop;
+									} else {
+										test.setRGB(x, y, Color.RED.getRGB());
+									}
+								}
+							} else 
+							if (fontCol.equals(Color.GREEN)) {
+								if ((pixelCol.getRed()<75
+										 && pixelCol.getGreen()<170 && pixelCol.getBlue()>130)) {
+									if (debug) {
+										test.setRGB(x, y, pixelCol.getRGB());
+									}
+								} else {
+									ruleBreak=true;
+									if (!debug) {
+										break colorloop;
+									} else {
+										test.setRGB(x, y, Color.GREEN.getRGB());
+									}
+								}
+							} else {
+								if (debug) {
+									test.setRGB(x, y, img.getRGB(xpointer-24+x+1, y+ypointer));
+								}
+							}
+						}
+					}
+					if (!ruleBreak) {
+						foundIndex=i;
+						if (debug) {
+							System.out.println("Passes as "+((foundIndex+1)%10));
+						}
+					} else 
+					if (debug) {
+						ImageIO.write(test,"png",new File("debug",System.nanoTime()+"_"+((i+1)%10)+".png"));
+					}
+				}
+				
+				if (foundIndex!=-1) {
+					//System.out.println("  Closest Match: Index "+((shortestIndex+1)%10)+" ("+shortestDistance+")");
+					if (integer.equals("")) {
+						integer = Integer.toString((foundIndex+1)%10); 
+					} else {
+						integer = Integer.toString((foundIndex+1)%10)+integer;
+					}
+					if (debug) {
+						System.out.println("Input as "+((foundIndex+1)%10));
+						System.out.println("-------------");
+					}
+					xpointer-=24;
+				} else {
+					//Try shifting the xpointer slowly to the right and try again.
+					xpointer--;
+				}
+			}
+			if (integer.length()>0) {
+				break trialloop;
+			}
+			ypointer++;
+		}
+		
+		return Float.parseFloat(integer+"."+decimal);
 	}
 	
 	public int extractNumbersFromImage(BufferedImage img) throws IOException {
@@ -63,8 +345,8 @@ public class TypeFace2 {
 								test.setRGB(x, y, Color.RED.getRGB());
 							}
 						} else
-						if (fontCol.equals(Color.GREEN) && (pixelCol.getRed()>150
-								 || pixelCol.getGreen()>150 || pixelCol.getBlue()>150)) {
+						if (fontCol.equals(Color.GREEN) && (pixelCol.getRed()>166
+								 || pixelCol.getGreen()>166 || pixelCol.getBlue()>166)) {
 							//Breaks a rule.
 							ruleBreak=true;
 							if (!debug) {
@@ -85,7 +367,7 @@ public class TypeFace2 {
 					}
 				} else 
 				if (debug) {
-					ImageIO.write(test,"png",new File(System.nanoTime()+"_"+((i+1)%10)+".png"));
+					ImageIO.write(test,"png",new File("debug",System.nanoTime()+"_"+((i+1)%10)+".png"));
 				}
 			}
 			if (foundIndex!=-1) {
@@ -111,32 +393,5 @@ public class TypeFace2 {
 		} else {
 			return Integer.parseInt(total);
 		}
-	}
-
-	public int[] getAllData(BufferedImage img, boolean debug) throws IOException {
-		BufferedImage img2 = ImageUtils.toBufferedImage(img.getScaledInstance(1280, 720, Image.SCALE_SMOOTH));
-		int[] finalNumbers = new int[5];
-		
-		Rectangle[] ranges = new Rectangle[] {
-				//These coords are in regard to the old screenshot sizes.
-				new Rectangle(866,262,100,20), //33 pixels per line.
-				new Rectangle(866,296,100,20),
-				new Rectangle(866,331,100,20),
-				new Rectangle(866,366,100,20),
-				new Rectangle(866,400,100,20),
-		};
-		
-		for (int i=0;i<ranges.length;i++) {
-			Rectangle r = ranges[i];
-
-			System.out.println("Image "+i+":");
-			File temp = new File("rectangle"+i+".png");
-			ImageIO.write(img2.getSubimage(r.x,r.y,r.width,r.height),"png",temp);
-			
-			finalNumbers[i]=extractNumbersFromImage(img2.getSubimage(
-					r.x,r.y,r.width,r.height),debug);
-			
-		}
-		return finalNumbers;
 	}
 }

@@ -513,7 +513,8 @@ public class MyRobot{
 			 typeface2.green_maxthreshold=typeface2.blue_maxthreshold=200;
 			 typeface2.darkFillCheck=false;*/
 	        	typeface1 = new TypeFace2(
-	    				ImageIO.read(new File("typeface.png"))
+	    				ImageIO.read(new File("typeface.png")),
+	    				ImageIO.read(new File("typeface2.png"))
 	    				);
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -691,23 +692,21 @@ public class MyRobot{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		int[] data = typeface1.getAllData(img,debug);
+		Result data = typeface1.getAllData(img,debug);
 		/*int cool = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,451-offset.y,115,26)),new File(tmp,"cool"));
 		int fine = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,484-offset.y,115,26)),new File(tmp,"fine"));
 		int safe = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,518-offset.y,115,26)),new File(tmp,"safe"));
 		int sad = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,553-offset.y,115,26)),new File(tmp,"sad"));
 		int worst = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,583-offset.y,115,26)),new File(tmp,"worst"));*/
-		//TODO Needs fixing.
 		//float percent = (float)typeface2.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1428-offset.x,361-offset.y,128,30)),new File(tmp,"percent"))/100f;
 		//TODO Needs fixing.
 		//boolean fail = textFailPixel(ImageUtils.cropImage(img, new Rectangle(952-offset.x,385-offset.y,1,1)));
-		assert data[0] == _cool : "Expected cool count to be "+_cool+", got "+data[0];
-		assert data[1] == _fine : "Expected fine count to be "+_fine+", got "+data[1];
-		assert data[2] == _safe : "Expected safe count to be "+_safe+", got "+data[2];
-		assert data[3] == _sad : "Expected sad count to be "+_sad+", got "+data[3];
-		assert data[4] == _worst : "Expected worst count to be "+_worst+", got "+data[4];
-		//TODO Needs fixing.
-		//assert percent == _percent : "Expected percent to be "+_percent+", got "+percent;
+		assert data.cool == _cool : "Expected cool count to be "+_cool+", got "+data.cool;
+		assert data.fine == _fine : "Expected fine count to be "+_fine+", got "+data.fine;
+		assert data.safe == _safe : "Expected safe count to be "+_safe+", got "+data.safe;
+		assert data.sad == _sad : "Expected sad count to be "+_sad+", got "+data.sad;
+		assert data.worst == _worst : "Expected worst count to be "+_worst+", got "+data.worst;
+		assert data.percent == _percent : "Expected percent to be "+_percent+", got "+data.percent;
 		//TODO Needs fixing.
 		//assert fail == _fail : "Expected fail to be "+_fail+", got "+fail;
 		System.out.println(" Passed ("+(System.currentTimeMillis()-startTime)+"ms)!");

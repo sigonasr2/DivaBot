@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+
 import sig.utils.FileUtils;
 import sig.utils.ImageUtils;
 
@@ -20,19 +21,19 @@ public class TypeFace {
 	final static int WIDTH = 32;
 	final static int HEIGHT = 32;
 	final static int NUMBER_COUNT = 10;
-	int blue_minthreshold = 75;
-	int green_minthreshold = 0;
-	int red_minthreshold = 0;
-	int blue_maxthreshold = 255;
-	int green_maxthreshold = 150;
-	int red_maxthreshold = 126;
-	int blue_fillminthreshold = 75;
-	int green_fillminthreshold = 0;
-	int red_fillminthreshold = 0;
-	int blue_fillmaxthreshold = 255;
-	int green_fillmaxthreshold = 150;
-	int red_fillmaxthreshold = 107;
-	boolean darkFillCheck = true;
+	public int blue_minthreshold = 75;
+	public int green_minthreshold = 0;
+	public int red_minthreshold = 0;
+	public int blue_maxthreshold = 255;
+	public int green_maxthreshold = 150;
+	public int red_maxthreshold = 126;
+	public int blue_fillminthreshold = 75;
+	public int green_fillminthreshold = 0;
+	public int red_fillminthreshold = 0;
+	public int blue_fillmaxthreshold = 255;
+	public int green_fillmaxthreshold = 150;
+	public int red_fillmaxthreshold = 107;
+	public boolean darkFillCheck = true;
 	Color[][] numbers = new Color[WIDTH*HEIGHT][NUMBER_COUNT];
 	BufferedImage baseImg;
 	public TypeFace(BufferedImage img) {
@@ -47,8 +48,48 @@ public class TypeFace {
 	}
 	
 	public int extractNumbersFromImage(BufferedImage img,File saveLoc) {
+		return extractNumbersFromImage(img,saveLoc,false);
+	}
+	
+	public int extractNumbersFromImage(BufferedImage img,File saveLoc,boolean debug) {
+		
+		final boolean DEBUG_IMG = debug;
+		
+		for (int x=0;x<img.getWidth();x++) {
+			for (int y=0;y<img.getHeight();y++) {
+				Color currentCol = new Color(img.getRGB(x, y));
+				if (this.equals(DemoApplication.typeface3)) {
+					if ((currentCol.getRed()>=0 && currentCol.getRed()<=70
+						&& currentCol.getGreen()>=0 && currentCol.getGreen()<=100 
+						&& currentCol.getBlue()>=0 && currentCol.getBlue()<=120)) {
+						img.setRGB(x, y, new Color(8,114,140).getRGB());
+					} else {
+						img.setRGB(x, y, Color.WHITE.getRGB());
+					}
+				} else
+				if ((currentCol.getRed()>=0 && currentCol.getRed()<=105
+				&& currentCol.getGreen()>=0 && currentCol.getGreen()<=150 
+				&& currentCol.getBlue()>=0 && currentCol.getBlue()<=150) ||
+						(this.equals(DemoApplication.typeface2) && 
+								currentCol.getRed()>=0 && currentCol.getRed()<=120
+						&& currentCol.getGreen()>=100 && currentCol.getGreen()<=210 
+						&& currentCol.getBlue()>=120 && currentCol.getBlue()<=230
+								&& currentCol.getGreen()+5<currentCol.getBlue())) {
+					img.setRGB(x, y, new Color(8,114,140).getRGB());
+				} else {
+					img.setRGB(x, y, Color.WHITE.getRGB());
+				}
+			}
+		}
+		
+		
 		if (!saveLoc.exists()) {
 			saveLoc.mkdirs();
+		}
+		try {
+			ImageIO.write(img,"png",new File(saveLoc,"img.png"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 		
 		int midY = img.getHeight()/2;
@@ -59,8 +100,6 @@ public class TypeFace {
 		int state = 0;
 		
 		BufferedImage numberImg = null;
-		
-		final boolean DEBUG_IMG = false;
 		
 
 		int iterations=0;
@@ -85,7 +124,7 @@ public class TypeFace {
 							}
 						}
 						if (darkFillCheck) {
-							success = fillDark(img,X,midY,0,0);
+							success = fillDark(img,X,midY,0,0,0);
 							if (!success) {
 								//We're done.
 								X=img.getWidth();
@@ -96,6 +135,7 @@ public class TypeFace {
 				}break;
 				case 1:{
 					//Move right until light pixel.
+					//Check if next pixel is also a light pixel.
 					if (p.getBlue()>200 && p.getGreen()>200 && p.getRed()>200) {
 						state=2;
 						if (DEBUG_IMG) {
@@ -107,6 +147,7 @@ public class TypeFace {
 								e.printStackTrace();
 							}
 						}
+						//System.out.println("Found light pixel");
 					}
 				}break;
 				case 2:{
@@ -118,8 +159,17 @@ public class TypeFace {
 						X=img.getWidth();
 						break;
 					} else {
-						X+=i.maxX-1;
 						numberImg = i.createImage();
+						if (numberImg.getWidth()>=32) {
+							state=0;
+							break;
+						}
+						X+=i.maxX;
+						if (numberImg.getHeight()<10 || numberImg.getWidth()<4) {
+							//A number should be at least 10 pixels high...This is not satisfactory.
+							state=4;
+							break;
+						}
 						//X+=numberImg.getWidth();
 						state=3;
 						if (DEBUG_IMG) {
@@ -131,6 +181,7 @@ public class TypeFace {
 								e.printStackTrace();
 							}
 						}
+						//System.out.println("Moving to next step: ");
 					}
 				}break;
 				case 3:{
@@ -140,6 +191,8 @@ public class TypeFace {
 					int[] hits = new int[NUMBER_COUNT];
 					double highestRatio = 0;
 					int highest = 0;
+					boolean goNext=false;
+					boolean foundOne=false;
 					for (int k=0;k<NUMBER_COUNT;k++) {
 						BufferedImage img2 = ImageUtils.toCompatibleImage(ImageUtils.copyBufferedImage(numberImg));
 						for (int i=0;i<WIDTH;i++) {
@@ -147,8 +200,26 @@ public class TypeFace {
 								if (i<numberImg.getWidth() &&
 										j<numberImg.getHeight()) {
 									Color pixel = new Color(numberImg.getRGB(i, j));
-									if (numbers[i*HEIGHT+j][k].getRed()==pixel.getRed() && numbers[i*HEIGHT+j][k].getGreen()==pixel.getGreen() && numbers[i*HEIGHT+j][k].getBlue()==pixel.getBlue()) {
-										hits[k]++;
+									if (numbers[i*HEIGHT+j][k].getRed()==0 && numbers[i*HEIGHT+j][k].getGreen()==255 && numbers[i*HEIGHT+j][k].getBlue()==0
+											&& pixel.getRed()==255 && pixel.getGreen()==255 && pixel.getBlue()==255) {
+										goNext=true;
+										img2.setRGB(i, j, Color.MAGENTA.getRGB());
+										break;
+									}
+									if (numbers[i*HEIGHT+j][k].getRed()==255 && numbers[i*HEIGHT+j][k].getGreen()==0 && numbers[i*HEIGHT+j][k].getBlue()==0
+											&& pixel.getRed()==0 && pixel.getGreen()==0 && pixel.getBlue()==0) {
+										goNext=true;
+										img2.setRGB(i, j, Color.YELLOW.getRGB());
+										break;
+									}
+									if (!goNext) {
+										foundOne=true;
+									}
+									if (numbers[i*HEIGHT+j][k].equals(Color.RED) || numbers[i*HEIGHT+j][k].equals(Color.GREEN) ||
+											(numbers[i*HEIGHT+j][k].getRed()==pixel.getRed() && numbers[i*HEIGHT+j][k].getGreen()==pixel.getGreen() && numbers[i*HEIGHT+j][k].getBlue()==pixel.getBlue())) {
+										if (!(numbers[i*HEIGHT+j][k].equals(Color.GREEN) && numbers[i*HEIGHT+j][k].equals(Color.RED))) {
+											hits[k]++;
+										}
 										//System.out.println("Hit for "+((k+1)%NUMBER_COUNT)+"! "+hits[k] + "/"+numbers[i*HEIGHT+j][k]+"/"+pixel);
 										if ((double)hits[k]/(WIDTH*HEIGHT)>highestRatio) {
 											highestRatio= (double)(hits[k])/(WIDTH*HEIGHT);
@@ -164,6 +235,7 @@ public class TypeFace {
 									}
 								}
 							}
+							if (goNext) {break;}
 						}
 						FileUtils.logToFile(((k+1)%NUMBER_COUNT)+":"+((double)(hits[k])/(WIDTH*HEIGHT)), new File(saveLoc,(iterations)+".txt").getPath());
 						try {
@@ -171,6 +243,12 @@ public class TypeFace {
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
+						goNext=false;
+					}
+					if (!foundOne) {
+						state=0;
+						iterations++;
+						break;
 					}
 					//System.out.println("Matches closest to "+((highest+1)%NUMBER_COUNT)+" with "+highestRatio);
 					iterations++;
@@ -178,11 +256,9 @@ public class TypeFace {
 					state=4;
 				}break;
 				case 4:{
-					//Find dark pixels again.
-					if (p.getBlue()>blue_minthreshold && p.getBlue()<blue_maxthreshold &&
-							p.getGreen()>green_minthreshold && p.getGreen()<green_maxthreshold &&
-							p.getRed()>red_minthreshold && p.getRed()<red_maxthreshold) {
-						//We found a dark pixel. Back to the start.
+					//Find light pixels again.
+					if (p.getBlue()>200 && p.getGreen()>200 && p.getRed()>200) {
+						X-=2;
 						state=0;
 						if (DEBUG_IMG) {
 							try {
@@ -193,6 +269,7 @@ public class TypeFace {
 								e.printStackTrace();
 							}
 						}
+						//System.out.println("Found next dark pixel");
 					}
 				}break;
 			}
@@ -206,8 +283,11 @@ public class TypeFace {
 		}
 	}
 
-	public boolean fillDark(BufferedImage img,int startX,int startY,int x,int y) {
+	public boolean fillDark(BufferedImage img,int startX,int startY,int x,int y, int iterations) {
 		//rect.AddPixel(new Point(x,y), Color.BLACK);
+		if (iterations>Math.max(img.getWidth(),img.getHeight())) {
+			return false;
+		}
 		img.setRGB(startX+x, startY+y, Color.BLACK.getRGB());
 		Color p = null;
 		if (startX+x+1<img.getWidth()) {
@@ -215,7 +295,7 @@ public class TypeFace {
 			if (p.getBlue()>blue_fillminthreshold && p.getBlue()<blue_fillmaxthreshold &&
 					p.getGreen()>green_fillminthreshold && p.getGreen()<green_fillmaxthreshold &&
 					p.getRed()>red_fillminthreshold && p.getRed()<red_fillmaxthreshold) {
-				fillDark(img,startX,startY,x+1,y);
+				fillDark(img,startX,startY,x+1,y,iterations+1);
 			}
 		} else {
 			return false;
@@ -225,7 +305,7 @@ public class TypeFace {
 			if (p.getBlue()>blue_fillminthreshold && p.getBlue()<blue_fillmaxthreshold &&
 					p.getGreen()>green_fillminthreshold && p.getGreen()<green_fillmaxthreshold &&
 					p.getRed()>red_fillminthreshold && p.getRed()<red_fillmaxthreshold) {
-				fillDark(img,startX,startY,x-1,y);
+				fillDark(img,startX,startY,x-1,y,iterations+1);
 			}
 		} else {
 			return false;
@@ -235,7 +315,7 @@ public class TypeFace {
 			if (p.getBlue()>blue_fillminthreshold && p.getBlue()<blue_fillmaxthreshold &&
 					p.getGreen()>green_fillminthreshold && p.getGreen()<green_fillmaxthreshold &&
 					p.getRed()>red_fillminthreshold && p.getRed()<red_fillmaxthreshold) {
-				fillDark(img,startX,startY,x,y+1);
+				fillDark(img,startX,startY,x,y+1,iterations+1);
 			}
 		} else {
 			return false;
@@ -245,7 +325,7 @@ public class TypeFace {
 			if (p.getBlue()>blue_fillminthreshold && p.getBlue()<blue_fillmaxthreshold &&
 					p.getGreen()>green_fillminthreshold && p.getGreen()<green_fillmaxthreshold &&
 					p.getRed()>red_fillminthreshold && p.getRed()<red_fillmaxthreshold) {
-				fillDark(img,startX,startY,x,y-1);
+				fillDark(img,startX,startY,x,y-1,iterations+1);
 			}
 		} else {
 			return false;

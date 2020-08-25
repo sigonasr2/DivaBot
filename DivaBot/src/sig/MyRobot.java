@@ -30,6 +30,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -115,7 +117,7 @@ public class MyRobot{
     boolean lastfail;
     long lastSongSelectTime = System.currentTimeMillis();
     
-    static TypeFace typeface1,typeface2; 
+    static TypeFace2 typeface1,typeface2; 
     static Thread t = null;
     
     String prevSongTitle = "";
@@ -208,7 +210,7 @@ public class MyRobot{
 									//602,260 16,222,202
 									//901,460 220-255,220-255,160-220
 									
-									if (OnResultsScreen() && !recordedResults && !recordingResults && results.size()==0) {
+									if (OnResultsScreen() && !recordedResults && !recordingResults && results.size()==0 && false) {
 										lastSongSelectTime=System.currentTimeMillis();
 										//gotoxy(800,64);
 										//click();
@@ -226,25 +228,27 @@ public class MyRobot{
 									    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,553,115,26))));
 									    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26))));
 									    //System.out.println(typeface2.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1428,361,128,30))));
+										ImageIO.write(MYROBOT.createNormalScreenCapture(new Rectangle(418,204,1227,690)),"png",new File("scoreimage.png"));
 										File tmp = new File("tmp");
 										if (tmp.exists()) {
 											FileUtils.deleteFile(tmp);
 										} else {
 											tmp.mkdir();
 										}
-										int cool = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,451,115,26)),new File(tmp,"cool"));
-										int fine = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,484,115,26)),new File(tmp,"fine"));
-										int safe = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,518,115,26)),new File(tmp,"safe"));
-										int sad = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,553,115,26)),new File(tmp,"sad"));
-										int worst = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26)),new File(tmp,"worst"));
+										int cool = typeface1.extractNumbersFromImage(MYROBOT.createNormalScreenCapture(new Rectangle(1235,451,115,26)),new File(tmp,"cool"));
+										int fine = typeface1.extractNumbersFromImage(MYROBOT.createNormalScreenCapture(new Rectangle(1235,484,115,26)),new File(tmp,"fine"));
+										int safe = typeface1.extractNumbersFromImage(MYROBOT.createNormalScreenCapture(new Rectangle(1235,518,115,26)),new File(tmp,"safe"));
+										int sad = typeface1.extractNumbersFromImage(MYROBOT.createNormalScreenCapture(new Rectangle(1235,553,115,26)),new File(tmp,"sad"));
+										int worst = typeface1.extractNumbersFromImage(MYROBOT.createNormalScreenCapture(new Rectangle(1235,583,115,26)),new File(tmp,"worst"));
 										
-										boolean fail = textFailPixel(MYROBOT.createScreenCapture(new Rectangle(952,385,1,1))); 
+										boolean fail = textFailPixel(MYROBOT.createNormalScreenCapture(new Rectangle(952,385,1,1))); 
 										/*try {
 											ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26)),"png",new File("worst.png"));
 										} catch (IOException e) {
 											e.printStackTrace();
 										}*/
-										float percent = (float)typeface2.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1428,361,128,30)),new File(tmp,"percent"))/100f;
+										float percent = (float)typeface2.extractNumbersFromImage(MYROBOT.createNormalScreenCapture(new Rectangle(1428,361,128,30)),new File(tmp,"percent"))/100f;
+										ImageIO.write(MYROBOT.createNormalScreenCapture(new Rectangle(418,204,1227,690)),"png",new File("test.png"));
 										if (cool==-1 || fine==-1 || safe==-1 || sad==-1 || worst==-1 || percent==-0.01f) {
 											System.out.println("Waiting for results to populate...");
 										} else 
@@ -260,18 +264,6 @@ public class MyRobot{
 											int playId = songFolderFiles.length;
 											File playFolder = new File(selectedSong.title+"/"+difficulty+"/"+playId);
 											playFolder.mkdir();
-											try {
-												/*FileUtils.copyFileDir(new File(tmp,"cool"), new File(playFolder,"cool"));
-												FileUtils.copyFileDir(new File(tmp,"fine"), new File(playFolder,"fine"));
-												FileUtils.copyFileDir(new File(tmp,"safe"), new File(playFolder,"safe"));
-												FileUtils.copyFileDir(new File(tmp,"sad"), new File(playFolder,"sad"));
-												FileUtils.copyFileDir(new File(tmp,"worst"), new File(playFolder,"worst"));
-												FileUtils.copyFileDir(new File(tmp,"percent"), new File(playFolder,"percent"));*/
-												//FileUtils.deleteFile(tmp);
-												ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(418,204,1227,690)),"png",new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+cool+"_"+fine+"_"+safe+"_"+sad+"_"+worst+"_"+percent+".png"));
-											} catch (IOException e) {
-												e.printStackTrace();
-											}
 											recordedResults=true;
 											lastcool=cool;
 											lastfine=fine;
@@ -280,7 +272,7 @@ public class MyRobot{
 											lastworst=worst;
 											lastpercent=percent;
 											lastfail=fail;
-											
+											new File("scoreimage.png").renameTo(new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+cool+"_"+fine+"_"+safe+"_"+sad+"_"+worst+"_"+percent+".png"));
 											results.add(new Result(selectedSong.title,difficulty,cool,fine,safe,sad,worst,percent,fail));
 											SoundUtils.playSound("collect_item.wav");
 											//gotoxy(800,64);
@@ -345,7 +337,15 @@ public class MyRobot{
 
 											try {
 												JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/sigonasr2");
+												JSONObject obj2 = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/bestplay/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
 												p.lastRating = p.overallrating;
+												if (obj2.has("score")) {
+													double newScore = obj2.getDouble("score");
+													if (newScore>p.lastScore) {
+														p.bestPlayTime=System.currentTimeMillis();
+													}
+													p.lastScore = newScore;
+												}
 												p.overallrating = (int)obj.getDouble("rating");
 												if (p.lastRating<p.overallrating) {p.ratingTime=System.currentTimeMillis();}
 												p.pullData(selectedSong.title, difficulty);
@@ -418,6 +418,7 @@ public class MyRobot{
 									}
 								}
 							}
+							MYROBOT.refreshScreen();
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -503,8 +504,8 @@ public class MyRobot{
         try {
 			 img1 = ImageUtils.toCompatibleImage(ImageIO.read(new File("typeface1.png")));
 			 img2 = ImageUtils.toCompatibleImage(ImageIO.read(new File("typeface2.png")));
-			 typeface1 = new TypeFace(img1);
-			 typeface2 = new TypeFace(img2);
+			 typeface1 = new TypeFace2(img1);
+			 typeface2 = new TypeFace2(img2);
 			 typeface2.green_minthreshold=typeface2.blue_minthreshold=100;
 			 typeface2.green_maxthreshold=typeface2.blue_maxthreshold=200;
 			 typeface2.darkFillCheck=false;
@@ -705,6 +706,7 @@ public class MyRobot{
 	    setKeyMap();
 	    try {
 	        MYROBOT = new CustomRobot();
+	        MYROBOT.refreshScreen();
 	    } catch (Exception e) {
 	        JOptionPane.showOptionDialog(null, "Can't build the robot!", "Error", -1, 1, null, null, this);
 	        System.exit(1);

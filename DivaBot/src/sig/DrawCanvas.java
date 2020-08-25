@@ -57,7 +57,9 @@ public class DrawCanvas extends JPanel implements KeyListener{
 	BufferedImage overallbar;
 	BufferedImage panel,paneloverlay,songpanel,songpaneloverlay;
     long ratingTime = System.currentTimeMillis()-10000;
+    long bestPlayTime = System.currentTimeMillis()-10000;
     int lastRating = -1;
+    double lastScore = 0d;
     Thread t = null;
     boolean scrolling = false;
     int scrollX = 0;
@@ -111,7 +113,7 @@ public class DrawCanvas extends JPanel implements KeyListener{
 		passes=0;
 		fcCount=0;
 		artist="";
-		this.repaint(0,0,1400,100);
+		this.repaint(0,0,1400,1000);
 		if (t!=null && t.isAlive()) {
 			t.stop();
 		}
@@ -132,6 +134,7 @@ public class DrawCanvas extends JPanel implements KeyListener{
 					JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/bestplay/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
 					if (obj.has("cool")) {
 						bestPlay = new Result(MyRobot.p.songname,difficulty,obj.getInt("cool"),obj.getInt("fine"),obj.getInt("safe"),obj.getInt("sad"),obj.getInt("worst"),(float)obj.getDouble("percent"));
+						lastScore = obj.getDouble("score");
 					} else {
 						bestPlay = null;
 					}
@@ -182,11 +185,21 @@ public class DrawCanvas extends JPanel implements KeyListener{
 			g2.drawImage(panel, 484,935,null);
 			g2.drawImage(panel, 968,935,null);
 
-			DrawUtils.drawOutlineText(g2, programFont, 8, 42, 1, Color.WHITE, new Color(0,0,0,64), ((romanizedname.length()>0)?romanizedname:englishname));
-			
-			DrawUtils.drawOutlineText(g2, programFontSmall, 8, 935+42, 1, Color.WHITE, new Color(0,0,0,64),((bestPlay!=null)?bestPlay.display():""));
+			String songDisplay = ((romanizedname.length()>0)?romanizedname:englishname) + " - " + artist;
+			Rectangle2D bounds = TextUtils.calculateStringBoundsFont(songDisplay, programFont);
+			if (bounds.getWidth()>675) {
+				DrawUtils.drawOutlineText(g2, programFontSmall, 8, 42, 1, Color.WHITE, new Color(0,0,0,64), songDisplay);
+			} else {
+				DrawUtils.drawOutlineText(g2, programFont, 8, 42, 1, Color.WHITE, new Color(0,0,0,64), songDisplay);
+			}
+
+			if ((bestPlayTime>System.currentTimeMillis()-10000)) {
+				DrawUtils.drawOutlineText(g2, programFont, 8, 935+42, 1, new Color(220,220,255,(int)Math.min(((System.currentTimeMillis()-bestPlayTime))/5,255)), new Color(0,0,0,64),"New Record!");
+			} else {
+				DrawUtils.drawOutlineText(g2, programFontSmall, 8, 935+42, 1, Color.WHITE, new Color(0,0,0,64),((bestPlay!=null)?bestPlay.display():""));
+			}
 			if ((ratingTime>System.currentTimeMillis()-10000)) {
-				DrawUtils.drawOutlineText(g2, programFont, 484+8, 935+42, 1, new Color(220,220,255,(int)Math.min(((System.currentTimeMillis()-ratingTime))/5,255)), new Color(0,0,0,64),"Rating up! "+lastRating+" -> "+overallrating);
+				DrawUtils.drawOutlineText(g2, programFontSmall, 484+8, 935+42, 1, new Color(220,220,255,(int)Math.min(((System.currentTimeMillis()-ratingTime))/5,255)), new Color(0,0,0,64),"Rating up! "+lastRating+" -> "+overallrating);
 			} else {
 				DrawUtils.drawOutlineText(g2, programFont, 484+8, 935+42, 1, Color.WHITE, new Color(0,0,0,64),Integer.toString(overallrating));
 			}

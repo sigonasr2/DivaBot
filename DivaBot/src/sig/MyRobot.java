@@ -202,18 +202,10 @@ public class MyRobot{
 									overlayHidden=false;
 									p.repaint(0, 0, 1400, 1000);
 								}
-								/*selectedSong=new SongData("test",new Color[] {});
-								difficulty="EXEX";*/
-								if ((selectedSong!=null && difficulty!=null) /*|| true*/) {
-									//Look for the results screen.
-									//602,217 254,254,254
-									//602,260 16,222,202
-									//901,460 220-255,220-255,160-220
+								if ((selectedSong!=null && difficulty!=null)) {
 									
-									if (OnResultsScreen() && !recordedResults && !recordingResults && results.size()==0 && false) {
+									if (OnResultsScreen() && !recordedResults && !recordingResults && results.size()==0) {
 										lastSongSelectTime=System.currentTimeMillis();
-										//gotoxy(800,64);
-										//click();
 										MYROBOT.setAutoDelay(0);
 										MYROBOT.keyPress(KeyEvent.VK_CONTROL);
 										MYROBOT.keyPress(KeyEvent.VK_SHIFT);
@@ -221,13 +213,6 @@ public class MyRobot{
 										MYROBOT.keyRelease(KeyEvent.VK_F12);
 										MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
 										MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
-										//1885,761
-									    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,451,115,26))));
-									    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,484,115,26))));
-									    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,518,115,26))));
-									    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,553,115,26))));
-									    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26))));
-									    //System.out.println(typeface2.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1428,361,128,30))));
 										MYROBOT.refreshScoreScreen();
 										ImageIO.write(MYROBOT.createNormalScreenCapture(new Rectangle(418,204,1227,690)),"png",new File("scoreimage.png"));
 										File tmp = new File("tmp");
@@ -236,57 +221,47 @@ public class MyRobot{
 										} else {
 											tmp.mkdir();
 										}
-										int[] data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
-										/*int cool = typeface1.extractNumbersFromImage(MYROBOT.createNormalScreenCapture(new Rectangle(1235,451,115,26)),new File(tmp,"cool"));
-										int fine = typeface1.extractNumbersFromImage(MYROBOT.createNormalScreenCapture(new Rectangle(1235,484,115,26)),new File(tmp,"fine"));
-										int safe = typeface1.extractNumbersFromImage(MYROBOT.createNormalScreenCapture(new Rectangle(1235,518,115,26)),new File(tmp,"safe"));
-										int sad = typeface1.extractNumbersFromImage(MYROBOT.createNormalScreenCapture(new Rectangle(1235,553,115,26)),new File(tmp,"sad"));
-										int worst = typeface1.extractNumbersFromImage(MYROBOT.createNormalScreenCapture(new Rectangle(1235,583,115,26)),new File(tmp,"worst"));
-										*/
-										boolean fail = textFailPixel(MYROBOT.createNormalScreenCapture(new Rectangle(952,385,1,1))); 
-										/*try {
-											ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26)),"png",new File("worst.png"));
-										} catch (IOException e) {
-											e.printStackTrace();
-										}*/
-										//TODO PERCENT
-										//float percent = (float)typeface2.extractNumbersFromImage(MYROBOT.createNormalScreenCapture(new Rectangle(1428,361,128,30)),new File(tmp,"percent"))/100f;
-										ImageIO.write(MYROBOT.createNormalScreenCapture(new Rectangle(418,204,1227,690)),"png",new File("test.png"));
-										if (cool==-1 || fine==-1 || safe==-1 || sad==-1 || worst==-1 || percent==-0.01f) {
-											System.out.println("Waiting for results to populate...");
-										} else 
-										if (fail!=lastfail || cool!=lastcool || lastfine!=fine || lastsafe!=safe || lastsad!=sad || lastworst!=worst /*|| lastpercent!=percent*/){
-											System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+cool+"/"+fine+"/"+safe+"/"+sad+"/"+worst+" "+percent+"%");
-											
-											System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+cool+"/"+fine+"/"+safe+"/"+sad+"/"+worst+" "+percent+"%");
-											File songFolder = new File(selectedSong.title+"/"+difficulty);
-											if (!songFolder.exists()) {
-												songFolder.mkdirs();
+										try {
+											Result data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
+											ImageIO.write(MYROBOT.createNormalScreenCapture(new Rectangle(418,204,1227,690)),"png",new File("test.png"));
+											if (data.cool==-1 || data.fine==-1 || data.safe==-1 || data.sad==-1 || data.worst==-1 || data.percent<0f || data.percent>110f) {
+												System.out.println("Waiting for results to populate...");
+											} else 
+											if (data.fail!=lastfail || data.cool!=lastcool || lastfine!=data.fine || lastsafe!=data.safe || lastsad!=data.sad || lastworst!=data.worst /*|| lastpercent!=percent*/){
+												System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+data.cool+"/"+data.fine+"/"+data.safe+"/"+data.sad+"/"+data.worst+" "+data.percent+"%");
+												
+												System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+data.cool+"/"+data.fine+"/"+data.safe+"/"+data.sad+"/"+data.worst+" "+data.percent+"%");
+												File songFolder = new File(selectedSong.title+"/"+difficulty);
+												if (!songFolder.exists()) {
+													songFolder.mkdirs();
+												}
+												File[] songFolderFiles = songFolder.listFiles();
+												int playId = songFolderFiles.length;
+												File playFolder = new File(selectedSong.title+"/"+difficulty+"/"+playId);
+												playFolder.mkdir();
+												recordedResults=true;
+												lastcool=data.cool;
+												lastfine=data.fine;
+												lastsafe=data.safe;
+												lastsad=data.sad;
+												lastworst=data.worst;
+												lastpercent=data.percent;
+												lastfail=data.fail;
+												new File("scoreimage.png").renameTo(new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+data.cool+"_"+data.fine+"_"+data.safe+"_"+data.sad+"_"+data.worst+"_"+data.percent+".png"));
+												results.add(new Result(selectedSong.title,difficulty,data.cool,data.fine,data.safe,data.sad,data.worst,data.percent,data.fail));
+												SoundUtils.playSound("collect_item.wav");
+												//gotoxy(800,64);
+												//click();
+												MYROBOT.setAutoDelay(0);
+												MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+												MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+												MYROBOT.keyPress(KeyEvent.VK_F11);
+												MYROBOT.keyRelease(KeyEvent.VK_F11);
+												MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+												MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
 											}
-											File[] songFolderFiles = songFolder.listFiles();
-											int playId = songFolderFiles.length;
-											File playFolder = new File(selectedSong.title+"/"+difficulty+"/"+playId);
-											playFolder.mkdir();
-											recordedResults=true;
-											lastcool=cool;
-											lastfine=fine;
-											lastsafe=safe;
-											lastsad=sad;
-											lastworst=worst;
-											lastpercent=percent;
-											lastfail=fail;
-											new File("scoreimage.png").renameTo(new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+cool+"_"+fine+"_"+safe+"_"+sad+"_"+worst+"_"+percent+".png"));
-											results.add(new Result(selectedSong.title,difficulty,cool,fine,safe,sad,worst,percent,fail));
-											SoundUtils.playSound("collect_item.wav");
-											//gotoxy(800,64);
-											//click();
-											MYROBOT.setAutoDelay(0);
-											MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-											MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-											MYROBOT.keyPress(KeyEvent.VK_F11);
-											MYROBOT.keyRelease(KeyEvent.VK_F11);
-											MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-											MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+										} catch (IOException|NumberFormatException|IndexOutOfBoundsException e) {
+											
 										}
 									} else {
 										if (results.size()>0) {
@@ -355,64 +330,6 @@ public class MyRobot{
 											} catch (JSONException | IOException e) {
 												e.printStackTrace();
 											}
-											/*MYROBOT.setAutoDelay(0);
-											MYROBOT.keyPress(KeyEvent.VK_ALT);
-											MYROBOT.keyPress(KeyEvent.VK_TAB);
-											MYROBOT.keyRelease(KeyEvent.VK_ALT);
-											MYROBOT.setAutoDelay(5000);
-											MYROBOT.keyRelease(KeyEvent.VK_TAB);
-											boolean first=true;
-											for (Result r  : results) {
-												if (!first) {
-													MYROBOT.setAutoDelay(5000);
-												} else {
-													first=false;
-													MYROBOT.setAutoDelay(100);
-													TYPE_DELAY=50;
-												}
-												StringSelection selection = new StringSelection((r.songName.equalsIgnoreCase("PIANOGIRL"))?"PIANO*GIRL":r.songName);
-											    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-											    clipboard.setContents(selection, selection);
-												MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-												MYROBOT.keyPress(KeyEvent.VK_V);
-												MYROBOT.keyRelease(KeyEvent.VK_V);
-												MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
-												MYROBOT.setAutoDelay(100);
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												type(Integer.toString(r.cool));
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												type(Integer.toString(r.fine));
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												type(Integer.toString(r.safe));
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												type(Integer.toString(r.sad));
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												type(Integer.toString(r.worst));
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												type(r.difficulty);
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												type(Float.toString(r.percent));
-												MYROBOT.keyPress(KeyEvent.VK_TAB);
-												MYROBOT.keyRelease(KeyEvent.VK_TAB);
-												MYROBOT.setAutoDelay(0);
-												MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-												MYROBOT.keyPress(KeyEvent.VK_ALT);
-												MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-												MYROBOT.keyPress(KeyEvent.VK_1);
-												MYROBOT.keyRelease(KeyEvent.VK_1);
-												MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
-												MYROBOT.keyRelease(KeyEvent.VK_ALT);
-												MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-											}
-											results.clear();
-											sleep(1000);
-											MYROBOT.setAutoDelay(0);
-											MYROBOT.keyPress(KeyEvent.VK_ALT);
-											MYROBOT.keyPress(KeyEvent.VK_TAB);
-											MYROBOT.keyRelease(KeyEvent.VK_ALT);
-											MYROBOT.setAutoDelay(250);
-											MYROBOT.keyRelease(KeyEvent.VK_TAB);
-											*/
 											recordingResults=false;
 										}
 										if (!OnResultsScreen() && recordedResults) {
@@ -423,13 +340,8 @@ public class MyRobot{
 							}
 							MYROBOT.refreshScreen();
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-				    //572,453 
-				    //Red: 100-200, Blue: 200-255 Purple (EXEX)
-				    //Red: 150-255, Green: < 50 Blue: < 50 (EX)
-				    //Red: 175-225, Green: 135-175 Blue: < 50 (Hard)
 				}
 					
 					private boolean OnResultsScreen() {
@@ -482,17 +394,6 @@ public class MyRobot{
 	    
 	    SongData.loadSongsFromFile();
 	    
-	    //img.get
-	    //System.out.println("Captured in "+(System.currentTimeMillis()-startTime)+"ms");
-	    /*for (int i=0;i<200;i++) {
-	    	for (int j=0;j<5;j++) {
-	    		System.out.println(img.getRGB(i, j));
-	    	}
-	    }
-	    System.out.println("Took "+(System.currentTimeMillis()-startTime)+"ms");*/
-	    //System.out.println(Arrays.deepToString(SCREEN));
-	    //460,426
-	    //Screen = new Color[]
 		 System.setProperty("awt.useSystemAAFontSettings","on");
 	    JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -505,13 +406,6 @@ public class MyRobot{
         typeface1 = null;
         typeface2=null;
         try {
-			 /*img1 = ImageUtils.toCompatibleImage(ImageIO.read(new File("typeface1.png")));
-			 img2 = ImageUtils.toCompatibleImage(ImageIO.read(new File("typeface2.png")));
-			 typeface1 = new TypeFace2(img1);
-			 typeface2 = new TypeFace2(img2);
-			 typeface2.green_minthreshold=typeface2.blue_minthreshold=100;
-			 typeface2.green_maxthreshold=typeface2.blue_maxthreshold=200;
-			 typeface2.darkFillCheck=false;*/
 	        	typeface1 = new TypeFace2(
 	    				ImageIO.read(new File("typeface.png")),
 	    				ImageIO.read(new File("typeface2.png"))
@@ -540,54 +434,7 @@ public class MyRobot{
          	   //System.out.println(title.getText());
             }
          });
-        /*inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "Press"); //DEBUG KEYS.
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "Identifier");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "Toggle");*/
-        /*actionMap.put("Press", new AbstractAction() {
-           @Override
-           public void actionPerformed(ActionEvent e) {
-       			BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(460,426,WIDTH,HEIGHT)));
-       			Color[] col = new Color[WIDTH*HEIGHT];
-       			for (int i=0;i<WIDTH;i++) {
-       				for (int j=0;j<HEIGHT;j++) {
-       					col[i*HEIGHT+j]=new Color(img.getRGB(i,j),true);
-       				}
-       			}
-       			SongData.saveSongToFile(title.getText(),col);
-       		    SongData.loadSongsFromFile();
-       			title.setText((++currentSong>=SONGNAMES.length)?"DONE!":SONGNAMES[currentSong]);
-        	   //System.out.println(title.getText());
-           }
-        });
-        actionMap.put("Identifier", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-       			BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(460,426,WIDTH,HEIGHT)));
-       			Color[] col = new Color[WIDTH*HEIGHT];
-       			for (int i=0;i<WIDTH;i++) {
-       				for (int j=0;j<HEIGHT;j++) {
-       					col[i*HEIGHT+j]=new Color(img.getRGB(i,j),true);
-       				}
-       			}
-        		SongData.compareData(col);
-         	   //System.out.println(title.getText());
-            }
-         });
-        actionMap.put("Toggle", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-       			currentSong++;
-       			SongData s = SongData.getByTitle(SONGNAMES[currentSong]);
-       		    BufferedImage bufferedImage = ImageUtils.toCompatibleImage(new BufferedImage(WIDTH, HEIGHT,
-       		            BufferedImage.TYPE_INT_RGB));
-       		    for (int i=0;i<WIDTH;i++) {
-       		    	for (int j=0;j<HEIGHT;j++) {
-       		    		bufferedImage.setRGB(i, j, s.songCode[i*HEIGHT+j].getRGB());
-       		    	}
-       		    }
-       		    p.getGraphics().drawImage(bufferedImage, 0, 0, f);
-            }
-         });*/
+        
 	    f.setVisible(true);
 	    f.setSize(1362, 1036);
 	    f.add(p);
@@ -596,39 +443,6 @@ public class MyRobot{
 	    title.setSize(200,100);
 	    title.setText((currentSong>=SONGNAMES.length)?"DONE!":SONGNAMES[currentSong].name);
 	    SongData s = SongData.getByTitle(SONGNAMES[currentSong].name);
-	    /*BufferedImage bufferedImage = new BufferedImage(TypeFace.WIDTH, TypeFace.HEIGHT,
-	            BufferedImage.TYPE_INT_RGB);
-	    for (int i=0;i<TypeFace.WIDTH;i++) {
-	    	for (int j=0;j<TypeFace.HEIGHT;j++) {
-	    		bufferedImage.setRGB(i, j, typeface1.numbers[i*TypeFace.HEIGHT+j][3].getRGB());
-	    	}
-	    }
-	    p.getGraphics().drawImage(bufferedImage, 0, 0, f);*/
-	    //1205,451 Cool Number range  160x26
-	    //1205,484 Fine Number range  160x26
-	    //1205,518 Safe Number range  160x26
-	    //1205,553 Sad Number range  160x26
-	    //1205,583 Worst Number range  160x26
-	    //1428,361 Percentage 128x30
-	    //572,453 
-	    //Red: 100-200, Blue: 200-255 Purple (EXEX)
-	    //Red: 150-255, Green: < 50 Blue: < 50 (EX)
-	    //Red: 175-225, Green: 135-175 Blue: < 50 (Hard)
-	    //1255-824: Red:43 Green:88 Blue:213
-	    //p.getGraphics().drawImage(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26)), 0, i+=26, f);
-	    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,451,115,26))));
-	    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,484,115,26))));
-	    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,518,115,26))));
-	    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,553,115,26))));
-	    //System.out.println(typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26))));
-	    //System.out.println(typeface2.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1428,361,128,30))));
-	    //p.getGraphics().drawImage(MYROBOT.createScreenCapture(new Rectangle(1205,484,160,26)), 0, i+=26, f);
-	    //p.getGraphics().drawImage(MYROBOT.createScreenCapture(new Rectangle(1205,518,160,26)), 0, i+=26, f);
-	    //p.getGraphics().drawImage(MYROBOT.createScreenCapture(new Rectangle(1205,553,160,26)), 0, i+=26, f);
-	    //p.getGraphics().drawImage(MYROBOT.createScreenCapture(new Rectangle(1205,583,160,26)), 0, i+=26, f);
-	    //p.getGraphics().drawImage(MYROBOT.createScreenCapture(new Rectangle(1428,361,128,30)), 0, i+=26, f);
-	    
-	    //p.getGraphics().fillRect(0, 0, 1349, 51);
 	   
 	    RunTests();
 	    BotMain();
@@ -636,46 +450,37 @@ public class MyRobot{
 	
 	void RunTests() throws IOException {
 		
-		//418,204
-		/*int cool = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,451,115,26)),new File(tmp,"cool"));
-		int fine = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,484,115,26)),new File(tmp,"fine"));
-		int safe = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,518,115,26)),new File(tmp,"safe"));
-		int sad = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,553,115,26)),new File(tmp,"sad"));
-		int worst = typeface1.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1235,583,115,26)),new File(tmp,"worst"));
-
-		float percent = (float)typeface2.extractNumbersFromImage(MYROBOT.createScreenCapture(new Rectangle(1428,361,128,30)),new File(tmp,"percent"))/100f;*/
-		
 		selectedSong=new SongData("LIKE THE WIND",new Color[] {});
 		difficulty="H";
-		/*RunTest("shake it!_EXplay_568_88_8_4_7_96.03.png",580,80,0,4,7,95.03f,false);
-		RunTest("え？あぁ、そう。_EXEXplay_499_121_11_9_43_77.11.png",439,121,11,5,43,77.11f,false);
-		RunTest("サマーアイドル_EXplay_959_56_19_5_10_81.32.png",363,58,15,5,10,84.32f,false);
-		RunTest("テレカクシ思春期_EXplay_44_108_7_4_18_81.8.png",447,109,7,4,16,84.80f,false);
-		RunTest("どういうことなの！？_EXplay_449_85_3_0_3_95.01.png",448,85,2,0,3,95.01f,false);
-		RunTest("天樂_EXplay_361_58_9_4_11_92.67.png",351,56,8,4,11,92.67f,false);
-		RunTest("番凩_EXEXplay_41_110_1_10_21_77.76.png",431,110,17,10,31,77.79f,false);
-		RunTest("結ンデ開イテ羅刹ト骸_EXEXplay_47_123_10_5_46_74.19.png",471,123,10,5,46,74.19f,false);
-		RunTest("エイリアンエイリアン_EXplay_505_278_3_0_5_89.19.png",505,218,3,0,5,89.19f,false);
-		RunTest("アンハッピーリフレイン_EXEXplay_716_163_15_6_64_72.69.png",716,163,15,6,64,72.69f,true);*/
-		RunTest("test1.jpg",393,127,28,10,48,72.28f,false);
-		RunTest("test2.jpg",518,144,17,3,23,81.94f,false);
-		RunTest("test3.jpg",646,54,1,0,0,103.06f,false);
-		RunTest("test4.jpg",518,64,0,0,0,102.57f,false);
-		RunTest("test5.jpg",276,58,3,0,0,89.64f,false);
-		RunTest("test6.jpg",448,129,17,7,42,79.22f,false);
-		RunTest("test7.jpg",419,227,28,7,20,75.76f,false);
-		RunTest("test8.jpg",567,26,0,0,0,104.31f,false);
-		RunTest("testimage.png",371,40,3,4,3,97.63f,false);
-		RunTest("testimage2.png",942,71,1,0,3,97.02f,false);
-		RunTest("testimage3.png",546,52,0,0,0,101.77f,false);
-		RunTest("testimage4.png",279,81,16,2,3,75.40f,false);
+		
+		RunTest("test1.jpg",393,127,28,10,48,72.28f,"EXEX","",false);
+		RunTest("test2.jpg",518,144,17,3,23,81.94f,"H","",false);
+		RunTest("test3.jpg",646,54,1,0,0,103.06f,"EX","",false);
+		RunTest("test4.jpg",518,64,0,0,0,102.57f,"H","",false);
+		RunTest("test5.jpg",276,58,3,0,0,89.64f,"E","",false);
+		RunTest("test6.jpg",448,129,17,7,42,79.22f,"EXEX","",false);
+		RunTest("test7.jpg",419,227,28,7,20,75.76f,"EX","",false);
+		RunTest("test8.jpg",567,26,0,0,0,104.31f,"EX","",false);
+		RunTest("test9.jpg",197,51,0,0,0,100.02f,"H","",false);
+		RunTest("test10.jpg",486,245,46,22,59,65.34f,"H","SD",false);
+		RunTest("test11.jpg",0,0,0,0,159,0.00f,"EX","SD",true);
+		RunTest("test12.jpg",0,0,0,0,79,0.08f,"EX","HD",true);
+		RunTest("testimage.png",371,40,3,4,3,97.63f,"EX","HS",false);
+		RunTest("testimage2.png",942,71,1,0,3,97.02f,"EXEX","",false);
+		RunTest("testimage3.png",546,52,0,0,0,101.77f,"EX","",false);
+		RunTest("testimage4.png",279,81,16,2,3,75.40f,"N","",false);
+		RunTest("testimage5.png",276,184,6,1,11,82.16f,"EXEX","HS",false);
+		RunTest("testimage6.png",455,60,2,0,8,93.48f,"EXEX","HS",false);
+		RunTest("testimage7.png",452,128,8,2,16,88.28f,"EXEX","HS",false);
+		RunTest("testimage8.png",229,38,2,0,13,83.25f,"EXEX","HS",false);
+		RunTest("testimage9.png",413,70,1,0,21,82.66f,"EXEX","HS",false);
 	}
 	
-	void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,boolean _fail) throws IOException {
-		RunTest(_img,_cool,_fine,_safe,_sad,_worst,_percent,false,false);
+	void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,boolean _fail) throws IOException {
+		RunTest(_img,_cool,_fine,_safe,_sad,_worst,_percent,_difficulty,_mod,_fail,false);
 	}
 	
-	void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,boolean _fail,boolean debug) throws IOException {
+	void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,boolean _fail,boolean debug) throws IOException {
 		System.out.println("Running test "+_img);
 		long startTime = System.currentTimeMillis();
 		String testdir="testsuite";
@@ -693,22 +498,15 @@ public class MyRobot{
 			e.printStackTrace();
 		}
 		Result data = typeface1.getAllData(img,debug);
-		/*int cool = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,451-offset.y,115,26)),new File(tmp,"cool"));
-		int fine = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,484-offset.y,115,26)),new File(tmp,"fine"));
-		int safe = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,518-offset.y,115,26)),new File(tmp,"safe"));
-		int sad = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,553-offset.y,115,26)),new File(tmp,"sad"));
-		int worst = typeface1.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1235-offset.x,583-offset.y,115,26)),new File(tmp,"worst"));*/
-		//float percent = (float)typeface2.extractNumbersFromImage(ImageUtils.cropImage(img,new Rectangle(1428-offset.x,361-offset.y,128,30)),new File(tmp,"percent"))/100f;
-		//TODO Needs fixing.
-		//boolean fail = textFailPixel(ImageUtils.cropImage(img, new Rectangle(952-offset.x,385-offset.y,1,1)));
 		assert data.cool == _cool : "Expected cool count to be "+_cool+", got "+data.cool;
 		assert data.fine == _fine : "Expected fine count to be "+_fine+", got "+data.fine;
 		assert data.safe == _safe : "Expected safe count to be "+_safe+", got "+data.safe;
 		assert data.sad == _sad : "Expected sad count to be "+_sad+", got "+data.sad;
 		assert data.worst == _worst : "Expected worst count to be "+_worst+", got "+data.worst;
 		assert data.percent == _percent : "Expected percent to be "+_percent+", got "+data.percent;
-		//TODO Needs fixing.
-		//assert fail == _fail : "Expected fail to be "+_fail+", got "+fail;
+		assert data.fail == _fail : "Expected fail to be "+_fail+", got "+data.fail;
+		assert data.mod == _mod : "Expected mod to be "+_mod+", got "+data.mod;
+		assert data.difficulty == _difficulty : "Expected difficulty to be "+_difficulty+", got "+data.difficulty;
 		System.out.println(" Passed ("+(System.currentTimeMillis()-startTime)+"ms)!");
 	}
 	

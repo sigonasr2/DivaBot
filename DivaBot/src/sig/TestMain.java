@@ -17,11 +17,11 @@ public class TestMain {
 				ImageIO.read(new File("typeface.png")),
 				ImageIO.read(new File("typeface2.png"))
 				);
-		/*CustomRobot r = new CustomRobot();
+		CustomRobot r = new CustomRobot();
 		Thread.sleep(3000);
 		r.refreshScoreScreen();
-		ImageIO.write(r.scoreCurrentScreen,"png",new File("liveimage.png"));*/
-		//System.out.println(font.getAllData(ImageIO.read(new File("liveimage.png")),true).display());
+		ImageIO.write(r.scoreCurrentScreen,"png",new File("liveimage.png"));
+		System.out.println(font.getAllData(ImageIO.read(new File("liveimage.png")),true).display());
 		/*System.out.println(font.getAllData(ImageIO.read(new File("testimage.png"))).display());
 		System.out.println(font.getAllData(ImageIO.read(new File("testimage2.png"))).display());
 		System.out.println(font.getAllData(ImageIO.read(new File("testimage3.png"))).display());

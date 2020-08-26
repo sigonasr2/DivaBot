@@ -9,6 +9,7 @@ public class Result {
 	int cool,fine,safe,sad,worst;
 	float percent;
 	boolean fail;
+	String mod;
 	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent) {
 		this.songName=song;
 		this.difficulty=diff;
@@ -18,6 +19,7 @@ public class Result {
 		this.sad=sad;
 		this.worst=worst;
 		this.percent=percent;
+		this.mod="";
 	}
 	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent,boolean fail) {
 		this(song,diff,cool,fine,safe,sad,worst,percent);

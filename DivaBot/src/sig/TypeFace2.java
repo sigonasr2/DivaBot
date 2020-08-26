@@ -34,7 +34,7 @@ public class TypeFace2 {
 		return getAllData(img,false);
 	}
 
-	public Result getAllData(BufferedImage img, boolean debug) throws IOException {
+	public Result getAllData(BufferedImage img, boolean debug) throws IOException,NumberFormatException,IndexOutOfBoundsException {
 		BufferedImage img2 = ImageUtils.toBufferedImage(img.getScaledInstance(1280, 720, Image.SCALE_SMOOTH));
 		Result result = new Result("","",-1,-1,-1,-1,-1,-1f);
 		int[] finalNumbers = new int[5];
@@ -69,9 +69,48 @@ public class TypeFace2 {
 		
 		result.percent=percent;
 		// result.percent = ??
+		
+		
+		//489,197
+		Color failPixel = new Color(img2.getRGB(489, 197));
+		result.fail = failPixel.getRed()<100&&failPixel.getGreen()<100&&failPixel.getBlue()<100;
+		
+		Color difficultyPixel = new Color(img2.getRGB(622, 110));
+		result.difficulty = getDifficulty(difficultyPixel);
+		
+		result.mod = getMod(img2);
+		
 		return result;
 	}
 	
+	private String getMod(BufferedImage img2) {
+		//1082,101 HS  R>125
+		//1113,122 HD  G>100, R>125
+		//1145,104 SD  G>100, B>125
+		Color modPixel = new Color(img2.getRGB(1082, 101));
+		if (modPixel.getRed()>125) {return "HS";}
+		modPixel = new Color(img2.getRGB(1113, 122));
+		if (modPixel.getGreen()>100&&modPixel.getRed()>125) {return "HD";}
+		modPixel = new Color(img2.getRGB(1145, 104));
+		if (modPixel.getGreen()>100&&modPixel.getBlue()>125) {return "SD";}
+		return "";
+	}
+
+	private String getDifficulty(Color difficultyPixel) {
+		String[] diffs = new String[] {"E","N","H","EX","EXEX"};
+		Color[] cols = new Color[] {new Color(95,243,255),new Color(20,234,0),new Color(251,191,0),new Color(253,14,81),new Color(157,0,227),};
+		int lowestDistance = Integer.MAX_VALUE;
+		int lowestIndex = -1;
+		for (int i=0;i<cols.length;i++) {
+			int distance = (int)ImageUtils.distanceToColor(difficultyPixel, cols[i]);
+			if (distance<lowestDistance) {
+				lowestDistance = distance;
+				lowestIndex=i;
+			}
+		}
+		return diffs[lowestIndex];
+	}
+
 	public float extractPercentFromImage(BufferedImage img) throws IOException {
 		return extractPercentFromImage(img,false);
 	}
@@ -141,8 +180,8 @@ public class TypeFace2 {
 								}
 							} else 
 							if (fontCol.equals(Color.GREEN)) {
-								if ((pixelCol.getRed()<75
-										 && pixelCol.getGreen()<170 && pixelCol.getBlue()>130)) {
+								if ((pixelCol.getRed()<93
+										 && pixelCol.getGreen()<176 && pixelCol.getBlue()>130)) {
 									if (debug) {
 										test.setRGB(x, y, pixelCol.getRGB());
 									}
@@ -253,8 +292,8 @@ public class TypeFace2 {
 								}
 							} else 
 							if (fontCol.equals(Color.GREEN)) {
-								if ((pixelCol.getRed()<75
-										 && pixelCol.getGreen()<170 && pixelCol.getBlue()>130)) {
+								if ((pixelCol.getRed()<93
+										 && pixelCol.getGreen()<176 && pixelCol.getBlue()>130)) {
 									if (debug) {
 										test.setRGB(x, y, pixelCol.getRGB());
 									}
@@ -346,7 +385,7 @@ public class TypeFace2 {
 							}
 						} else
 						if (fontCol.equals(Color.GREEN) && (pixelCol.getRed()>166
-								 || pixelCol.getGreen()>166 || pixelCol.getBlue()>166)) {
+								 || pixelCol.getGreen()>166 || pixelCol.getBlue()>175)) {
 							//Breaks a rule.
 							ruleBreak=true;
 							if (!debug) {

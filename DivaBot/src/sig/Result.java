@@ -29,4 +29,9 @@ public class Result {
 		return new StringBuilder(Integer.toString(cool)).append("/").append(fine)
 				.append("/").append(safe).append("/").append(sad).append("/").append(worst).append("   ").append(percent).append("%").toString();
 	}
+	public String displayDebug() {
+		return new StringBuilder(Integer.toString(cool)).append(",").append(fine)
+				.append(",").append(safe).append(",").append(sad).append(",").append(worst).append(",").append(percent).append("f")
+				.append(",\"").append(difficulty).append("\",\"").append(mod).append("\",").append(Boolean.toString(fail).toLowerCase()).toString();
+	}
 }

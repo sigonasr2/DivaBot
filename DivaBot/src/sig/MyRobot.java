@@ -81,7 +81,7 @@ public class MyRobot{
 	static SongData SONGS[];
 	//static String SONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","packaged","Palette","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失 -DEAD END-","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク","ブレス・ユア・ブレス","恋は戦争","あなたの歌姫","Starduster","StargazeR","リンリンシグナル","Rosary Pale","多重未来のカルテット～QUARTET THEME～","LIKE THE WIND","AFTER BURNER"};
 	static SongInfo SONGNAMES[] = new SongInfo[] {};
-	static String NEWSONGS[] = new String[] {};
+	static String NEWSONGS[] = new String[] {"ワールドイズマイン"};
 	int SCREEN_X;
 	int SCREEN_Y;
 	int WINDOW_X;
@@ -213,8 +213,9 @@ public class MyRobot{
 										MYROBOT.keyRelease(KeyEvent.VK_F12);
 										MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
 										MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+										Thread.sleep(200);
 										MYROBOT.refreshScoreScreen();
-										ImageIO.write(MYROBOT.createNormalScreenCapture(new Rectangle(418,204,1227,690)),"png",new File("scoreimage.png"));
+										ImageIO.write(MYROBOT.createScoreScreenCapture(),"png",new File("scoreimage.png"));
 										File tmp = new File("tmp");
 										if (tmp.exists()) {
 											FileUtils.deleteFile(tmp);
@@ -223,7 +224,7 @@ public class MyRobot{
 										}
 										try {
 											Result data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
-											ImageIO.write(MYROBOT.createNormalScreenCapture(new Rectangle(418,204,1227,690)),"png",new File("test.png"));
+											//ImageIO.write(MYROBOT.createNormalScreenCapture(new Rectangle(418,204,1227,690)),"png",new File("test.png"));
 											if (data.cool==-1 || data.fine==-1 || data.safe==-1 || data.sad==-1 || data.worst==-1 || data.percent<0f || data.percent>110f) {
 												System.out.println("Waiting for results to populate...");
 											} else 
@@ -339,7 +340,7 @@ public class MyRobot{
 								}
 							}
 							MYROBOT.refreshScreen();
-						} catch (IOException e) {
+						} catch (IOException | InterruptedException e) {
 							e.printStackTrace();
 						}
 				}
@@ -349,7 +350,7 @@ public class MyRobot{
 						Color c2 = new Color(MYROBOT.createScreenCapture(new Rectangle(449,400,2,2)).getRGB(0, 0));
 						Color c3 = new Color(MYROBOT.createScreenCapture(new Rectangle(901,460,2,2)).getRGB(0, 0));
 						return c1.getRed()>=254 && c1.getGreen()>=254 && c1.getBlue()>=254 && c2.getRed()==16 && c2.getGreen()==222 && c2.getBlue()==202 &&
-								c3.getRed()>=220 && c3.getRed()<=255 && c3.getGreen()>=220 && c3.getGreen()<=255 && c3.getBlue()>=160 && c3.getBlue()<=220;
+								c3.getRed()>=219 && c3.getRed()<=255 && c3.getGreen()>=213 && c3.getGreen()<=255 && c3.getBlue()>=160 && c3.getBlue()<=220;
 					}
 
 					private void GetCurrentDifficulty() {
@@ -434,7 +435,8 @@ public class MyRobot{
          	   //System.out.println(title.getText());
             }
          });
-        
+
+	    RunTests();
 	    f.setVisible(true);
 	    f.setSize(1362, 1036);
 	    f.add(p);
@@ -444,7 +446,6 @@ public class MyRobot{
 	    title.setText((currentSong>=SONGNAMES.length)?"DONE!":SONGNAMES[currentSong].name);
 	    SongData s = SongData.getByTitle(SONGNAMES[currentSong].name);
 	   
-	    RunTests();
 	    BotMain();
 	}
 	
@@ -465,6 +466,12 @@ public class MyRobot{
 		RunTest("test10.jpg",486,245,46,22,59,65.34f,"H","SD",false);
 		RunTest("test11.jpg",0,0,0,0,159,0.00f,"EX","SD",true);
 		RunTest("test12.jpg",0,0,0,0,79,0.08f,"EX","HD",true);
+		RunTest("test13.jpg",245,19,4,0,2,87.04f,"E","",false);
+		RunTest("test14.png",623,39,1,0,0,100.83f,"EXEX","HS",false);
+		RunTest("test15.png",540,57,1,0,3,98.05f,"EX","HS",false);
+		RunTest("test16.png",320,46,2,0,4,93.26f,"EXEX","HS",false);
+		RunTest("test17.png",431,30,3,0,3,100.51f,"EXEX","HS",false);
+		RunTest("test18.png",427,86,5,1,4,92.45f,"EX","HS",false);
 		RunTest("testimage.png",371,40,3,4,3,97.63f,"EX","HS",false);
 		RunTest("testimage2.png",942,71,1,0,3,97.02f,"EXEX","",false);
 		RunTest("testimage3.png",546,52,0,0,0,101.77f,"EX","",false);

@@ -180,7 +180,7 @@ public class TypeFace2 {
 								}
 							} else 
 							if (fontCol.equals(Color.GREEN)) {
-								if ((pixelCol.getRed()<93
+								if ((pixelCol.getRed()<99
 										 && pixelCol.getGreen()<176 && pixelCol.getBlue()>130)) {
 									if (debug) {
 										test.setRGB(x, y, pixelCol.getRGB());
@@ -292,7 +292,7 @@ public class TypeFace2 {
 								}
 							} else 
 							if (fontCol.equals(Color.GREEN)) {
-								if ((pixelCol.getRed()<93
+								if ((pixelCol.getRed()<99
 										 && pixelCol.getGreen()<176 && pixelCol.getBlue()>130)) {
 									if (debug) {
 										test.setRGB(x, y, pixelCol.getRGB());
@@ -385,7 +385,7 @@ public class TypeFace2 {
 							}
 						} else
 						if (fontCol.equals(Color.GREEN) && (pixelCol.getRed()>166
-								 || pixelCol.getGreen()>166 || pixelCol.getBlue()>175)) {
+								 || pixelCol.getGreen()>171 || pixelCol.getBlue()>185)) {
 							//Breaks a rule.
 							ruleBreak=true;
 							if (!debug) {

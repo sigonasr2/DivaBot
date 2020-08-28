@@ -81,7 +81,7 @@ public class MyRobot{
 	static SongData SONGS[];
 	//static String SONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","packaged","Palette","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失 -DEAD END-","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク","ブレス・ユア・ブレス","恋は戦争","あなたの歌姫","Starduster","StargazeR","リンリンシグナル","Rosary Pale","多重未来のカルテット～QUARTET THEME～","LIKE THE WIND","AFTER BURNER"};
 	static SongInfo SONGNAMES[] = new SongInfo[] {};
-	static String NEWSONGS[] = new String[] {"ワールドイズマイン"};
+	static String NEWSONGS[] = new String[] {"裏表ラバーズ"};
 	int SCREEN_X;
 	int SCREEN_Y;
 	int WINDOW_X;
@@ -112,7 +112,7 @@ public class MyRobot{
     static String difficulty = "H"; //H=Hard EX=Extreme EXEX=Extra Extreme
     static boolean recordedResults=false;
     
-    int lastcool,lastfine,lastsafe,lastsad,lastworst;
+    int lastcool,lastfine,lastsafe,lastsad,lastworst,lastcombo,lastscore;
     float lastpercent;
     boolean lastfail;
     long lastSongSelectTime = System.currentTimeMillis();
@@ -225,13 +225,14 @@ public class MyRobot{
 										try {
 											Result data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
 											//ImageIO.write(MYROBOT.createNormalScreenCapture(new Rectangle(418,204,1227,690)),"png",new File("test.png"));
-											if (data.cool==-1 || data.fine==-1 || data.safe==-1 || data.sad==-1 || data.worst==-1 || data.percent<0f || data.percent>110f) {
+											if (data.cool==-1 || data.fine==-1 || data.safe==-1 || data.sad==-1 || data.worst==-1 || data.percent<0f || data.percent>110f || data.combo==-1 || data.score==-1) {
 												System.out.println("Waiting for results to populate...");
 											} else 
-											if (data.fail!=lastfail || data.cool!=lastcool || lastfine!=data.fine || lastsafe!=data.safe || lastsad!=data.sad || lastworst!=data.worst /*|| lastpercent!=percent*/){
-												System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+data.cool+"/"+data.fine+"/"+data.safe+"/"+data.sad+"/"+data.worst+" "+data.percent+"%");
+											if ((data.combo!=lastcombo || data.fail!=lastfail || data.cool!=lastcool || lastfine!=data.fine || lastsafe!=data.safe || lastsad!=data.sad || lastworst!=data.worst)
+													&& data.score!=lastscore /*|| lastpercent!=percent*/){
+												//System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+data.cool+"/"+data.fine+"/"+data.safe+"/"+data.sad+"/"+data.worst+" "+data.percent+"%");
 												
-												System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+data.cool+"/"+data.fine+"/"+data.safe+"/"+data.sad+"/"+data.worst+" "+data.percent+"%");
+												System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+data.display());
 												File songFolder = new File(selectedSong.title+"/"+difficulty);
 												if (!songFolder.exists()) {
 													songFolder.mkdirs();
@@ -247,9 +248,12 @@ public class MyRobot{
 												lastsad=data.sad;
 												lastworst=data.worst;
 												lastpercent=data.percent;
+												lastcombo=data.combo;
+												lastscore=data.score;
 												lastfail=data.fail;
-												new File("scoreimage.png").renameTo(new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+data.cool+"_"+data.fine+"_"+data.safe+"_"+data.sad+"_"+data.worst+"_"+data.percent+".png"));
-												results.add(new Result(selectedSong.title,difficulty,data.cool,data.fine,data.safe,data.sad,data.worst,data.percent,data.fail));
+												new File("scoreimage.png").renameTo(new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+data.cool+"_"+data.fine+"_"+data.safe+"_"+data.sad+"_"+data.worst+"_"+data.percent+""
+														+ "_"+data.combo+"_"+data.score+".png"));
+												results.add(new Result(selectedSong.title,difficulty,data.cool,data.fine,data.safe,data.sad,data.worst,data.percent,data.combo,data.score,data.fail));
 												SoundUtils.playSound("collect_item.wav");
 												//gotoxy(800,64);
 												//click();
@@ -285,7 +289,9 @@ public class MyRobot{
 												params.add(new BasicNameValuePair("worst", Integer.toString(r.worst)));
 												params.add(new BasicNameValuePair("percent", Float.toString(r.percent)));
 												params.add(new BasicNameValuePair("fail", Boolean.toString(r.fail)));
-												params.add(new BasicNameValuePair("mod", "HS"));
+												params.add(new BasicNameValuePair("mod", r.mod));
+												params.add(new BasicNameValuePair("combo", Integer.toString(r.combo)));
+												params.add(new BasicNameValuePair("gameScore", Integer.toString(r.score)));
 												try {
 													httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 												} catch (UnsupportedEncodingException e) {
@@ -409,7 +415,8 @@ public class MyRobot{
         try {
 	        	typeface1 = new TypeFace2(
 	    				ImageIO.read(new File("typeface.png")),
-	    				ImageIO.read(new File("typeface2.png"))
+	    				ImageIO.read(new File("typeface2.png")),
+	    				ImageIO.read(new File("typeface3.png"))
 	    				);
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -454,40 +461,40 @@ public class MyRobot{
 		selectedSong=new SongData("LIKE THE WIND",new Color[] {});
 		difficulty="H";
 		
-		RunTest("test1.jpg",393,127,28,10,48,72.28f,"EXEX","",false);
-		RunTest("test2.jpg",518,144,17,3,23,81.94f,"H","",false);
-		RunTest("test3.jpg",646,54,1,0,0,103.06f,"EX","",false);
-		RunTest("test4.jpg",518,64,0,0,0,102.57f,"H","",false);
-		RunTest("test5.jpg",276,58,3,0,0,89.64f,"E","",false);
-		RunTest("test6.jpg",448,129,17,7,42,79.22f,"EXEX","",false);
-		RunTest("test7.jpg",419,227,28,7,20,75.76f,"EX","",false);
-		RunTest("test8.jpg",567,26,0,0,0,104.31f,"EX","",false);
-		RunTest("test9.jpg",197,51,0,0,0,100.02f,"H","",false);
-		RunTest("test10.jpg",486,245,46,22,59,65.34f,"H","SD",false);
-		RunTest("test11.jpg",0,0,0,0,159,0.00f,"EX","SD",true);
-		RunTest("test12.jpg",0,0,0,0,79,0.08f,"EX","HD",true);
-		RunTest("test13.jpg",245,19,4,0,2,87.04f,"E","",false);
-		RunTest("test14.png",623,39,1,0,0,100.83f,"EXEX","HS",false);
-		RunTest("test15.png",540,57,1,0,3,98.05f,"EX","HS",false);
-		RunTest("test16.png",320,46,2,0,4,93.26f,"EXEX","HS",false);
-		RunTest("test17.png",431,30,3,0,3,100.51f,"EXEX","HS",false);
-		RunTest("test18.png",427,86,5,1,4,92.45f,"EX","HS",false);
-		RunTest("testimage.png",371,40,3,4,3,97.63f,"EX","HS",false);
-		RunTest("testimage2.png",942,71,1,0,3,97.02f,"EXEX","",false);
-		RunTest("testimage3.png",546,52,0,0,0,101.77f,"EX","",false);
-		RunTest("testimage4.png",279,81,16,2,3,75.40f,"N","",false);
-		RunTest("testimage5.png",276,184,6,1,11,82.16f,"EXEX","HS",false);
-		RunTest("testimage6.png",455,60,2,0,8,93.48f,"EXEX","HS",false);
-		RunTest("testimage7.png",452,128,8,2,16,88.28f,"EXEX","HS",false);
-		RunTest("testimage8.png",229,38,2,0,13,83.25f,"EXEX","HS",false);
-		RunTest("testimage9.png",413,70,1,0,21,82.66f,"EXEX","HS",false);
+		RunTest("test1.jpg",393,127,28,10,48,72.28f,"EXEX","",85,577160,false);
+		RunTest("test2.jpg",518,144,17,3,23,81.94f,"H","",98,580090,false);
+		RunTest("test3.jpg",646,54,1,0,0,103.06f,"EX","",691,666410,false);
+		RunTest("test4.jpg",518,64,0,0,0,102.57f,"H","",582,470770,false);
+		RunTest("test5.jpg",276,58,3,0,0,89.64f,"E","",215,238240,false);
+		RunTest("test6.jpg",448,129,17,7,42,79.22f,"EXEX","",90,760770,false);
+		RunTest("test7.jpg",419,227,28,7,20,75.76f,"EX","",154,473340,false);
+		RunTest("test8.jpg",567,26,0,0,0,104.31f,"EX","",593,569500,false);
+		RunTest("test9.jpg",197,51,0,0,0,100.02f,"H","",248,194700,false);
+		RunTest("test10.jpg",486,245,46,22,59,65.34f,"H","SD",89,495850,false);
+		RunTest("test11.jpg",0,0,0,0,159,0.00f,"EX","SD",0,0,true);
+		RunTest("test12.jpg",0,0,0,0,79,0.08f,"EX","HD",0,580,true);
+		RunTest("test13.jpg",245,19,4,0,2,87.04f,"E","",103,179360,false);
+		RunTest("test14.png",623,39,1,0,0,100.83f,"EXEX","HS",350,869180,false);
+		RunTest("test15.png",540,57,1,0,3,98.05f,"EX","HS",225,602000,false);
+		RunTest("test16.png",320,46,2,0,4,93.26f,"EXEX","HS",135,463170,false);
+		RunTest("test17.png",431,30,3,0,3,100.51f,"EXEX","HS",386,581700,false);
+		RunTest("test18.png",427,86,5,1,4,92.45f,"EX","HS",136,526740,false);
+		RunTest("testimage.png",371,40,3,4,3,97.63f,"EX","HS",233,523750,false);
+		RunTest("testimage2.png",942,71,1,0,3,97.02f,"EXEX","",714,951020,false);
+		RunTest("testimage3.png",546,52,0,0,0,101.77f,"EX","",598,567430,false);
+		RunTest("testimage4.png",279,81,16,2,3,75.40f,"N","",85,228100,false);
+		RunTest("testimage5.png",276,184,6,1,11,82.16f,"EXEX","HS",78,549870,false);
+		RunTest("testimage6.png",455,60,2,0,8,93.48f,"EXEX","HS",272,532470,false);
+		RunTest("testimage7.png",452,128,8,2,16,88.28f,"EXEX","HS",146,773150,false);
+		RunTest("testimage8.png",229,38,2,0,13,83.25f,"EXEX","HS",65,300120,false);
+		RunTest("testimage9.png",413,70,1,0,21,82.66f,"EXEX","HS",94,443050,false);
 	}
 	
-	void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,boolean _fail) throws IOException {
-		RunTest(_img,_cool,_fine,_safe,_sad,_worst,_percent,_difficulty,_mod,_fail,false);
+	void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail) throws IOException {
+		RunTest(_img,_cool,_fine,_safe,_sad,_worst,_percent,_difficulty,_mod,_combo,_score,_fail,false);
 	}
 	
-	void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,boolean _fail,boolean debug) throws IOException {
+	void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail,boolean debug) throws IOException {
 		System.out.println("Running test "+_img);
 		long startTime = System.currentTimeMillis();
 		String testdir="testsuite";
@@ -514,6 +521,8 @@ public class MyRobot{
 		assert data.fail == _fail : "Expected fail to be "+_fail+", got "+data.fail;
 		assert data.mod == _mod : "Expected mod to be "+_mod+", got "+data.mod;
 		assert data.difficulty == _difficulty : "Expected difficulty to be "+_difficulty+", got "+data.difficulty;
+		assert data.combo == _combo : "Expected combo to be "+_combo+", got "+data.combo;
+		assert data.score == _score : "Expected score to be "+_score+", got "+data.score;
 		System.out.println(" Passed ("+(System.currentTimeMillis()-startTime)+"ms)!");
 	}
 	

@@ -10,6 +10,7 @@ public class Result {
 	float percent;
 	boolean fail;
 	String mod;
+	int combo,score;
 	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent) {
 		this.songName=song;
 		this.difficulty=diff;
@@ -20,18 +21,27 @@ public class Result {
 		this.worst=worst;
 		this.percent=percent;
 		this.mod="";
+		this.combo=-1;
+		this.score=-1;
 	}
 	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent,boolean fail) {
 		this(song,diff,cool,fine,safe,sad,worst,percent);
 		this.fail=fail;
 	}
+	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent,int combo, int score,boolean fail) {
+		this(song,diff,cool,fine,safe,sad,worst,percent,fail);
+		this.combo=combo;
+		this.score=score;
+	}
 	public String display() {
 		return new StringBuilder(Integer.toString(cool)).append("/").append(fine)
-				.append("/").append(safe).append("/").append(sad).append("/").append(worst).append("   ").append(percent).append("%").toString();
+				.append("/").append(safe).append("/").append(sad).append("/").append(worst).append("   ").append(percent).append("%")
+				.append("   ").append(combo).append("   ").append(score).toString();
 	}
 	public String displayDebug() {
 		return new StringBuilder(Integer.toString(cool)).append(",").append(fine)
 				.append(",").append(safe).append(",").append(sad).append(",").append(worst).append(",").append(percent).append("f")
-				.append(",\"").append(difficulty).append("\",\"").append(mod).append("\",").append(Boolean.toString(fail).toLowerCase()).toString();
+				.append(",\"").append(difficulty).append("\",\"").append(mod).append("\",").append(Boolean.toString(fail).toLowerCase())
+				.append(",").append(combo).append(",").append(score).toString();
 	}
 }

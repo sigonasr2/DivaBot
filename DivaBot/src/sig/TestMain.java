@@ -15,14 +15,15 @@ public class TestMain {
 		
 		TypeFace2 font = new TypeFace2(
 				ImageIO.read(new File("typeface.png")),
-				ImageIO.read(new File("typeface2.png"))
+				ImageIO.read(new File("typeface2.png")),
+				ImageIO.read(new File("typeface3.png"))
 				);
 		/*CustomRobot r = new CustomRobot();
 		Thread.sleep(3000);
 		r.refreshScoreScreen();
 		ImageIO.write(r.scoreCurrentScreen,"png",new File("testsuite","liveimage.png"));*/
-		System.out.println(font.getAllData(ImageIO.read(new File("testsuite","test18.png")),false).display());
-		System.out.println(font.getAllData(ImageIO.read(new File("testsuite","test18.png")),true).displayDebug());
+		System.out.println(font.getAllData(ImageIO.read(new File("testsuite","test16.png")),false).display());
+		System.out.println(font.getAllData(ImageIO.read(new File("testsuite","test16.png")),true).displayDebug());
 		//System.out.println(font.getAllData(ImageIO.read(new File("testsuite","test14.png"))).display());
 		/*System.out.println(font.getAllData(ImageIO.read(new File("testimage.png"))).display());
 		System.out.println(font.getAllData(ImageIO.read(new File("testimage2.png"))).display());

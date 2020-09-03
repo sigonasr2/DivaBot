@@ -4,13 +4,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class Result {
-	String songName;
-	String difficulty;
-	int cool,fine,safe,sad,worst;
-	float percent;
-	boolean fail;
-	String mod;
-	int combo,score;
+	public String songName;
+	public String difficulty;
+	public int cool,fine,safe,sad,worst;
+	public float percent;
+	public boolean fail;
+	public String mod;
+	public int combo,score;
 	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent) {
 		this.songName=song;
 		this.difficulty=diff;
@@ -36,7 +36,7 @@ public class Result {
 	public String display() {
 		return new StringBuilder(Integer.toString(cool)).append("/").append(fine)
 				.append("/").append(safe).append("/").append(sad).append("/").append(worst).append("   ").append(percent).append("%")
-				.append("   ").append(combo).append("   ").append(score).toString();
+				.toString();
 	}
 	public String displayDebug() {
 		return new StringBuilder(Integer.toString(cool)).append(",").append(fine)

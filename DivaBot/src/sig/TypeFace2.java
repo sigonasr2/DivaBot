@@ -130,13 +130,13 @@ public class TypeFace2 {
 		//second part: 1123
 		String decimal = "";
 		String integer = "";
-		xpointer=1180;
+		xpointer=1182;
 		ypointer=165;
 		BufferedImage test = null;
 		
 		trialloop:
 		while (ypointer<168) {
-			xpointer=1180;
+			xpointer=1182;
 			while (xpointer>1132) {
 				int foundIndex = -1;
 				for (int i=0;i<10;i++) {
@@ -190,8 +190,8 @@ public class TypeFace2 {
 								}
 							} else 
 							if (fontCol.equals(Color.GREEN)) {
-								if ((pixelCol.getRed()<99
-										 && pixelCol.getGreen()<176 && pixelCol.getBlue()>130)) {
+								if ((pixelCol.getRed()<105
+										 && pixelCol.getGreen()<176 && pixelCol.getBlue()>120)) {
 									if (debug) {
 										test.setRGB(x, y, pixelCol.getRGB());
 									}

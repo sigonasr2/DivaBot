@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import sig.utils.FileUtils;
 import sig.utils.ImageUtils;
 
 public class TypeFace2 {
@@ -175,8 +176,7 @@ public class TypeFace2 {
 							}*/
 							
 							if (fontCol.equals(Color.RED)) {
-								if (pixelCol.getRed()>=200
-									 && pixelCol.getGreen()>=200 && pixelCol.getBlue()>=200) {
+								if (lightColorCheck(pixelCol)) {
 									if (debug) {
 										test.setRGB(x, y, pixelCol.getRGB());
 									}
@@ -190,8 +190,7 @@ public class TypeFace2 {
 								}
 							} else 
 							if (fontCol.equals(Color.GREEN)) {
-								if ((pixelCol.getRed()<105
-										 && pixelCol.getGreen()<176 && pixelCol.getBlue()>120)) {
+								if (darkColorCheck(pixelCol)) {
 									if (debug) {
 										test.setRGB(x, y, pixelCol.getRGB());
 									}
@@ -287,8 +286,7 @@ public class TypeFace2 {
 							}*/
 							
 							if (fontCol.equals(Color.RED)) {
-								if (pixelCol.getRed()>=200
-									 && pixelCol.getGreen()>=200 && pixelCol.getBlue()>=200) {
+								if (lightColorCheck(pixelCol)) {
 									if (debug) {
 										test.setRGB(x, y, pixelCol.getRGB());
 									}
@@ -302,8 +300,7 @@ public class TypeFace2 {
 								}
 							} else 
 							if (fontCol.equals(Color.GREEN)) {
-								if ((pixelCol.getRed()<99
-										 && pixelCol.getGreen()<176 && pixelCol.getBlue()>130)) {
+								if (darkColorCheck(pixelCol)) {
 									if (debug) {
 										test.setRGB(x, y, pixelCol.getRGB());
 									}
@@ -358,7 +355,18 @@ public class TypeFace2 {
 		
 		return Float.parseFloat(integer+"."+decimal);
 	}
+
+	private boolean lightColorCheck(Color pixel) {
+		return pixel.getRed()+pixel.getGreen()+pixel.getBlue()>=580;
+		/*(pixelCol.getRed()>=200
+			 && pixelCol.getGreen()>=200 && pixelCol.getBlue()>=200);*/
+	}
 	
+	private boolean darkColorCheck(Color pixel) {
+		return pixel.getRed()<110
+				 && pixel.getGreen()<176 && pixel.getBlue()>100;
+	}
+
 	public int extractNumbersFromImage(BufferedImage img) throws IOException {
 		return extractNumbersFromImage(img,false);
 	}
@@ -469,9 +477,9 @@ public class TypeFace2 {
 						for (int y=0;y<28;y++) {
 							Color fontCol = new Color(scorefont.getRGB(x+i*30,y));
 							Color pixelCol = new Color(img.getRGB(xpointer-30+x+1, y+ypointer));
-							if (fontCol.equals(Color.RED) && pixelCol.getRed()<170
-									 && pixelCol.getGreen()<170 && pixelCol.getBlue()<170) {
-								//Breaks a rule.
+							if (fontCol.equals(Color.RED) && pixelCol.getRed()<200
+									 && pixelCol.getGreen()<200 && pixelCol.getBlue()<200
+									/*pixelCol.getRed()+pixelCol.getGreen()+pixelCol.getBlue()<490*/) {
 								ruleBreak=true;
 								if (!debug) {
 									break colorloop;

@@ -488,6 +488,35 @@ public class MyRobot{
 		RunTest("testimage7.png",452,128,8,2,16,88.28f,"EXEX","HS",146,773150,false);
 		RunTest("testimage8.png",229,38,2,0,13,83.25f,"EXEX","HS",65,300120,false);
 		RunTest("testimage9.png",413,70,1,0,21,82.66f,"EXEX","HS",94,443050,false);
+		RunTest("16 -out of the gravity-.jpg",554,45,1,0,1,101.36f,"EX","HS",339,606780,false);
+		RunTest("＊ハロー、プラネット。 (I.M.PLSE-EDIT).jpg",336,128,24,6,93,58.85f,"EX","",52,308760,true);
+		
+		RunTest("39.jpg",531,71,2,0,2,97.82f,"EXEX","HS",324,832390,false);
+		RunTest("39みゅーじっく！.jpg",573,175,5,0,18,91.22f,"EX","HS",354,754140,false);
+		RunTest("1925.jpg",510,115,14,7,22,77.79f,"EX","HS",85,564860,false);
+		RunTest("ACUTE.jpg",478,64,1,1,5,95.76f,"EX","HS",197,505210,false);
+		RunTest("AFTER BURNER.jpg",370,113,25,16,30,68.76f,"EX","HS",94,386390,true);
+		RunTest("Blackjack.jpg",415,123,15,7,50,71.22f,"EX","HS",79,443260,false);
+		RunTest("Catch the Wave.jpg",603,72,0,0,1,100.65f,"EX","HS",559,773570,false);
+		RunTest("Dear.jpg",402,64,0,0,1,100.90f,"EXEX","HS",394,587740,false);
+		RunTest("DECORATOR.jpg",436,100,1,0,6,93.52f,"EX","HS",217,560180,false);
+		RunTest("DYE.jpg",530,106,7,2,13,84.77f,"EX","HS",143,486360,false);
+		RunTest("erase or zero.jpg",442,70,0,0,2,100.12f,"EX","HS",265,731120,false);
+		RunTest("FREELY TOMORROW.jpg",367,57,0,0,0,102.84f,"EX","HS",424,498640,false);
+		RunTest("from Y to Y.jpg",350,49,6,1,8,86.35f,"EXEX","HS",139,427650,false);
+		RunTest("Glory 3usi9.jpg",468,43,0,0,2,101.62f,"EX","HS",382,549780,false);
+		RunTest("Hand in Hand.jpg",401,54,1,0,3,97.58f,"EX","HS",176,610040,false);
+		RunTest("Hello, Worker.jpg",439,118,7,1,14,89.93f,"EXEX","HS",147,930290,false);
+		RunTest("Just Be Friends.jpg",510,107,6,0,12,89.38f,"EXEX","HS",203,602080,false);
+		RunTest("Knife.jpg",327,85,14,9,27,51.96f,"EX","HS",124,395170,true);
+		RunTest("LIKE THE WIND.jpg",330,144,20,9,20,72.06f,"EX","HS",65,425970,false);
+		RunTest("LOL -lots of laugh-.jpg",489,59,1,2,2,96.36f,"EX","HS",183,641920,false);
+		RunTest("magnet.jpg",435,101,18,4,35,76.98f,"EXEX","HS",115,480540,false);
+		RunTest("No Logic.jpg",491,101,11,5,15,86.32f,"EX","HS",186,476910,false);
+		RunTest("Nostalogic.jpg",346,70,15,7,16,83.61f,"EX","HS",94,486030,false);
+		RunTest("WORLD'S END UMBRELLA.jpg",437,136,6,1,3,90.59f,"H","",215,475120,false);
+		RunTest("ぽっぴっぽー.jpg",350,46,7,6,3,80.39f,"N","",175,263630,false);
+		RunTest("サマーアイドル.jpg",245,19,4,0,2,87.04f,"E","",103,179360,false);
 	}
 	
 	void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail) throws IOException {

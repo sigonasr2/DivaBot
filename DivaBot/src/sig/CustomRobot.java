@@ -25,6 +25,10 @@ public class CustomRobot extends Robot{
 		super(screen);
 	}
 	
+	public synchronized BufferedImage getSizedCapture(Rectangle r) {
+		return super.createScreenCapture(r);
+	}
+	
 	public void refreshScreen() {
 		currentScreen = super.createScreenCapture(new Rectangle(418+18,204+83,912-18,586-83));
 	}

@@ -1,7 +1,11 @@
 package sig;
 import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
@@ -9,6 +13,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
@@ -16,6 +21,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -41,6 +47,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -58,6 +67,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -111,6 +121,9 @@ public class MyRobot{
     static SongData selectedSong = null;
     static String difficulty = "H"; //H=Hard EX=Extreme EXEX=Extra Extreme
     static boolean recordedResults=false;
+    static boolean CALIBRATION = true;
+    static Point STARTDRAG = null;
+    static Point ENDDRAG = null;
     
     int lastcool,lastfine,lastsafe,lastsad,lastworst,lastcombo,lastscore;
     float lastpercent;
@@ -128,6 +141,16 @@ public class MyRobot{
     
     boolean overlayHidden=false;
     static boolean onSongSelect=false;
+    static BufferedImage finishbutton = null; 
+    static Dimension screenSize = new Dimension(0,0);
+    static boolean dragging = false;
+    static String CALIBRATIONSTATUS = "";
+    static boolean calibrating=true;
+    static Rectangle calibrationline = null;
+    static boolean repaintCalled = false;
+    public static Overlay OVERLAY;
+    
+    public static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     
 	
 	public static void main(String[] args) throws JSONException, IOException, FontFormatException {
@@ -136,6 +159,7 @@ public class MyRobot{
 		for (String key : JSONObject.getNames(obj)) {
 			SONGNAMES[Integer.parseInt(key)-1] = new SongInfo(obj.getJSONObject(key));
 		}
+		finishbutton = ImageIO.read(new File("finish.png"));
 	    new MyRobot().go();
 	}
 	
@@ -442,15 +466,27 @@ public class MyRobot{
          	   //System.out.println(title.getText());
             }
          });
-
-	    RunTests();
-	    f.setVisible(true);
-	    f.setSize(1362, 1036);
-	    f.add(p);
+        JFrame.setDefaultLookAndFeelDecorated(true);
+        f.setUndecorated(true);
+	    OVERLAY = new Overlay();
+	    OVERLAY.setBounds(f.getGraphicsConfiguration().getBounds());
+	    OVERLAY.setOpaque(false);
+	    f.addMouseListener(OVERLAY);
+	    f.addMouseMotionListener(OVERLAY);
+        screenSize=new Dimension(f.getGraphicsConfiguration().getBounds().width,f.getGraphicsConfiguration().getBounds().height);
+        f.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+	    //f.add(p);
+        //System.out.println(f.getGraphicsConfiguration().getBounds().width+"/"+f.getGraphicsConfiguration().getBounds().height);
+        f.setSize(f.getGraphicsConfiguration().getBounds().width,f.getGraphicsConfiguration().getBounds().height);
+        f.add(OVERLAY);
+        f.setBackground(new Color(0,0,0,0));
+        f.setVisible(true);
 	    f.setTitle("DivaBot");
 	    title = new JTextField();
 	    title.setSize(200,100);
 	    title.setText((currentSong>=SONGNAMES.length)?"DONE!":SONGNAMES[currentSong].name);
+	    
+	    
 	    SongData s = SongData.getByTitle(SONGNAMES[currentSong].name);
 	   
 	    BotMain();

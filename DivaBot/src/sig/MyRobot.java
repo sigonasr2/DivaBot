@@ -145,7 +145,7 @@ public class MyRobot{
     static Dimension screenSize = new Dimension(0,0);
     static boolean dragging = false;
     static String CALIBRATIONSTATUS = "";
-    static boolean calibrating=true;
+    static boolean calibrating=false;
     static Rectangle calibrationline = null;
     static boolean repaintCalled = false;
     public static Overlay OVERLAY;
@@ -198,6 +198,12 @@ public class MyRobot{
 					@Override
 					public void run() {
 						try {
+							if (MyRobot.calibrating) {
+								MyRobot.calibrating=false;
+								Overlay.OVERLAY.setVisible(false);
+								Thread.sleep(1000);
+								Calibrator c = new Calibrator();
+							}
 							if (checkSongSelect()) {
 								if (!overlayHidden) {
 									overlayHidden=true;

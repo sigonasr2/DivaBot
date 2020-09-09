@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 
 public class Overlay extends JPanel implements MouseMotionListener,MouseListener{
 	
+	public static Overlay OVERLAY;
+	
 	Overlay() {
 		Thread t = new Thread() {
 			public void run() {
@@ -24,6 +26,7 @@ public class Overlay extends JPanel implements MouseMotionListener,MouseListener
 			}
 		};
 		t.start();
+		OVERLAY=this;
 	}
 	
 	@Override
@@ -62,6 +65,7 @@ public class Overlay extends JPanel implements MouseMotionListener,MouseListener
 			MyRobot.STARTDRAG.y=MyRobot.ENDDRAG.y;
 			MyRobot.ENDDRAG.y=xTemp;
 		}
+		MyRobot.calibrating=true;
 	}
 
 	@Override

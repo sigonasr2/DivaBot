@@ -68,8 +68,10 @@ public class TypeFace2 {
 			Rectangle r = ranges[i];
 
 			//System.out.println("Image "+i+":");
-			File temp = new File("rectangle"+i+".png");
-			ImageIO.write(img2.getSubimage(r.x,r.y,r.width,r.height),"png",temp);
+			if (debug) {
+				File temp = new File("rectangle"+i+".png");
+				ImageIO.write(img2.getSubimage(r.x,r.y,r.width,r.height),"png",temp);
+			}
 			
 			finalNumbers[i]=extractNumbersFromImage(img2.getSubimage(
 					r.x,r.y,r.width,r.height),debug);
@@ -88,8 +90,16 @@ public class TypeFace2 {
 		
 		
 		//489,197
-		Color failPixel = new Color(img2.getRGB(489, 197));
-		result.fail = failPixel.getRed()<100&&failPixel.getGreen()<100&&failPixel.getBlue()<100;
+		
+		Color failPixel = null;
+		result.fail = false;
+		for (int i=0;i<11;i++) {
+			failPixel=new Color(img2.getRGB(489, 187+i));
+			if (failPixel.getRed()<100&&failPixel.getGreen()<100&&failPixel.getBlue()<100) {
+				result.fail = true;
+				break;
+			}
+		}
 		
 		Color difficultyPixel = new Color(img2.getRGB(622, 110));
 		result.difficulty = getDifficulty(difficultyPixel);

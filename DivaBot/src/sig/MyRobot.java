@@ -397,7 +397,7 @@ public class MyRobot{
 					}
 
 					private void GetCurrentDifficulty() {
-						Color c = new Color(MYROBOT.createScreenCapture(new Rectangle(653,459,10,10)).getRGB(5, 5));
+						Color c = new Color(MYROBOT.createScreenCapture(new Rectangle(320,274,10,10)).getRGB(0, 0));
 						//return c.getRed()==43 && c.getGreen()==88 && c.getBlue()==213;
 						if (c.getRed()>100 && c.getRed()<200 && c.getBlue()>200 && c.getBlue()<255 && c.getGreen()<50) {
 							difficulty="EXEX";
@@ -407,6 +407,12 @@ public class MyRobot{
 						} else 
 						if (c.getRed()>175 && c.getRed()<225 && c.getBlue()<50 && c.getGreen()<175 && c.getGreen()>135) {
 							difficulty="H";
+						} else 
+						if (c.getRed()>0 && c.getRed()<50 && c.getBlue()<50 && c.getGreen()<255 && c.getGreen()>190) {
+							difficulty="N";
+						} else 
+						if (c.getRed()>0 && c.getRed()<50 && c.getBlue()>170 && c.getBlue()<230 && c.getGreen()<190 && c.getGreen()>150) {
+							difficulty="E";
 						}
 					}
 					private void GetCurrentSong() throws IOException {

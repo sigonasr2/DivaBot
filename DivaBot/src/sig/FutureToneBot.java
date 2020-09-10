@@ -193,7 +193,11 @@ public class FutureToneBot{
 						} catch (IOException | InterruptedException e) {
 							e.printStackTrace();
 						}
-						MYROBOT.refreshScreen();
+						try {
+							MYROBOT.refreshScreen();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 				}
 					
 					private boolean OnResultsScreen() {

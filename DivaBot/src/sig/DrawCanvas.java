@@ -126,6 +126,7 @@ public class DrawCanvas extends JPanel implements KeyListener{
 					artist = obj.getString("artist");*/
 					if (MyRobot.p.songname!=null) {
 						SongInfo currentSong = SongInfo.getByTitle(MyRobot.p.songname);
+						FileUtils.writetoFile(new String[] {MyRobot.p.songname}, "testencode.txt");
 						if (currentSong!=null) {
 							if (currentSong.rating.has(difficulty)) {
 								difficultyRating = currentSong.rating.getDouble(difficulty);

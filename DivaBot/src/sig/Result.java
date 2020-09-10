@@ -33,6 +33,12 @@ public class Result {
 		this.combo=combo;
 		this.score=score;
 	}
+	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent,String mod,int combo, int score,boolean fail) {
+		this(song,diff,cool,fine,safe,sad,worst,percent,fail);
+		this.combo=combo;
+		this.score=score;
+		this.mod=mod;
+	}
 	public String display() {
 		return new StringBuilder(Integer.toString(cool)).append("/").append(fine)
 				.append("/").append(safe).append("/").append(sad).append("/").append(worst).append("   ").append(percent).append("%")
@@ -41,8 +47,9 @@ public class Result {
 	public String displayDebug() {
 		return new StringBuilder(Integer.toString(cool)).append(",").append(fine)
 				.append(",").append(safe).append(",").append(sad).append(",").append(worst).append(",").append(percent).append("f")
-				.append(",\"").append(difficulty).append("\",\"").append(mod).append("\",").append(Boolean.toString(fail).toLowerCase())
-				.append(",").append(combo).append(",").append(score).toString();
+				.append(",\"").append(difficulty).append("\",\"").append(mod).append("\",").append(combo).append(",").append(score).append(",")
+				.append(Boolean.toString(fail).toLowerCase())
+				.toString();
 	}
 	public String toString() {
 		return displayDebug();

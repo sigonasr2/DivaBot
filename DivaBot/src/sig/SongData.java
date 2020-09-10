@@ -1,5 +1,6 @@
 package sig;
 import java.awt.Color;
+import java.io.IOException;
 
 import sig.utils.FileUtils;
 import sig.utils.ImageUtils;
@@ -70,7 +71,7 @@ public class SongData {
 		}
 		FileUtils.logToFile(sb.toString(),"colorData");
 	}
-	public static void loadSongsFromFile() {
+	public static void loadSongsFromFile() throws IOException {
 		String[] data = FileUtils.readFromFile("colorData");
 		MyRobot.SONGS = new SongData[data.length];
 		for (int i=0;i<data.length;i++) {

@@ -33,7 +33,7 @@ public class CustomRobot extends Robot{
 		return super.createScreenCapture(r);
 	}
 	
-	public void refreshScreen() {
+	public void refreshScreen() throws IOException {
 		//currentScreen = super.createScreenCapture(new Rectangle(418+18,204+83,912-18,586-83));
 		if (CalibrationDataChanged()) {
 			ReloadCalibrationData();
@@ -44,7 +44,7 @@ public class CustomRobot extends Robot{
 			currentScreen = super.createScreenCapture(new Rectangle(418+18,204+83,912-18,586-83));
 		}
 	}
-	private void ReloadCalibrationData() {
+	private void ReloadCalibrationData() throws IOException {
 		lastCalibrationTime=calibration_file.lastModified();
 		String[] data = FileUtils.readFromFile("calibration_data.txt");
 		calibration_data[0]=Integer.parseInt(data[0]);
@@ -57,7 +57,7 @@ public class CustomRobot extends Robot{
 		return calibration_file.exists()&&lastCalibrationTime!=calibration_file.lastModified();
 	}
 
-	public void refreshScoreScreen() {
+	public void refreshScoreScreen() throws IOException {
 		if (CalibrationDataChanged()) {
 			ReloadCalibrationData();
 		}

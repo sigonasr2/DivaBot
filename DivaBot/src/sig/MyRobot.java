@@ -292,7 +292,7 @@ public class MyRobot{
 													lastfail=data.fail;
 													new File("scoreimage.png").renameTo(new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+data.cool+"_"+data.fine+"_"+data.safe+"_"+data.sad+"_"+data.worst+"_"+data.percent+""
 															+ "_"+data.combo+"_"+data.score+".png"));
-													results.add(new Result(selectedSong.title,difficulty,data.cool,data.fine,data.safe,data.sad,data.worst,data.percent,data.combo,data.score,data.fail));
+													results.add(new Result(selectedSong.title,difficulty,data.cool,data.fine,data.safe,data.sad,data.worst,data.percent,data.mod,data.combo,data.score,data.fail));
 													SoundUtils.playSound("collect_item.wav");
 													//gotoxy(800,64);
 													//click();
@@ -305,7 +305,8 @@ public class MyRobot{
 													MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
 												}
 											} catch (IOException|NumberFormatException|IndexOutOfBoundsException e) {
-												
+												e.printStackTrace();
+												System.out.println(e.getMessage());
 											}
 										} else {
 											if (results.size()>0) {
@@ -393,9 +394,9 @@ public class MyRobot{
 					
 					private boolean OnResultsScreen() throws IOException {
 						//r.x-418, r.y-204
-						ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(31,230,40,40)),"png",new File("color1.png"));
+						/*ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(31,230,40,40)),"png",new File("color1.png"));
 						ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(31,196,40,40)),"png",new File("color2.png"));
-						ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)),"png",new File("color3.png"));
+						ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)),"png",new File("color3.png"));*/
 						Color c1 = new Color(MYROBOT.createScreenCapture(new Rectangle(31,230,40,40)).getRGB(0, 0));
 						Color c2 = new Color(MYROBOT.createScreenCapture(new Rectangle(31,196,40,40)).getRGB(0, 0));
 						Color c3 = new Color(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)).getRGB(0, 0));
@@ -535,7 +536,11 @@ public class MyRobot{
             public void actionPerformed(ActionEvent e) {
     			//BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(460,426,WIDTH,HEIGHT)));
             	//Buffered img ImageUtils.toCompatibleImage(
-            	MYROBOT.refreshScreen();
+            	try {
+					MYROBOT.refreshScreen();
+				} catch (IOException e2) {
+					e2.printStackTrace();
+				}
             	BufferedImage img = null;
             	try {
 					ImageIO.write(img=MYROBOT.createScreenCapture(new Rectangle(812,380,WIDTH,HEIGHT)),"png",new File("test.png"));
@@ -549,7 +554,11 @@ public class MyRobot{
     				}
     			}
     			SongData.saveSongToFile(NEWSONGS[currentSong],col);
-    		    SongData.loadSongsFromFile();
+    		    try {
+					SongData.loadSongsFromFile();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
     		    currentSong+=1;
     		    if (currentSong>=NEWSONGS.length) {
         			System.out.println("DONE!");
@@ -619,6 +628,14 @@ public class MyRobot{
 		RunTest("test17.png",431,30,3,0,3,100.51f,"EXEX","HS",386,581700,false);
 		RunTest("test18.png",427,86,5,1,4,92.45f,"EX","HS",136,526740,false);
 		RunTest("test19.png",4,2,2,0,95,0.42f,"EXEX","HS",2,4130,true);
+		RunTest("test20.png",3,1,1,2,58,0.75f,"EX","HS",2,7810,true);
+		RunTest("test21.png",13,19,15,6,41,2.16f,"EX","HS",5,17860,true);
+		RunTest("test22.png",49,37,21,15,26,4.68f,"EX","HS",10,42210,true);
+		RunTest("test23.png",10,20,10,7,72,3.85f,"EXEX","HS",11,20050,true);
+		RunTest("test24.png",35,29,19,22,11,7.85f,"N","HD",17,29600,true);
+		RunTest("test25.png",175,75,13,10,32,50.84f,"E","SD",26,122670,false);
+		RunTest("test26.png",29,24,6,7,35,3.12f,"EXEX","HS",26,28100,true);
+		RunTest("test27.png",45,35,8,6,22,7.00f,"EX","HS",27,69780,true);
 		RunTest("testimage.png",371,40,3,4,3,97.63f,"EX","HS",233,523750,false);
 		RunTest("testimage2.png",942,71,1,0,3,97.02f,"EXEX","",714,951020,false);
 		RunTest("testimage3.png",546,52,0,0,0,101.77f,"EX","",598,567430,false);
@@ -689,12 +706,27 @@ public class MyRobot{
 			assert data.worst == _worst : "Expected worst count to be "+_worst+", got "+data.worst;
 			assert data.percent == _percent : "Expected percent to be "+_percent+", got "+data.percent;
 			assert data.fail == _fail : "Expected fail to be "+_fail+", got "+data.fail;
-			assert data.mod == _mod : "Expected mod to be "+_mod+", got "+data.mod;
+			assert data.mod.equals(_mod) : "Expected mod to be "+_mod+", got "+data.mod;
 			assert data.difficulty == _difficulty : "Expected difficulty to be "+_difficulty+", got "+data.difficulty;
 			assert data.combo == _combo : "Expected combo to be "+_combo+", got "+data.combo;
 			assert data.score == _score : "Expected score to be "+_score+", got "+data.score;
 		} catch(AssertionError e) {
 			System.err.println("\t"+e.getMessage()+" "+"("+(System.currentTimeMillis()-startTime)+"ms)!");
+			if (!debug) {
+				System.out.print("Automatically running in debug mode");
+				FileUtils.deleteFile("debug");
+				File f = new File("debug");
+				f.mkdir();
+				while (!f.exists()) {
+					try {
+						Thread.sleep(1000);
+						f.mkdir();
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+				}
+				RunTest(_img,_cool,_fine,_safe,_sad,_worst,_percent,_difficulty,_mod,_combo,_score,_fail,true);
+			}
 			System.exit(1);
 		}
 		System.out.println("\tPassed ("+(System.currentTimeMillis()-startTime)+"ms)!");
@@ -721,7 +753,8 @@ public class MyRobot{
 	        MYROBOT = new CustomRobot();
 	        MYROBOT.refreshScreen();
 	    } catch (Exception e) {
-	        JOptionPane.showOptionDialog(null, "Can't build the robot!", "Error", -1, 1, null, null, this);
+	    	e.printStackTrace();
+	        JOptionPane.showOptionDialog(null, e.getMessage(), "Error", -1, 1, null, null, this);
 	        System.exit(1);
 	    }
 	    X = SCREEN_X / 2;

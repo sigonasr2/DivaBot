@@ -2,6 +2,7 @@ package sig.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -34,27 +35,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class FileUtils {
-	public static String[] readFromFile(String filename) {
+	public static String[] readFromFile(String filename) throws IOException {
 		File file = new File(filename);
 		//System.out.println(file.getAbsolutePath());
 		List<String> contents= new ArrayList<String>();
 		if (file.exists()) {
-			try(
-					FileReader fw = new FileReader(filename);
-				    BufferedReader bw = new BufferedReader(fw);)
-				{
-					String readline = bw.readLine();
+					FileInputStream in = new FileInputStream(file);
+					InputStreamReader isr = new InputStreamReader(in,Charset.forName("UTF-8"));
+					BufferedReader br = new BufferedReader(isr);
+					String readline = br.readLine();
 					do {
 						if (readline!=null) {
 							//System.out.println(readline);
 							contents.add(readline);
-							readline = bw.readLine();
+							readline = br.readLine();
 						}} while (readline!=null);
-					fw.close();
-					bw.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+					br.close();
+					isr.close();
+					in.close();
 		}
 		return contents.toArray(new String[contents.size()]);
 	}
@@ -272,8 +270,9 @@ public class FileUtils {
 				}
 				OutputStream out = new FileOutputStream(file,true);
 			    Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+			    
 				PrintWriter pw = new PrintWriter(writer);
-
+				//pw.print('\uFEFF');
 				pw.println(message);
 				pw.flush();
 				pw.close();
@@ -290,9 +289,10 @@ public class FileUtils {
 					file.createNewFile();
 				}
 
-				FileWriter fw = new FileWriter(file,false);
-				PrintWriter pw = new PrintWriter(fw);
-				
+				OutputStream out = new FileOutputStream(file,true);
+			    Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+				PrintWriter pw = new PrintWriter(writer);
+				pw.print('\uFEFF');
 				for (String s : data) {
 					pw.println(s);
 				}

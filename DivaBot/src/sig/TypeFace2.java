@@ -40,15 +40,15 @@ public class TypeFace2 {
 	
 	final static int XOFFSET = 8;
 	
-	final static Rectangle RECT_SEARCH_COOL=new Rectangle(866+XOFFSET,260,100+XOFFSET,22);
-	final static Rectangle RECT_SEARCH_FINE=new Rectangle(866+XOFFSET,294,100+XOFFSET,22);
-	final static Rectangle RECT_SEARCH_SAFE=new Rectangle(866+XOFFSET,329,100+XOFFSET,22);
-	final static Rectangle RECT_SEARCH_SAD=new Rectangle(866+XOFFSET,364,100+XOFFSET,22);
-	final static Rectangle RECT_SEARCH_WORST=new Rectangle(866+XOFFSET,400,100+XOFFSET,22);
-	final static Rectangle RECT_SEARCH_PCT=new Rectangle(1182+XOFFSET,165,1132,168);
-	final static Rectangle RECT_SEARCH_PCT2=new Rectangle(1123+XOFFSET,165,1051,168);
-	final static Rectangle RECT_SEARCH_SCORE=new Rectangle(859+XOFFSET,578,250+XOFFSET,32);
-	final static Rectangle RECT_SEARCH_COMBO=new Rectangle(1010+XOFFSET,435,100+XOFFSET,20);
+	final static Rectangle RECT_SEARCH_COOL=new Rectangle(866+XOFFSET,260,100+XOFFSET+1,22+8);
+	final static Rectangle RECT_SEARCH_FINE=new Rectangle(866+XOFFSET,294,100+XOFFSET+1,22+8);
+	final static Rectangle RECT_SEARCH_SAFE=new Rectangle(866+XOFFSET,329,100+XOFFSET+1,22+8);
+	final static Rectangle RECT_SEARCH_SAD=new Rectangle(866+XOFFSET,364,100+XOFFSET+1,22+8);
+	final static Rectangle RECT_SEARCH_WORST=new Rectangle(866+XOFFSET,400,100+XOFFSET+1,22+8);
+	final static Rectangle RECT_SEARCH_PCT=new Rectangle(1182+XOFFSET,163,1132,8);
+	final static Rectangle RECT_SEARCH_PCT2=new Rectangle(1123+XOFFSET,163,1051,8);
+	final static Rectangle RECT_SEARCH_SCORE=new Rectangle(859+XOFFSET,578-2,250+XOFFSET+1,32+10);
+	final static Rectangle RECT_SEARCH_COMBO=new Rectangle(1010+XOFFSET,435-2,100+XOFFSET+1,22+8);
 
 	public Result getAllData(BufferedImage img, boolean debug) throws IOException,NumberFormatException,IndexOutOfBoundsException {
 		BufferedImage img2 = ImageUtils.toBufferedImage(img.getScaledInstance(1280 , 720, Image.SCALE_SMOOTH));
@@ -158,7 +158,7 @@ public class TypeFace2 {
 		BufferedImage test = null;
 		
 		trialloop:
-		while (ypointer<RECT_SEARCH_PCT.height) {
+		while (ypointer<RECT_SEARCH_PCT.height+RECT_SEARCH_PCT.y) {
 			xpointer=RECT_SEARCH_PCT.x;
 			while (xpointer>RECT_SEARCH_PCT.width) {
 				int foundIndex = -1;
@@ -268,7 +268,7 @@ public class TypeFace2 {
 		xpointer=RECT_SEARCH_PCT2.x;
 		ypointer=RECT_SEARCH_PCT2.y;
 		trialloop:
-		while (ypointer<RECT_SEARCH_PCT2.height) {
+		while (ypointer<RECT_SEARCH_PCT2.height+RECT_SEARCH_PCT2.y) {
 			xpointer=RECT_SEARCH_PCT2.x;
 			while (xpointer>RECT_SEARCH_PCT2.width) {
 				int foundIndex = -1;
@@ -401,7 +401,7 @@ public class TypeFace2 {
 		ypointer=0;
 		String total = "";
 		trialloop:
-		while (ypointer<4) {
+		while (ypointer<8) {
 			xpointer=RECT_SEARCH_COOL.width-1;
 			while (xpointer>22) {
 				int distance = 0;
@@ -491,7 +491,7 @@ public class TypeFace2 {
 		ypointer=0;
 		String total = "";
 		trialloop:
-		while (ypointer<4) {
+		while (ypointer<8) {
 			xpointer=RECT_SEARCH_SCORE.width-1;
 			while (xpointer>31) {
 				int distance = 0;

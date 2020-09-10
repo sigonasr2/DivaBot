@@ -44,4 +44,7 @@ public class Result {
 				.append(",\"").append(difficulty).append("\",\"").append(mod).append("\",").append(Boolean.toString(fail).toLowerCase())
 				.append(",").append(combo).append(",").append(score).toString();
 	}
+	public String toString() {
+		return displayDebug();
+	}
 }

@@ -205,193 +205,201 @@ public class MyRobot{
 					@Override
 					public void run() {
 						try {
-							if (MyRobot.calibrating) {
-								MyRobot.calibrating=false;
-								Overlay.OVERLAY.setVisible(false);
-								Thread.sleep(1000);
-								Calibrator c = new Calibrator();
-							}
-							if (checkSongSelect()) {
-								if (!overlayHidden) {
-									overlayHidden=true;
-									p.repaint(0, 0, 1400, 1000);
+							if (CALIBRATION_MODE) {
+								if (MyRobot.calibrating) {
+									MyRobot.calibrating=false;
+									Overlay.OVERLAY.setVisible(false);
+									Thread.sleep(1000);
+									Calibrator c = new Calibrator();
 								}
-								GetCurrentSong();
-								GetCurrentDifficulty();
-								recordedResults=false;
-								if (selectedSong!=null && difficulty!=null) {
-									if (!prevSongTitle.equalsIgnoreCase(selectedSong.title) || !prevDifficulty.equalsIgnoreCase(difficulty)) {
-										System.out.println("On Song Select Screen: Current Song-"+selectedSong.title+" Diff:"+difficulty);
-										p.pullData(selectedSong.title,difficulty);
-										prevSongTitle=selectedSong.title;
-										prevDifficulty=difficulty;
-										MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-										MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-										MYROBOT.keyPress(KeyEvent.VK_F11);
-										MYROBOT.keyRelease(KeyEvent.VK_F11);
-										MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-										MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
-									}
-								}
-								lastSongSelectTime = System.currentTimeMillis();
 							} else {
-								if (overlayHidden) {
-									overlayHidden=false;
-									p.repaint(0, 0, 1400, 1000);
-								}
-								if ((selectedSong!=null && difficulty!=null)) {
-									
-									if (OnResultsScreen() && !recordedResults && !recordingResults && results.size()==0) {
-										lastSongSelectTime=System.currentTimeMillis();
-										MYROBOT.setAutoDelay(0);
-										MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-										MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-										MYROBOT.keyPress(KeyEvent.VK_F12);
-										MYROBOT.keyRelease(KeyEvent.VK_F12);
-										MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-										MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
-										Thread.sleep(200);
-										MYROBOT.refreshScoreScreen();
-										ImageIO.write(MYROBOT.createScoreScreenCapture(),"png",new File("scoreimage.png"));
-										File tmp = new File("tmp");
-										if (tmp.exists()) {
-											FileUtils.deleteFile(tmp);
-										} else {
-											tmp.mkdir();
+								if (checkSongSelect()) {
+									if (!overlayHidden) {
+										overlayHidden=true;
+										p.repaint(0, 0, 1400, 1000);
+									}
+									GetCurrentSong();
+									GetCurrentDifficulty();
+									recordedResults=false;
+									if (selectedSong!=null && difficulty!=null) {
+										if (!prevSongTitle.equalsIgnoreCase(selectedSong.title) || !prevDifficulty.equalsIgnoreCase(difficulty)) {
+											System.out.println("On Song Select Screen: Current Song-"+selectedSong.title+" Diff:"+difficulty);
+											p.pullData(selectedSong.title,difficulty);
+											prevSongTitle=selectedSong.title;
+											prevDifficulty=difficulty;
+											MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+											MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+											MYROBOT.keyPress(KeyEvent.VK_F11);
+											MYROBOT.keyRelease(KeyEvent.VK_F11);
+											MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+											MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
 										}
-										try {
-											Result data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
-											//ImageIO.write(MYROBOT.createNormalScreenCapture(new Rectangle(418,204,1227,690)),"png",new File("test.png"));
-											if (data.cool==-1 || data.fine==-1 || data.safe==-1 || data.sad==-1 || data.worst==-1 || data.percent<0f || data.percent>110f || data.combo==-1 || data.score==-1) {
-												System.out.println("Waiting for results to populate...");
-											} else 
-											if ((data.combo!=lastcombo || data.fail!=lastfail || data.cool!=lastcool || lastfine!=data.fine || lastsafe!=data.safe || lastsad!=data.sad || lastworst!=data.worst)
-													&& data.score!=lastscore /*|| lastpercent!=percent*/){
-												//System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+data.cool+"/"+data.fine+"/"+data.safe+"/"+data.sad+"/"+data.worst+" "+data.percent+"%");
-												
-												System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+data.display());
-												File songFolder = new File(selectedSong.title+"/"+difficulty);
-												if (!songFolder.exists()) {
-													songFolder.mkdirs();
-												}
-												File[] songFolderFiles = songFolder.listFiles();
-												int playId = songFolderFiles.length;
-												File playFolder = new File(selectedSong.title+"/"+difficulty+"/"+playId);
-												playFolder.mkdir();
-												recordedResults=true;
-												lastcool=data.cool;
-												lastfine=data.fine;
-												lastsafe=data.safe;
-												lastsad=data.sad;
-												lastworst=data.worst;
-												lastpercent=data.percent;
-												lastcombo=data.combo;
-												lastscore=data.score;
-												lastfail=data.fail;
-												new File("scoreimage.png").renameTo(new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+data.cool+"_"+data.fine+"_"+data.safe+"_"+data.sad+"_"+data.worst+"_"+data.percent+""
-														+ "_"+data.combo+"_"+data.score+".png"));
-												results.add(new Result(selectedSong.title,difficulty,data.cool,data.fine,data.safe,data.sad,data.worst,data.percent,data.combo,data.score,data.fail));
-												SoundUtils.playSound("collect_item.wav");
-												//gotoxy(800,64);
-												//click();
-												MYROBOT.setAutoDelay(0);
-												MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-												MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-												MYROBOT.keyPress(KeyEvent.VK_F11);
-												MYROBOT.keyRelease(KeyEvent.VK_F11);
-												MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-												MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+									}
+									lastSongSelectTime = System.currentTimeMillis();
+								} else {
+									if (overlayHidden) {
+										overlayHidden=false;
+										p.repaint(0, 0, 1400, 1000);
+									}
+									if ((selectedSong!=null && difficulty!=null)) {
+										if (OnResultsScreen() && !recordedResults && !recordingResults && results.size()==0) {
+											lastSongSelectTime=System.currentTimeMillis();
+											MYROBOT.setAutoDelay(0);
+											MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+											MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+											MYROBOT.keyPress(KeyEvent.VK_F12);
+											MYROBOT.keyRelease(KeyEvent.VK_F12);
+											MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+											MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+											Thread.sleep(200);
+											MYROBOT.refreshScoreScreen();
+											ImageIO.write(MYROBOT.createScoreScreenCapture(),"png",new File("scoreimage.png"));
+											File tmp = new File("tmp");
+											if (tmp.exists()) {
+												FileUtils.deleteFile(tmp);
+											} else {
+												tmp.mkdir();
 											}
-										} catch (IOException|NumberFormatException|IndexOutOfBoundsException e) {
-											
-										}
-									} else {
-										if (results.size()>0) {
-											recordingResults=true;
-											for (Result r  : results) {
-												r.songName=r.songName.equalsIgnoreCase("PIANOGIRL")?"PIANO*GIRL":(r.songName.equalsIgnoreCase("16 -out of the gravity-"))?"1/6 -out of the gravity-":r.songName;
-												HttpClient httpclient = HttpClients.createDefault();
-												HttpPost httppost = new HttpPost("http://45.33.13.215:4501/submit");
-
-												// Request parameters and other properties.
-												List<NameValuePair> params = new ArrayList<NameValuePair>();
-												params.add(new BasicNameValuePair("song", r.songName));
-												params.add(new BasicNameValuePair("username", "sigonasr2"));
-												params.add(new BasicNameValuePair("authentication_token", "sig"));
-												params.add(new BasicNameValuePair("difficulty", r.difficulty));
-												params.add(new BasicNameValuePair("cool", Integer.toString(r.cool)));
-												params.add(new BasicNameValuePair("fine", Integer.toString(r.fine)));
-												params.add(new BasicNameValuePair("safe", Integer.toString(r.safe)));
-												params.add(new BasicNameValuePair("sad", Integer.toString(r.sad)));
-												params.add(new BasicNameValuePair("worst", Integer.toString(r.worst)));
-												params.add(new BasicNameValuePair("percent", Float.toString(r.percent)));
-												params.add(new BasicNameValuePair("fail", Boolean.toString(r.fail)));
-												params.add(new BasicNameValuePair("mod", r.mod));
-												params.add(new BasicNameValuePair("combo", Integer.toString(r.combo)));
-												params.add(new BasicNameValuePair("gameScore", Integer.toString(r.score)));
-												try {
-													httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-												} catch (UnsupportedEncodingException e) {
-													e.printStackTrace();
+											try {
+												Result data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
+												System.out.println(data);
+												//ImageIO.write(MYROBOT.,"png",new File("test.png"));
+												if (data.cool==-1 || data.fine==-1 || data.safe==-1 || data.sad==-1 || data.worst==-1 || data.percent<0f || data.percent>110f || data.combo==-1 || data.score==-1) {
+													System.out.println("Waiting for results to populate...");
+												} else 
+												if ((data.combo!=lastcombo || data.fail!=lastfail || data.cool!=lastcool || lastfine!=data.fine || lastsafe!=data.safe || lastsad!=data.sad || lastworst!=data.worst)
+														&& data.score!=lastscore /*|| lastpercent!=percent*/){
+													//System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+data.cool+"/"+data.fine+"/"+data.safe+"/"+data.sad+"/"+data.worst+" "+data.percent+"%");
+													
+													System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+data.display());
+													File songFolder = new File(selectedSong.title+"/"+difficulty);
+													if (!songFolder.exists()) {
+														songFolder.mkdirs();
+													}
+													File[] songFolderFiles = songFolder.listFiles();
+													int playId = songFolderFiles.length;
+													File playFolder = new File(selectedSong.title+"/"+difficulty+"/"+playId);
+													playFolder.mkdir();
+													recordedResults=true;
+													lastcool=data.cool;
+													lastfine=data.fine;
+													lastsafe=data.safe;
+													lastsad=data.sad;
+													lastworst=data.worst;
+													lastpercent=data.percent;
+													lastcombo=data.combo;
+													lastscore=data.score;
+													lastfail=data.fail;
+													new File("scoreimage.png").renameTo(new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+data.cool+"_"+data.fine+"_"+data.safe+"_"+data.sad+"_"+data.worst+"_"+data.percent+""
+															+ "_"+data.combo+"_"+data.score+".png"));
+													results.add(new Result(selectedSong.title,difficulty,data.cool,data.fine,data.safe,data.sad,data.worst,data.percent,data.combo,data.score,data.fail));
+													SoundUtils.playSound("collect_item.wav");
+													//gotoxy(800,64);
+													//click();
+													MYROBOT.setAutoDelay(0);
+													MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+													MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+													MYROBOT.keyPress(KeyEvent.VK_F11);
+													MYROBOT.keyRelease(KeyEvent.VK_F11);
+													MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+													MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
 												}
-
-												//Execute and get the response.
-												HttpResponse response = null;
-												try {
-													response = httpclient.execute(httppost);
-												} catch (IOException e) {
-													e.printStackTrace();
-												}
-												HttpEntity entity = response.getEntity();
-
-												if (entity != null) {
-												    try (InputStream instream = entity.getContent()) {
-												    	Scanner s = new Scanner(instream).useDelimiter("\\A");
-												    	String result = s.hasNext() ? s.next() : "";
-												    	System.out.println(result);
-												    	instream.close();
-												    } catch (UnsupportedOperationException | IOException e) {
+											} catch (IOException|NumberFormatException|IndexOutOfBoundsException e) {
+												
+											}
+										} else {
+											if (results.size()>0) {
+												recordingResults=true;
+												for (Result r  : results) {
+													r.songName=r.songName.equalsIgnoreCase("PIANOGIRL")?"PIANO*GIRL":(r.songName.equalsIgnoreCase("16 -out of the gravity-"))?"1/6 -out of the gravity-":r.songName;
+													HttpClient httpclient = HttpClients.createDefault();
+													HttpPost httppost = new HttpPost("http://45.33.13.215:4501/submit");
+	
+													// Request parameters and other properties.
+													List<NameValuePair> params = new ArrayList<NameValuePair>();
+													params.add(new BasicNameValuePair("song", r.songName));
+													params.add(new BasicNameValuePair("username", "sigonasr2"));
+													params.add(new BasicNameValuePair("authentication_token", "sig"));
+													params.add(new BasicNameValuePair("difficulty", r.difficulty));
+													params.add(new BasicNameValuePair("cool", Integer.toString(r.cool)));
+													params.add(new BasicNameValuePair("fine", Integer.toString(r.fine)));
+													params.add(new BasicNameValuePair("safe", Integer.toString(r.safe)));
+													params.add(new BasicNameValuePair("sad", Integer.toString(r.sad)));
+													params.add(new BasicNameValuePair("worst", Integer.toString(r.worst)));
+													params.add(new BasicNameValuePair("percent", Float.toString(r.percent)));
+													params.add(new BasicNameValuePair("fail", Boolean.toString(r.fail)));
+													params.add(new BasicNameValuePair("mod", r.mod));
+													params.add(new BasicNameValuePair("combo", Integer.toString(r.combo)));
+													params.add(new BasicNameValuePair("gameScore", Integer.toString(r.score)));
+													try {
+														httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+													} catch (UnsupportedEncodingException e) {
 														e.printStackTrace();
 													}
-												}
-											}
-											results.clear();
-
-											try {
-												JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/sigonasr2");
-												JSONObject obj2 = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/bestplay/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
-												p.lastRating = p.overallrating;
-												if (obj2.has("score")) {
-													double newScore = obj2.getDouble("score");
-													if (newScore>p.lastScore) {
-														p.bestPlayTime=System.currentTimeMillis();
+	
+													//Execute and get the response.
+													HttpResponse response = null;
+													try {
+														response = httpclient.execute(httppost);
+													} catch (IOException e) {
+														e.printStackTrace();
 													}
-													p.lastScore = newScore;
+													HttpEntity entity = response.getEntity();
+	
+													if (entity != null) {
+													    try (InputStream instream = entity.getContent()) {
+													    	Scanner s = new Scanner(instream).useDelimiter("\\A");
+													    	String result = s.hasNext() ? s.next() : "";
+													    	System.out.println(result);
+													    	instream.close();
+													    } catch (UnsupportedOperationException | IOException e) {
+															e.printStackTrace();
+														}
+													}
 												}
-												p.overallrating = (int)obj.getDouble("rating");
-												if (p.lastRating<p.overallrating) {p.ratingTime=System.currentTimeMillis();}
-												p.pullData(selectedSong.title, difficulty);
-											} catch (JSONException | IOException e) {
-												e.printStackTrace();
+												results.clear();
+	
+												try {
+													JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/sigonasr2");
+													JSONObject obj2 = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/bestplay/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
+													p.lastRating = p.overallrating;
+													if (obj2.has("score")) {
+														double newScore = obj2.getDouble("score");
+														if (newScore>p.lastScore) {
+															p.bestPlayTime=System.currentTimeMillis();
+														}
+														p.lastScore = newScore;
+													}
+													p.overallrating = (int)obj.getDouble("rating");
+													if (p.lastRating<p.overallrating) {p.ratingTime=System.currentTimeMillis();}
+													p.pullData(selectedSong.title, difficulty);
+												} catch (JSONException | IOException e) {
+													e.printStackTrace();
+												}
+												recordingResults=false;
 											}
-											recordingResults=false;
-										}
-										if (!OnResultsScreen() && recordedResults) {
-											recordedResults=false;
+											if (!OnResultsScreen() && recordedResults) {
+												recordedResults=false;
+											}
 										}
 									}
 								}
+								MYROBOT.refreshScreen();
 							}
-							MYROBOT.refreshScreen();
 						} catch (IOException | InterruptedException e) {
 							e.printStackTrace();
 						}
 				}
 					
-					private boolean OnResultsScreen() {
-						Color c1 = new Color(MYROBOT.createScreenCapture(new Rectangle(449,434,2,2)).getRGB(0, 0));
-						Color c2 = new Color(MYROBOT.createScreenCapture(new Rectangle(449,400,2,2)).getRGB(0, 0));
-						Color c3 = new Color(MYROBOT.createScreenCapture(new Rectangle(901,460,2,2)).getRGB(0, 0));
+					private boolean OnResultsScreen() throws IOException {
+						//r.x-418, r.y-204
+						ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(31,230,40,40)),"png",new File("color1.png"));
+						ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(31,196,40,40)),"png",new File("color2.png"));
+						ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)),"png",new File("color3.png"));
+						Color c1 = new Color(MYROBOT.createScreenCapture(new Rectangle(31,230,40,40)).getRGB(0, 0));
+						Color c2 = new Color(MYROBOT.createScreenCapture(new Rectangle(31,196,40,40)).getRGB(0, 0));
+						Color c3 = new Color(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)).getRGB(0, 0));
+						//System.out.println(c1+"/"+c2+"/"+c3);
 						return c1.getRed()>=254 && c1.getGreen()>=254 && c1.getBlue()>=254 && c2.getRed()==16 && c2.getGreen()==222 && c2.getBlue()==202 &&
 								c3.getRed()>=219 && c3.getRed()<=255 && c3.getGreen()>=213 && c3.getGreen()<=255 && c3.getBlue()>=160 && c3.getBlue()<=220;
 					}
@@ -571,6 +579,7 @@ public class MyRobot{
 	        f.add(OVERLAY);
 	        f.setBackground(new Color(0,0,0,0));
         } else {
+    		RunTests();
         	f.setSize(1362, 1036);
         	f.add(p);
         }
@@ -581,12 +590,12 @@ public class MyRobot{
 	    title.setText((currentSong>=SONGNAMES.length)?"DONE!":SONGNAMES[currentSong].name);
 	    
 	    
-	    SongData s = SongData.getByTitle(SONGNAMES[currentSong].name);
+	    //SongData s = SongData.getByTitle(SONGNAMES[currentSong].name);
 	   
 	    BotMain();
 	}
 	
-	void RunTests() throws IOException {
+	static void RunTests() throws IOException {
 		
 		selectedSong=new SongData("LIKE THE WIND",new Color[] {});
 		difficulty="H";
@@ -609,6 +618,7 @@ public class MyRobot{
 		RunTest("test16.png",320,46,2,0,4,93.26f,"EXEX","HS",135,463170,false);
 		RunTest("test17.png",431,30,3,0,3,100.51f,"EXEX","HS",386,581700,false);
 		RunTest("test18.png",427,86,5,1,4,92.45f,"EX","HS",136,526740,false);
+		RunTest("test19.png",4,2,2,0,95,0.42f,"EXEX","HS",2,4130,true);
 		RunTest("testimage.png",371,40,3,4,3,97.63f,"EX","HS",233,523750,false);
 		RunTest("testimage2.png",942,71,1,0,3,97.02f,"EXEX","",714,951020,false);
 		RunTest("testimage3.png",546,52,0,0,0,101.77f,"EX","",598,567430,false);
@@ -649,11 +659,11 @@ public class MyRobot{
 		RunTest("サマーアイドル.jpg",245,19,4,0,2,87.04f,"E","",103,179360,false);
 	}
 	
-	void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail) throws IOException {
+	static void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail) throws IOException {
 		RunTest(_img,_cool,_fine,_safe,_sad,_worst,_percent,_difficulty,_mod,_combo,_score,_fail,false);
 	}
 	
-	void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail,boolean debug) throws IOException {
+	static void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail,boolean debug) throws IOException {
 		System.out.println("Running test "+_img);
 		long startTime = System.currentTimeMillis();
 		String testdir="testsuite";
@@ -671,18 +681,23 @@ public class MyRobot{
 			e.printStackTrace();
 		}
 		Result data = typeface1.getAllData(img,debug);
-		assert data.cool == _cool : "Expected cool count to be "+_cool+", got "+data.cool;
-		assert data.fine == _fine : "Expected fine count to be "+_fine+", got "+data.fine;
-		assert data.safe == _safe : "Expected safe count to be "+_safe+", got "+data.safe;
-		assert data.sad == _sad : "Expected sad count to be "+_sad+", got "+data.sad;
-		assert data.worst == _worst : "Expected worst count to be "+_worst+", got "+data.worst;
-		assert data.percent == _percent : "Expected percent to be "+_percent+", got "+data.percent;
-		assert data.fail == _fail : "Expected fail to be "+_fail+", got "+data.fail;
-		assert data.mod == _mod : "Expected mod to be "+_mod+", got "+data.mod;
-		assert data.difficulty == _difficulty : "Expected difficulty to be "+_difficulty+", got "+data.difficulty;
-		assert data.combo == _combo : "Expected combo to be "+_combo+", got "+data.combo;
-		assert data.score == _score : "Expected score to be "+_score+", got "+data.score;
-		System.out.println(" Passed ("+(System.currentTimeMillis()-startTime)+"ms)!");
+		try {
+			assert data.cool == _cool : "Expected cool count to be "+_cool+", got "+data.cool;
+			assert data.fine == _fine : "Expected fine count to be "+_fine+", got "+data.fine;
+			assert data.safe == _safe : "Expected safe count to be "+_safe+", got "+data.safe;
+			assert data.sad == _sad : "Expected sad count to be "+_sad+", got "+data.sad;
+			assert data.worst == _worst : "Expected worst count to be "+_worst+", got "+data.worst;
+			assert data.percent == _percent : "Expected percent to be "+_percent+", got "+data.percent;
+			assert data.fail == _fail : "Expected fail to be "+_fail+", got "+data.fail;
+			assert data.mod == _mod : "Expected mod to be "+_mod+", got "+data.mod;
+			assert data.difficulty == _difficulty : "Expected difficulty to be "+_difficulty+", got "+data.difficulty;
+			assert data.combo == _combo : "Expected combo to be "+_combo+", got "+data.combo;
+			assert data.score == _score : "Expected score to be "+_score+", got "+data.score;
+		} catch(AssertionError e) {
+			System.err.println("\t"+e.getMessage()+" "+"("+(System.currentTimeMillis()-startTime)+"ms)!");
+			System.exit(1);
+		}
+		System.out.println("\tPassed ("+(System.currentTimeMillis()-startTime)+"ms)!");
 	}
 	
 	public static boolean checkSongSelect() throws IOException {

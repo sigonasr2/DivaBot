@@ -37,19 +37,31 @@ public class TypeFace2 {
 	public Result getAllData(BufferedImage img) throws IOException {
 		return getAllData(img,false);
 	}
+	
+	final static int XOFFSET = 8;
+	
+	final static Rectangle RECT_SEARCH_COOL=new Rectangle(866+XOFFSET,260,100+XOFFSET,22);
+	final static Rectangle RECT_SEARCH_FINE=new Rectangle(866+XOFFSET,294,100+XOFFSET,22);
+	final static Rectangle RECT_SEARCH_SAFE=new Rectangle(866+XOFFSET,329,100+XOFFSET,22);
+	final static Rectangle RECT_SEARCH_SAD=new Rectangle(866+XOFFSET,364,100+XOFFSET,22);
+	final static Rectangle RECT_SEARCH_WORST=new Rectangle(866+XOFFSET,400,100+XOFFSET,22);
+	final static Rectangle RECT_SEARCH_PCT=new Rectangle(1182+XOFFSET,165,1132,168);
+	final static Rectangle RECT_SEARCH_PCT2=new Rectangle(1123+XOFFSET,165,1051,168);
+	final static Rectangle RECT_SEARCH_SCORE=new Rectangle(859+XOFFSET,578,250+XOFFSET,32);
+	final static Rectangle RECT_SEARCH_COMBO=new Rectangle(1010+XOFFSET,435,100+XOFFSET,20);
 
 	public Result getAllData(BufferedImage img, boolean debug) throws IOException,NumberFormatException,IndexOutOfBoundsException {
-		BufferedImage img2 = ImageUtils.toBufferedImage(img.getScaledInstance(1280, 720, Image.SCALE_SMOOTH));
+		BufferedImage img2 = ImageUtils.toBufferedImage(img.getScaledInstance(1280 , 720, Image.SCALE_SMOOTH));
 		Result result = new Result("","",-1,-1,-1,-1,-1,-1f);
 		int[] finalNumbers = new int[5];
 		
 		Rectangle[] ranges = new Rectangle[] {
 				//These coords are in regard to the old screenshot sizes.
-				new Rectangle(866,262,100,20), //33 pixels per line.
-				new Rectangle(866,296,100,20),
-				new Rectangle(866,331,100,20),
-				new Rectangle(866,366,100,20),
-				new Rectangle(866,400,100,20),
+				RECT_SEARCH_COOL, //33 pixels per line.
+				RECT_SEARCH_FINE,
+				RECT_SEARCH_SAFE,
+				RECT_SEARCH_SAD,
+				RECT_SEARCH_WORST,
 		};
 		
 		for (int i=0;i<ranges.length;i++) {
@@ -86,10 +98,10 @@ public class TypeFace2 {
 		
 		//1109,435
 		result.combo = extractNumbersFromImage(img2.getSubimage(
-				1010,435,100,20),debug);
+				RECT_SEARCH_COMBO.x,RECT_SEARCH_COMBO.y,RECT_SEARCH_COMBO.width,RECT_SEARCH_COMBO.height),debug);
 		
 		result.score = extractScoreNumbersFromImage(img2.getSubimage(
-				859,578,250,32),debug);
+				RECT_SEARCH_SCORE.x,RECT_SEARCH_SCORE.y,RECT_SEARCH_SCORE.width,RECT_SEARCH_SCORE.height),debug);
 		
 		return result;
 	}
@@ -131,14 +143,14 @@ public class TypeFace2 {
 		//second part: 1123
 		String decimal = "";
 		String integer = "";
-		xpointer=1182;
-		ypointer=165;
+		xpointer=RECT_SEARCH_PCT.x;
+		ypointer=RECT_SEARCH_PCT.y;
 		BufferedImage test = null;
 		
 		trialloop:
-		while (ypointer<168) {
-			xpointer=1182;
-			while (xpointer>1132) {
+		while (ypointer<RECT_SEARCH_PCT.height) {
+			xpointer=RECT_SEARCH_PCT.x;
+			while (xpointer>RECT_SEARCH_PCT.width) {
 				int foundIndex = -1;
 				for (int i=0;i<10;i++) {
 					if (debug) {
@@ -243,12 +255,12 @@ public class TypeFace2 {
 			ypointer++;
 		}
 
-		xpointer=1123;
-		ypointer=165;
+		xpointer=RECT_SEARCH_PCT2.x;
+		ypointer=RECT_SEARCH_PCT2.y;
 		trialloop:
-		while (ypointer<168) {
-			xpointer=1123;
-			while (xpointer>1051) {
+		while (ypointer<RECT_SEARCH_PCT2.height) {
+			xpointer=RECT_SEARCH_PCT2.x;
+			while (xpointer>RECT_SEARCH_PCT2.width) {
 				int foundIndex = -1;
 				for (int i=0;i<10;i++) {
 					if (debug) {
@@ -375,74 +387,83 @@ public class TypeFace2 {
 		this.img=img;
 		File f = null;
 		BufferedImage test = null;
-		xpointer=99;
+		xpointer=RECT_SEARCH_COOL.width-1;
+		ypointer=0;
 		String total = "";
-		while (xpointer>22) {
-			int distance = 0;
-			int foundIndex = -1;
-			//Compare the 22x21 range.
-			for (int i=0;i<10;i++) {
-				if (debug) {
-					test = new BufferedImage(22,20,BufferedImage.TYPE_INT_ARGB);
-				}
-				boolean ruleBreak=false;
-				
-				colorloop:
-				for (int x=0;x<22;x++) {
-					for (int y=0;y<20;y++) {
-						Color fontCol = new Color(font.getRGB(x+i*22,y));
-						Color pixelCol = new Color(img.getRGB(xpointer-22+x+1, y));
-						if (fontCol.equals(Color.RED) && pixelCol.getRed()<150
-								 && pixelCol.getGreen()<150 && pixelCol.getBlue()<150) {
-							//Breaks a rule.
-							ruleBreak=true;
-							if (!debug) {
-								break colorloop;
-							} else {
-								test.setRGB(x, y, Color.RED.getRGB());
+		trialloop:
+		while (ypointer<4) {
+			xpointer=RECT_SEARCH_COOL.width-1;
+			while (xpointer>22) {
+				int distance = 0;
+				int foundIndex = -1;
+				//Compare the 22x21 range.
+				for (int i=0;i<10;i++) {
+					if (debug) {
+						test = new BufferedImage(22,20,BufferedImage.TYPE_INT_ARGB);
+					}
+					boolean ruleBreak=false;
+					
+					colorloop:
+					for (int x=0;x<22;x++) {
+						for (int y=0;y<20;y++) {
+							Color fontCol = new Color(font.getRGB(x+i*22,y));
+							Color pixelCol = new Color(img.getRGB(xpointer-22+x+1, y+ypointer));
+							if (fontCol.equals(Color.RED) && pixelCol.getRed()<150
+									 && pixelCol.getGreen()<150 && pixelCol.getBlue()<150) {
+								//Breaks a rule.
+								ruleBreak=true;
+								if (!debug) {
+									break colorloop;
+								} else {
+									test.setRGB(x, y, Color.RED.getRGB());
+								}
+							} else
+							if (fontCol.equals(Color.GREEN) && (pixelCol.getRed()>166
+									 || pixelCol.getGreen()>171 || pixelCol.getBlue()>185)) {
+								//Breaks a rule.
+								ruleBreak=true;
+								if (!debug) {
+									break colorloop;
+								} else {
+									test.setRGB(x, y, Color.GREEN.getRGB());
+								}
+							} else
+							if (debug) {
+								test.setRGB(x, y, pixelCol.getRGB());
 							}
-						} else
-						if (fontCol.equals(Color.GREEN) && (pixelCol.getRed()>166
-								 || pixelCol.getGreen()>171 || pixelCol.getBlue()>185)) {
-							//Breaks a rule.
-							ruleBreak=true;
-							if (!debug) {
-								break colorloop;
-							} else {
-								test.setRGB(x, y, Color.GREEN.getRGB());
-							}
-						} else
-						if (debug) {
-							test.setRGB(x, y, pixelCol.getRGB());
 						}
 					}
-				}
-				if (!ruleBreak) {
-					foundIndex=i;
+					if (!ruleBreak) {
+						foundIndex=i;
+						if (debug) {
+							System.out.println("Passes as "+((foundIndex+1)%10));
+						}
+					} else 
 					if (debug) {
-						System.out.println("Passes as "+((foundIndex+1)%10));
+						ImageIO.write(test,"png",new File("debug",System.nanoTime()+"_"+((i+1)%10)+".png"));
 					}
-				} else 
-				if (debug) {
-					ImageIO.write(test,"png",new File("debug",System.nanoTime()+"_"+((i+1)%10)+".png"));
 				}
-			}
-			if (foundIndex!=-1) {
-				//System.out.println("  Closest Match: Index "+((shortestIndex+1)%10)+" ("+shortestDistance+")");
-				if (total.equals("")) {
-					total = Integer.toString((foundIndex+1)%10); 
+				if (foundIndex!=-1) {
+					//System.out.println("  Closest Match: Index "+((shortestIndex+1)%10)+" ("+shortestDistance+")");
+					if (total.equals("")) {
+						total = Integer.toString((foundIndex+1)%10); 
+					} else {
+						total = Integer.toString((foundIndex+1)%10)+total;
+					}
+					if (debug) {
+						System.out.println("Input as "+((foundIndex+1)%10));
+						System.out.println("-------------");
+					}
+					xpointer-=22;
 				} else {
-					total = Integer.toString((foundIndex+1)%10)+total;
+					//Try shifting the xpointer slowly to the right and try again.
+					xpointer--;
 				}
-				if (debug) {
-					System.out.println("Input as "+((foundIndex+1)%10));
-					System.out.println("-------------");
-				}
-				xpointer-=22;
-			} else {
-				//Try shifting the xpointer slowly to the right and try again.
-				xpointer--;
 			}
+			if (total.length()>0) {
+				break trialloop;
+			}
+			ypointer++;
 		}
 		
 		if (total.equals("")) {
@@ -456,12 +477,12 @@ public class TypeFace2 {
 		this.img=img;
 		File f = null;
 		BufferedImage test = null;
-		xpointer=249;
+		xpointer=RECT_SEARCH_SCORE.width-1;
 		ypointer=0;
 		String total = "";
 		trialloop:
 		while (ypointer<4) {
-			xpointer=249;
+			xpointer=RECT_SEARCH_SCORE.width-1;
 			while (xpointer>31) {
 				int distance = 0;
 				int foundIndex = -1;

@@ -207,9 +207,9 @@ public class Calibrator{
 				//ImageIO.write(miniImg,"png",new File("capture_"+System.nanoTime()+".png"));
 				Color col = new Color(miniImg.getRGB(0, 0));
 				System.out.println("Checking "+col);
-				if ((col.getRed()>=5&&col.getRed()<=40&&
+				if ((col.getRed()>=5&&col.getRed()<=75&&
 						col.getGreen()>=170&&col.getGreen()<=210&&
-						col.getBlue()>=205&&col.getBlue()<=250)) {
+						col.getBlue()>=180&&col.getBlue()<=250)) {
 					//This is the max X. Calibration on this side good.
 					MyRobot.STARTDRAG.y=MyRobot.STARTDRAG.y+i;
 					//MyRobot.STARTDRAG.x--;

@@ -8,7 +8,7 @@ public class SongData {
 	String title;
 	Color[] songCode;
 	int distance=0;
-	static int MAXTHRESHOLD=200000;
+	static int MAXTHRESHOLD=400000;
 	final static float TOLERANCE = 0.95f;
 	public SongData(String title,Color[] songCode) {
 		this.title=title;
@@ -38,16 +38,16 @@ public class SongData {
 						break;
 					}*/
 				}
-				if (/*distance<=MAXTHRESHOLD && */distance<closestDistance) {
+				if (/*distance<=MAXTHRESHOLD &&*/ distance<closestDistance) {
 					//System.out.println(distance+" pixels matched for song "+s.title);
 					closestSong=s;
 					closestSong.distance=distance;
 					closestDistance=distance;
 				}
-				if (distance>=MAXTHRESHOLD && distance<closestMaxThresholdDistance) {
+				/*if (distance>=MAXTHRESHOLD && distance<closestMaxThresholdDistance) {
 					System.out.println(distance+" pixels diff: "+s.title);
 					closestMaxThresholdDistance=distance;
-				}
+				}*/
 			} else {
 				continue;
 			}

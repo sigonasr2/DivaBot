@@ -636,6 +636,10 @@ public class MyRobot{
 		RunTest("test25.png",175,75,13,10,32,50.84f,"E","SD",26,122670,false);
 		RunTest("test26.png",29,24,6,7,35,3.12f,"EXEX","HS",26,28100,true);
 		RunTest("test27.png",45,35,8,6,22,7.00f,"EX","HS",27,69780,true);
+		RunTest("test28.png",463,139,10,2,50,72.96f,"EXEX","HS",99,479170,false);
+		RunTest("test29.png",354,112,4,3,43,67.73f,"EXEX","HS",55,331060,true);
+		RunTest("test30.png",390,90,8,9,22,74.95f,"N","HS",82,326560,false);
+		RunTest("test31.png",329,69,8,1,34,72.15f,"EX","HS",40,358760,false);
 		RunTest("testimage.png",371,40,3,4,3,97.63f,"EX","HS",233,523750,false);
 		RunTest("testimage2.png",942,71,1,0,3,97.02f,"EXEX","",714,951020,false);
 		RunTest("testimage3.png",546,52,0,0,0,101.77f,"EX","",598,567430,false);

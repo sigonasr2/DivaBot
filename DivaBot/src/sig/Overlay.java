@@ -56,12 +56,12 @@ public class Overlay extends JPanel implements MouseMotionListener,MouseListener
 	public void mouseReleased(MouseEvent e) {
 		MyRobot.ENDDRAG=e.getLocationOnScreen();
 		if (MyRobot.STARTDRAG.x>MyRobot.ENDDRAG.x) { 
-			var xTemp = MyRobot.STARTDRAG.x;
+			int xTemp = MyRobot.STARTDRAG.x;
 			MyRobot.STARTDRAG.x=MyRobot.ENDDRAG.x;
 			MyRobot.ENDDRAG.x=xTemp;
 		}
 		if (MyRobot.STARTDRAG.y>MyRobot.ENDDRAG.y) { 
-			var xTemp = MyRobot.STARTDRAG.y;
+			int xTemp = MyRobot.STARTDRAG.y;
 			MyRobot.STARTDRAG.y=MyRobot.ENDDRAG.y;
 			MyRobot.ENDDRAG.y=xTemp;
 		}

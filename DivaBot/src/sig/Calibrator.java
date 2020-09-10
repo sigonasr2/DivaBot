@@ -9,6 +9,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import sig.utils.FileUtils;
+
 public class Calibrator{
 	
 	public static BufferedImage img;
@@ -62,6 +64,11 @@ public class Calibrator{
 		//MyRobot.CALIBRATIONSTATUS="First calibration set done: X"+(x-MyRobot.STARTDRAG.x)+" Y"+(y-MyRobot.STARTDRAG.y);
 		img = MyRobot.MYROBOT.getSizedCapture(new Rectangle(0,0,MyRobot.screenSize.width,MyRobot.screenSize.height));
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture_5.png"));
+		FileUtils.deleteFile("calibration_data.txt");
+		FileUtils.logToFile(Integer.toString(MyRobot.STARTDRAG.x), "calibration_data.txt");
+		FileUtils.logToFile(Integer.toString(MyRobot.STARTDRAG.y), "calibration_data.txt");
+		FileUtils.logToFile(Integer.toString(MyRobot.ENDDRAG.x), "calibration_data.txt");
+		FileUtils.logToFile(Integer.toString(MyRobot.ENDDRAG.y), "calibration_data.txt");
 	}
 
 	private boolean CalibrationStage1() throws IOException, InterruptedException {

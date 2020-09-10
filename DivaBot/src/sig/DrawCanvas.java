@@ -103,7 +103,7 @@ public class DrawCanvas extends JPanel implements KeyListener{
 		}
 	}
 	
-	public void pullData(String songname,String difficulty) {
+	public void pullData(final String songname,final String difficulty) {
 		this.songname=(songname.equalsIgnoreCase("PIANOGIRL")?"PIANO*GIRL":(songname.equalsIgnoreCase("16 -out of the gravity-"))?"1/6 -out of the gravity-":songname);
 		this.difficulty=difficulty;
 		romanizedname="";
@@ -124,42 +124,46 @@ public class DrawCanvas extends JPanel implements KeyListener{
 					romanizedname = obj.getString("romanized_name");
 					englishname = obj.getString("english_name");
 					artist = obj.getString("artist");*/
-					SongInfo currentSong = SongInfo.getByTitle(MyRobot.p.songname);
-					if (currentSong.rating.has(difficulty)) {
-						difficultyRating = currentSong.rating.getDouble(difficulty);
-					}
-					romanizedname = currentSong.romanized_name;
-					englishname = currentSong.english_name;
-					artist = currentSong.artist;
-					JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/bestplay/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
-					if (obj.has("cool")) {
-						bestPlay = new Result(MyRobot.p.songname,difficulty,obj.getInt("cool"),obj.getInt("fine"),obj.getInt("safe"),obj.getInt("sad"),obj.getInt("worst"),(float)obj.getDouble("percent"));
-						lastScore = obj.getDouble("score");
-					} else {
-						bestPlay = null;
-					}
-					obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/playcount/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
-					plays = obj.getInt("playcount");
-					obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/songpasscount/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
-					passes = obj.getInt("passcount");
-					obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/songfccount/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
-					fcCount = obj.getInt("fccount");
-					/*obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/sigonasr2");
-					lastRating = overallrating;
-					overallrating = (int)obj.getDouble("rating");
-					if (lastRating<overallrating) {ratingTime=System.currentTimeMillis();}
-					*/
-					String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate"+((fcCount>0)?"  -  "+fcCount+" FC"+(fcCount==1?"":"s")+"    "+((int)(Math.floor(((float)fcCount)/plays*100)))+"% FC rate":"")+")":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():"")+"     Overall Rating: "+overallrating;
-					Rectangle2D bounds = TextUtils.calculateStringBoundsFont(text, programFont);
-					if (bounds.getWidth()>1345) {
-						scrolling=true;
-					} else {
-						scrolling=false;
-					}
-					scrollX = 0;
-					MyRobot.p.repaint(0,0,1400,1000);
+					if (MyRobot.p.songname!=null) {
+						SongInfo currentSong = SongInfo.getByTitle(MyRobot.p.songname);
+						if (currentSong!=null) {
+							if (currentSong.rating.has(difficulty)) {
+								difficultyRating = currentSong.rating.getDouble(difficulty);
+							}
+							romanizedname = currentSong.romanized_name;
+							englishname = currentSong.english_name;
+							artist = currentSong.artist;
+							JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/bestplay/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
+							if (obj.has("cool")) {
+								bestPlay = new Result(MyRobot.p.songname,difficulty,obj.getInt("cool"),obj.getInt("fine"),obj.getInt("safe"),obj.getInt("sad"),obj.getInt("worst"),(float)obj.getDouble("percent"));
+								lastScore = obj.getDouble("score");
+							} else {
+								bestPlay = null;
+							}
+							obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/playcount/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
+							plays = obj.getInt("playcount");
+							obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/songpasscount/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
+							passes = obj.getInt("passcount");
+							obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/songfccount/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
+							fcCount = obj.getInt("fccount");
+							/*obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/sigonasr2");
+							lastRating = overallrating;
+							overallrating = (int)obj.getDouble("rating");
+							if (lastRating<overallrating) {ratingTime=System.currentTimeMillis();}
+							*/
+							String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate"+((fcCount>0)?"  -  "+fcCount+" FC"+(fcCount==1?"":"s")+"    "+((int)(Math.floor(((float)fcCount)/plays*100)))+"% FC rate":"")+")":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():"")+"     Overall Rating: "+overallrating;
+							Rectangle2D bounds = TextUtils.calculateStringBoundsFont(text, programFont);
+							if (bounds.getWidth()>1345) {
+								scrolling=true;
+							} else {
+								scrolling=false;
+							}
+							scrollX = 0;
+							MyRobot.p.repaint(0,0,1400,1000);
+							}
+						}
 					} catch (JSONException | IOException e) {
-					e.printStackTrace();
+						e.printStackTrace();
 				}
 			}
 		};

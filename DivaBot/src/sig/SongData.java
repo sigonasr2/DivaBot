@@ -7,6 +7,8 @@ import sig.utils.ImageUtils;
 public class SongData {
 	String title;
 	Color[] songCode;
+	int distance=0;
+	static int MAXTHRESHOLD=200000;
 	final static float TOLERANCE = 0.95f;
 	public SongData(String title,Color[] songCode) {
 		this.title=title;
@@ -23,17 +25,31 @@ public class SongData {
 	}
 	
 	public static SongData compareData(Color[] data) {
-		int closestDistance = Integer.MAX_VALUE; 
+		int closestDistance = Integer.MAX_VALUE;
+		int closestMaxThresholdDistance = Integer.MAX_VALUE;
 		SongData closestSong = null;
 		for (SongData s : MyRobot.SONGS) {
 			int distance = 0;
-			for (int i=0;i<s.songCode.length;i++) {
-				distance += ImageUtils.distanceToColor(s.songCode[i],data[i]);
-			}
-			if (distance<closestDistance) {
-				//System.out.println(matched+"/"+s.songCode.length+" pixels matched for song "+s.title);
-				closestSong=s;
-				closestDistance=distance;
+			if (s!=null&&s.songCode!=null) {
+				for (int i=0;i<s.songCode.length;i++) {
+					distance += ImageUtils.distanceToColor(s.songCode[i],data[i]);
+					/*if (distance>MAXTHRESHOLD) {
+						distance=MAXTHRESHOLD+1;
+						break;
+					}*/
+				}
+				if (/*distance<=MAXTHRESHOLD && */distance<closestDistance) {
+					//System.out.println(distance+" pixels matched for song "+s.title);
+					closestSong=s;
+					closestSong.distance=distance;
+					closestDistance=distance;
+				}
+				if (distance>=MAXTHRESHOLD && distance<closestMaxThresholdDistance) {
+					System.out.println(distance+" pixels diff: "+s.title);
+					closestMaxThresholdDistance=distance;
+				}
+			} else {
+				continue;
 			}
 		}
 		return closestSong;
@@ -71,6 +87,7 @@ public class SongData {
 		for (int i=0;i<data.length;i++) {
 			colors[i]=new Color(Integer.parseInt(data[i]),true);
 		}
+		System.out.println("Store "+title+"/"+colors);
 		return new SongData(title,colors);
 	}
 }

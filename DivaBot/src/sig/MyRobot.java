@@ -602,6 +602,8 @@ public class MyRobot{
     		FRAME.addComponentListener(p);
 		    FRAME.addWindowListener(p);
 		    FRAME.addMouseListener(p);
+		    FRAME.addMouseMotionListener(p);
+		    FRAME.addKeyListener(p);
 		    if (DrawCanvas.configData.containsKey("WIDTH")&&DrawCanvas.configData.containsKey("HEIGHT")) {
 		    	try {
 		    		FRAME.setSize(

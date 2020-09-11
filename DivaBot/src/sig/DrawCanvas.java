@@ -18,6 +18,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.font.TextAttribute;
@@ -28,12 +29,15 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.AttributedString;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.json.JSONArray;
@@ -45,7 +49,7 @@ import sig.utils.FileUtils;
 import sig.utils.ImageUtils;
 import sig.utils.TextUtils;
 
-public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,WindowListener,MouseListener{
+public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,WindowListener,MouseListener,MouseMotionListener{
 	String difficulty;
 	String panelText;
 	//Font programFont = new Font("Alata Regular", Font.PLAIN, 32);
@@ -76,6 +80,9 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
     boolean targetBuffer=false;
     static Color background = new Color(170,170,170);
     public static HashMap<String,String> configData = new HashMap<String,String>();
+    List<Display> displays = new ArrayList<Display>();
+    public static Display selectedDisplay = null;
+    public static Display draggedDisplay = null;
 	DrawCanvas() throws FontFormatException, IOException {
 		loadConfig();
 		addConfigButton = ImageIO.read(new File("addDisplay.png"));
@@ -209,41 +216,9 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 		g2.drawImage(addConfigButton,getWidth()-addConfigButton.getWidth()+1,0,this);
 		g2.drawImage(backgroundColorButton,getWidth()-backgroundColorButton.getWidth()+1,backgroundColorButton.getHeight()+1,this);
 		
-
-//			String songDisplay = ((romanizedname.length()>0)?romanizedname:englishname) + " - " + artist;
-//			Rectangle2D bounds = TextUtils.calculateStringBoundsFont(songDisplay, programFont);
-//			if (bounds.getWidth()>675) {
-//				DrawUtils.drawOutlineText(g2, programFontSmall, 8, 42, 1, Color.WHITE, new Color(0,0,0,64), songDisplay);
-//			} else {
-//				DrawUtils.drawOutlineText(g2, programFont, 8, 42, 1, Color.WHITE, new Color(0,0,0,64), songDisplay);
-//			}
-//
-//			if ((bestPlayTime>System.currentTimeMillis()-10000)) {
-//				DrawUtils.drawOutlineText(g2, programFont, 8, 935+42, 1, new Color(220,220,255,(int)Math.min(((System.currentTimeMillis()-bestPlayTime))/5,255)), new Color(0,0,0,64),"New Record!");
-//			} else {
-//				DrawUtils.drawOutlineText(g2, programFontSmall, 8, 935+42, 1, Color.WHITE, new Color(0,0,0,64),((bestPlay!=null)?bestPlay.display():""));
-//			}
-//			if ((ratingTime>System.currentTimeMillis()-10000)) {
-//				DrawUtils.drawOutlineText(g2, programFontSmall, 484+8, 935+42, 1, new Color(220,220,255,(int)Math.min(((System.currentTimeMillis()-ratingTime))/5,255)), new Color(0,0,0,64),"Rating up! "+lastRating+" -> "+overallrating);
-//			} else {
-//				DrawUtils.drawOutlineText(g2, programFont, 484+8, 935+42, 1, Color.WHITE, new Color(0,0,0,64),Integer.toString(overallrating));
-//			}
-//			if (displayTimer%3==0) {
-//				DrawUtils.drawOutlineText(g2, programFont, 968+8, 935+42, 1, Color.WHITE, new Color(0,0,0,64),difficultyRating + " - " + fullNameDifficulty());
-//			} else 
-//			if (displayTimer%3==1) {
-//				if (plays>0) {
-//					DrawUtils.drawOutlineText(g2, programFontSmall, 968+8, 935+42, 1, Color.WHITE, new Color(0,0,0,64),""+(passes)+"/"+(plays)+" play"+((plays!=1)?"s":"")+" "+"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate)");
-//				} else {
-//					DrawUtils.drawOutlineText(g2, programFont, 968+8, 935+42, 1, Color.WHITE, new Color(0,0,0,64),"No plays");
-//				}
-//			} else {
-//				if (fcCount>0) {
-//					DrawUtils.drawOutlineText(g2, programFont, 968+8, 935+42, 1, Color.WHITE, new Color(0,0,0,64),fcCount +" FC"+(fcCount==1?"":"s")+"    "+((int)(Math.floor(((float)fcCount)/plays*100)))+"% FC rate");
-//				} else {
-//					DrawUtils.drawOutlineText(g2, programFont, 968+8, 935+42, 1, Color.WHITE, new Color(0,0,0,64),difficultyRating + " - " + fullNameDifficulty());
-//				}
-//			}
+		for (int i=0;i<displays.size();i++) {
+			displays.get(i).draw(g);
+		}
 	}
 
 	private String fullNameDifficulty() {
@@ -275,6 +250,20 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		if (selectedDisplay!=null && e.getKeyCode()==KeyEvent.VK_DELETE) {
+			DeleteDisplay();
+		}
+	}
+
+	private void DeleteDisplay() {
+		if (selectedDisplay!=null) {
+			int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you would like to delete this display box?","Warning",JOptionPane.YES_NO_OPTION);
+			if(dialogResult == JOptionPane.YES_OPTION){
+				selectedDisplay.deleted=true;
+				selectedDisplay=(displays.remove(selectedDisplay))?null:selectedDisplay;
+				repaint();
+			}
+		}
 	}
 
 	@Override
@@ -354,34 +343,83 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		Point cursor = GetCursorPosition(e);
+		switch (e.getButton()) {
+			case MouseEvent.BUTTON3:{
+				selectedDisplay=null;
+				for (int i=0;i<displays.size();i++) {
+					Display d = displays.get(i);
+					if (cursor.x>=d.x&&
+						cursor.x<=d.x+d.width&&
+						cursor.y>=d.y&&
+						cursor.y<=d.y+d.height) {
+						selectedDisplay=d;
+						break;
+					}
+				}
+				DeleteDisplay();
+			}break;
+			case MouseEvent.BUTTON1:{
+				//System.out.println(cursor+"/"+addConfigButton.getHeight());
+				if (cursor.x>=getWidth()-addConfigButton.getWidth()&&
+						cursor.x<=getWidth()&&
+						cursor.y>=0&&
+						cursor.y<=addConfigButton.getHeight()) {
+						Display d = new Display();
+						displays.add(d);
+						selectedDisplay=d;
+						DisplayManager.setupSettings(selectedDisplay);
+						return;
+					} else
+				if (cursor.x>=getWidth()-addConfigButton.getWidth()&&
+				cursor.x<=getWidth()&&
+				cursor.y>=addConfigButton.getHeight()+1&&
+				cursor.y<=addConfigButton.getHeight()+1+addConfigButton.getHeight()) {
+					Color c = MyRobot.CP.getBackgroundColor();
+					if (c!=null) {
+						configData.put("BACKGROUND",Integer.toString(c.getRGB()));
+						applyConfig();
+					}
+					return;
+				}
+				
+				Display previousDisplay = selectedDisplay;
+				selectedDisplay=null;
+				for (int i=0;i<displays.size();i++) {
+					Display d = displays.get(i);
+					if (cursor.x>=d.x&&
+						cursor.x<=d.x+d.width&&
+						cursor.y>=d.y&&
+						cursor.y<=d.y+d.height) {
+						selectedDisplay=d;
+						break;
+					}
+				}
+				
+				if (selectedDisplay==null) {
+					MyRobot.FRAME.setCursor(Cursor.getDefaultCursor());
+					DisplayManager.f.setVisible(false);
+				} else {
+					MyRobot.FRAME.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+					draggedDisplay=selectedDisplay;
+					if (selectedDisplay.equals(previousDisplay)) {
+						//System.out.println("Double click");
+						DisplayManager.setupSettings(selectedDisplay);
+					}
+				}
+			}break;
+		}
+	}
+
+	private Point GetCursorPosition(MouseEvent e) {
 		Point cursor = e.getPoint();
 		cursor.translate(-MyRobot.FRAME.getInsets().left,-MyRobot.FRAME.getInsets().top);
-		System.out.println(cursor+"/"+addConfigButton.getHeight());
-		if (cursor.x>=getWidth()-addConfigButton.getWidth()&&
-				cursor.x<=getWidth()&&
-				cursor.y>=0&&
-				cursor.y<=addConfigButton.getHeight()) {
-				MyRobot.FRAME.setCursor(new Cursor(Cursor.HAND_CURSOR));
-			} else
-		if (cursor.x>=getWidth()-addConfigButton.getWidth()&&
-		cursor.x<=getWidth()&&
-		cursor.y>=addConfigButton.getHeight()+1&&
-		cursor.y<=addConfigButton.getHeight()+1+addConfigButton.getHeight()) {
-			Color c = MyRobot.CP.getBackgroundColor();
-			if (c!=null) {
-				configData.put("BACKGROUND",Integer.toString(c.getRGB()));
-				applyConfig();
-			}
-		} else
-		{
-			MyRobot.FRAME.setCursor(Cursor.getDefaultCursor());	
-		}
+		return cursor;
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		draggedDisplay=null;
 	}
 
 	@Override
@@ -392,6 +430,22 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		if (draggedDisplay!=null) {
+			Point cursor = GetCursorPosition(e);
+			draggedDisplay.x=(int)(Math.floor((cursor.x-draggedDisplay.width/2)/8)*8);
+			draggedDisplay.y=(int)(Math.floor((cursor.y-draggedDisplay.height/2)/8)*8);
+			MyRobot.p.repaint();
+		}
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

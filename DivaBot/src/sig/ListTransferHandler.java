@@ -104,7 +104,13 @@ public class ListTransferHandler extends TransferHandler {
 	        	}
 	        }
         }
-        System.out.println("Selected indexes: "+Arrays.toString(indices));
+        String[] labels = new String[listModel.getSize()];
+        for (int i=0;i<listModel.getSize();i++) {
+        	labels[i]=(String)listModel.get(i);
+        }
+        DisplayManager.selectedDisplay.labels=labels;
+        MyRobot.p.repaint();
+        //System.out.println("Selected indexes: "+Arrays.toString(indices));
         for (int i=0;i<indices.length;i++) {
         	if (addIndex<indices[i]) {
 	        	listModel.add(addIndex, listModel.get(indices[i]));

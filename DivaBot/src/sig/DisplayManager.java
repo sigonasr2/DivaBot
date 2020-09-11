@@ -9,6 +9,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -30,36 +32,42 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.BadLocationException;
 
-public class DisplayManager extends JPanel implements MouseListener,ListSelectionListener{
-	JFrame f = new JFrame();
-	GridBagConstraints g = new GridBagConstraints();
-	Font[] fontList = null;
-	ColorButton colorButton;
-	ColorButton colorButton2;
-	JTextField fontSizeInput;
-	JTextField widthInput;
-	JTextField heightInput;
-	JTextField delayInput;
-	DefaultListModel model = new DefaultListModel();
-	DefaultListModel model2 = new DefaultListModel();
+public class DisplayManager extends JPanel implements MouseListener,ListSelectionListener,ItemListener{
+	public static JFrame f = new JFrame();
+	static GridBagConstraints g = new GridBagConstraints();
+	static Font[] fontList = null;
+	static ColorButton colorButton;
+	static ColorButton colorButton2;
+	static JTextField fontSizeInput;
+	static JTextField widthInput;
+	static JTextField heightInput;
+	static JTextField delayInput;
+	static DefaultListModel model = new DefaultListModel();
+	static DefaultListModel model2 = new DefaultListModel();
+	static JComboBox fonts;
 	JList labels = new JList(model);
 	JList displayedLabels = new JList(model2);
-	String[] AVAILABLELABELS = new String[] {
+	public static Display selectedDisplay;
+	static String[] AVAILABLELABELS = new String[] {
 			"Best Play",
 			"Overall Rating",
 			"Song Difficulty",
 			"Song Title (Japanese)",
 			"Song Title (Romanized)",
+			"Song Title (Japanese+Romanized)",
 			"Song Title (English)",
-			"Play",
-			"Play/Pass Count (+%)",
-			"Play/Pass Count (+%)",
+			"Song Title (Japanese+Romanized+ENG)",
+			"Play Count",
+			"Pass/Play Count",
+			"Pass/Play Count (+%)",
 			"FC Count",
-			"FC/Play Count",
-			"FC/Play Count (+%)"
+			"FC Count (+%)"
 	};
 	
 	DisplayManager() throws IOException {
@@ -70,8 +78,9 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 		List<Font> tempFontList = new ArrayList(Arrays.asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts()));
 		
 		for (int i=0;i<tempFontList.size();i++) {
+			//System.out.println(tempFontList.get(i));
 			if (!tempFontList.get(i).canDisplay(12479) || tempFontList.get(i).getFontName().equals("Dialog.plain")) {
-				tempFontList.remove(i);
+				tempFontList.remove(i--);
 			}
 		}
 		
@@ -81,32 +90,121 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 		g.anchor=GridBagConstraints.EAST;
 		addComponent(1,1,3,1,new JLabel("Background Color"));
 		g.anchor=GridBagConstraints.WEST;
-		colorButton = (ColorButton)addComponent(4,1,4,1,new ColorButton("Color"));
-		JComboBox fonts = new JComboBox(fontList) {
+		colorButton = (ColorButton)addComponent(4,1,4,1,new ColorButton("Color","background"));
+		fonts = new JComboBox(fontList) {
 			@Override 
 			public Dimension getPreferredSize() {
 				return new Dimension(300,40);
 			}	
 		};
+		if (MyRobot.p.configData.containsKey("LAST_BACKGROUND")) {
+			colorButton.setBackground(new Color(Integer.parseInt(MyRobot.p.configData.get("LAST_BACKGROUND"))));
+		}
 		addComponent(9,1,2,1,new JLabel(" "));
 		fonts.setRenderer(new FontRenderer());
 		fonts.setMaximumRowCount(5);
+		fonts.addItemListener(this);
+		
 		g.anchor=GridBagConstraints.EAST;
 		addComponent(1,3,3,1,new JLabel("Font"));
 		g.anchor=GridBagConstraints.WEST;
 		addComponent(4,3,4,1,fonts);
+		if (MyRobot.p.configData.containsKey("LAST_FONT")) {
+			for (int i=0;i<fontList.length;i++) {
+				if (MyRobot.p.configData.get("LAST_FONT").equals(fontList[i].getFontName())) {
+					fonts.setSelectedItem(fontList[i]);
+					break;
+				}
+			}
+			//fonts.setSelectedItem(new Font(MyRobot.p.configData.get("LAST_FONT"),Font.PLAIN,32));
+		}
 		g.anchor=GridBagConstraints.EAST;
 		addComponent(1,5,3,1,new JLabel("Font Color"));
 		g.anchor=GridBagConstraints.WEST;
-		colorButton = (ColorButton)addComponent(4,5,4,1,new ColorButton("Color"));
+		colorButton2 = (ColorButton)addComponent(4,5,2,1,new ColorButton("Color","foreground"));
+		colorButton2.setColor(Color.WHITE);
+		if (MyRobot.p.configData.containsKey("LAST_TEXT")) {
+			colorButton.setBackground(new Color(Integer.parseInt(MyRobot.p.configData.get("LAST_TEXT"))));
+		}
 		g.anchor=GridBagConstraints.EAST;
-		addComponent(1,7,1,1,new JLabel("Width"));
+		addComponent(7,5,1,1,new JLabel("Size"));
+		g.anchor=GridBagConstraints.WEST;
+		fontSizeInput = (JTextField)addComponent(8,5,1,1,new JTextField() {
+			@Override 
+			public Dimension getPreferredSize() {
+				return new Dimension(50,20);
+			}	
+		});
+		if (MyRobot.p.configData.containsKey("LAST_FONTSIZE")) {
+			fontSizeInput.setText(MyRobot.p.configData.get("LAST_FONTSIZE"));
+		}
+		fontSizeInput.getDocument().addDocumentListener(new DocumentListener() {
+
+			void updateField(JTextField c, DocumentEvent e) {
+				try {
+					selectedDisplay.font=new Font(selectedDisplay.font.getFontName(),Font.PLAIN,Integer.parseInt(e.getDocument().getText(0, e.getDocument().getLength())));
+					selectedDisplay.fontSize=Integer.parseInt(e.getDocument().getText(0, e.getDocument().getLength()));
+					MyRobot.p.repaint();
+					c.setBackground(Color.WHITE);
+				} catch (NullPointerException | NumberFormatException | BadLocationException e1) {
+					c.setBackground(Color.RED);
+				}
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateField(fontSizeInput,e);
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateField(fontSizeInput,e);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+			}
+			
+		});
+		//addComponent(1,5,3,1,new JLabel("Font Color"));
+		g.anchor=GridBagConstraints.EAST;
+		addComponent(2,7,1,1,new JLabel("Width"));
 		g.anchor=GridBagConstraints.WEST;
 		widthInput = (JTextField)addComponent(3,7,1,1,new JTextField() {
 			@Override 
 			public Dimension getPreferredSize() {
 				return new Dimension(50,20);
 			}	
+		});
+		if (MyRobot.p.configData.containsKey("LAST_WIDTH")) {
+			widthInput.setText(MyRobot.p.configData.get("LAST_WIDTH"));
+		}
+		widthInput.getDocument().addDocumentListener(new DocumentListener() {
+
+			void updateField(JTextField c, DocumentEvent e) {
+				try {
+					selectedDisplay.width=Integer.parseInt(e.getDocument().getText(0, e.getDocument().getLength()));
+					MyRobot.p.repaint();
+					c.setBackground(Color.WHITE);
+				} catch (NullPointerException | NumberFormatException | BadLocationException e1) {
+					c.setBackground(Color.RED);
+				}
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateField(widthInput,e);
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateField(widthInput,e);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+			}
+			
 		});
 		g.anchor=GridBagConstraints.EAST;
 		addComponent(4,7,2,1,new JLabel("Height"));
@@ -117,6 +215,36 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 				return new Dimension(50,20);
 			}	
 		});
+		if (MyRobot.p.configData.containsKey("LAST_HEIGHT")) {
+			heightInput.setText(MyRobot.p.configData.get("LAST_HEIGHT"));
+		}
+		heightInput.getDocument().addDocumentListener(new DocumentListener() {
+
+			void updateField(JTextField c, DocumentEvent e) {
+				try {
+					selectedDisplay.height=Integer.parseInt(e.getDocument().getText(0, e.getDocument().getLength()));
+					MyRobot.p.repaint();
+					c.setBackground(Color.WHITE);
+				} catch (NullPointerException | NumberFormatException | BadLocationException e1) {
+					c.setBackground(Color.RED);
+				}
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateField(heightInput,e);
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateField(heightInput,e);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+			}
+			
+		});
 		g.anchor=GridBagConstraints.WEST;
 		addComponent(1,10,6,1,new JLabel(" "));
 		g.anchor=GridBagConstraints.WEST;
@@ -126,6 +254,36 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 				return new Dimension(50,20);
 			}	
 		});
+		delayInput.getDocument().addDocumentListener(new DocumentListener() {
+
+			void updateField(JTextField c, DocumentEvent e) {
+				try {
+					selectedDisplay.delay=Integer.parseInt(e.getDocument().getText(0, e.getDocument().getLength()));
+					MyRobot.p.repaint();
+					c.setBackground(Color.WHITE);
+				} catch (NullPointerException | NumberFormatException | BadLocationException e1) {
+					c.setBackground(Color.RED);
+				}
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateField(delayInput,e);
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateField(delayInput,e);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+			}
+			
+		});
+		if (MyRobot.p.configData.containsKey("LAST_DELAY")) {
+			delayInput.setText(MyRobot.p.configData.get("LAST_DELAY"));
+		}
 		g.anchor=GridBagConstraints.WEST;
 		addComponent(6,10,1,1,new JLabel("ms"));
 		
@@ -170,12 +328,13 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 		addComponent(7,12,2,1,new JLabel("Active Labels:"));
 		
 		widthInput.setText("200");
-		heightInput.setText("200");
+		heightInput.setText("48");
+		fontSizeInput.setText("32");
 		delayInput.setText("10000");
 		f.add(this);
 		f.pack();
 		f.setResizable(false);
-		//f.setVisible(true);
+		f.setVisible(false);
 	}
 	private Component addComponent(int x, int y, int w, int h,Component component) {
 		g.gridx=x;
@@ -184,6 +343,46 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 		g.gridheight=h;
 		this.add(component,g);
 		return component;
+	}
+	public static void setupSettings(Display d) {
+		selectedDisplay=d;
+		colorButton.setBackground(d.backgroundCol);
+		MyRobot.p.configData.put("LAST_BACKGROUND",Integer.toString(d.backgroundCol.getRGB()));
+		colorButton2.setBackground(d.textCol);
+		MyRobot.p.configData.put("LAST_TEXT",Integer.toString(d.textCol.getRGB()));
+		for (int i=0;i<fonts.getItemCount();i++) {
+			if (d.font.getFontName().equals(((Font)(fonts.getItemAt(i))).getFontName())) {
+				fonts.setSelectedItem(fonts.getItemAt(i));
+				break;
+			}
+		}
+		MyRobot.p.configData.put("LAST_FONT",d.font.getFontName());
+		widthInput.setText(Integer.toString(d.width));
+		MyRobot.p.configData.put("LAST_WIDTH",Integer.toString(d.width));
+		heightInput.setText(Integer.toString(d.height));
+		MyRobot.p.configData.put("LAST_HEIGHT",Integer.toString(d.height));
+		delayInput.setText(Integer.toString(d.delay));
+		MyRobot.p.configData.put("LAST_DELAY",Integer.toString(d.delay));
+		fontSizeInput.setText(Integer.toString(d.fontSize));
+		MyRobot.p.configData.put("LAST_FONTSIZE",Integer.toString(d.fontSize));
+		model.clear();
+		model2.clear();
+		for (int i=0;i<d.labels.length;i++) {
+			if (!d.labels[i].equalsIgnoreCase("Add a label!")) {
+				model2.add(i, d.labels[i]);
+			}
+		}
+		first:
+		for (int j=0;j<AVAILABLELABELS.length;j++) {
+			String labelCheck = AVAILABLELABELS[j];
+			for (int i=0;i<d.labels.length;i++) {
+				if (labelCheck.equalsIgnoreCase(d.labels[i])) {
+					continue first;
+				}
+			}
+			model.add(model.getSize(),labelCheck);
+		}
+		f.setVisible(true);
 	}
 	
 	class FontRenderer extends JLabel
@@ -215,7 +414,8 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 	
 	class ColorButton extends JButton{
 		protected Color col = Color.BLUE;
-		public ColorButton(String string) {
+		String type = "background";
+		public ColorButton(String string,final String type) {
 			super(string);
 			this.setColor(col);
 			this.addActionListener(new ActionListener(){
@@ -224,6 +424,16 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 					Color c = MyRobot.CP.getColor(col);
 					if (c!=null) {
 						((ColorButton)(e.getSource())).setColor(c);
+						switch (type) {
+							case "background":{
+								selectedDisplay.backgroundCol=c;
+								MyRobot.p.repaint();
+							}break;
+							case "foreground":{
+								selectedDisplay.textCol=c;
+								MyRobot.p.repaint();
+							}break;
+						}
 					}
 				}
 			});
@@ -272,7 +482,12 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 	}
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		// TODO Auto-generated method stub
-		
+	}
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		if (selectedDisplay!=null) {
+			selectedDisplay.font=new Font(((Font)fonts.getSelectedItem()).getFontName(),Font.PLAIN,selectedDisplay.fontSize);
+			MyRobot.p.repaint();
+		}
 	}
 }

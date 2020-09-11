@@ -89,6 +89,7 @@ public class MyRobot{
 	static CustomRobot MYROBOT;
 	Color SCREEN[][];
 	static SongData SONGS[];
+	public static JFrame FRAME;
 	/*static String SONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","packaged","Palette","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失 -DEAD END-","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク","ブレス・ユア・ブレス","恋は戦争","あなたの歌姫","Starduster","StargazeR","リンリンシグナル","Rosary Pale","多重未来のカルテット～QUARTET THEME～","LIKE THE WIND","AFTER BURNER",
 			"ストロボナイツ","VOiCE","恋色病棟","ねこみみスイッチ","パラジクロロベンゼン","カラフル×セクシィ","劣等上等","Star Story","パズル","キップル・インダストリー","夢の続き","MEGANE","Change me"};*/
 	static SongInfo SONGNAMES[] = new SongInfo[] {};
@@ -151,6 +152,9 @@ public class MyRobot{
     static boolean repaintCalled = false;
     public static Overlay OVERLAY;
     public static boolean CALIBRATION_MODE=false;
+    public static boolean DEBUG_MODE=false;
+    public static ColorPanel CP;
+    public static DisplayManager DM;
     
     public static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     
@@ -159,6 +163,9 @@ public class MyRobot{
 		if (args.length>0) {
 			if (args[0].equalsIgnoreCase("calibrate")) {
 				CALIBRATION_MODE=true;
+			}
+			if (args[0].equalsIgnoreCase("debug")) {
+				DEBUG_MODE=true;
 			}
 		}
 		JSONObject obj = FileUtils.readJsonFromUrl("http://www.projectdivar.com/songs");
@@ -500,6 +507,7 @@ public class MyRobot{
 	
 	void go() throws FontFormatException, IOException {
 	    initialize();        
+	    DrawCanvas.loadConfig();
 	    //gotoxy(100, 100);
 	    SCREEN = new Color[SCREEN_X][SCREEN_Y];
 	    long startTime = System.currentTimeMillis();
@@ -507,8 +515,8 @@ public class MyRobot{
 	    SongData.loadSongsFromFile();
 	    
 		 System.setProperty("awt.useSystemAAFontSettings","on");
-	    JFrame f = new JFrame();
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    FRAME = new JFrame();
+        FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         p = new DrawCanvas();
         p.difficulty="EXEX";
         p.songname = "Dear";
@@ -574,26 +582,44 @@ public class MyRobot{
          });
         if (CALIBRATION_MODE) {
             JFrame.setDefaultLookAndFeelDecorated(true);
-            f.setUndecorated(true);
+            FRAME.setUndecorated(true);
 		    OVERLAY = new Overlay();
-		    OVERLAY.setBounds(f.getGraphicsConfiguration().getBounds());
+		    OVERLAY.setBounds(FRAME.getGraphicsConfiguration().getBounds());
 		    OVERLAY.setOpaque(false);
-		    f.addMouseListener(OVERLAY);
-		    f.addMouseMotionListener(OVERLAY);
-	        screenSize=new Dimension(f.getGraphicsConfiguration().getBounds().width,f.getGraphicsConfiguration().getBounds().height);
-	        f.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+		    FRAME.addMouseListener(OVERLAY);
+		    FRAME.addMouseMotionListener(OVERLAY);
+	        screenSize=new Dimension(FRAME.getGraphicsConfiguration().getBounds().width,FRAME.getGraphicsConfiguration().getBounds().height);
+	        FRAME.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 		    //f.add(p);
 	        //System.out.println(f.getGraphicsConfiguration().getBounds().width+"/"+f.getGraphicsConfiguration().getBounds().height);
-	        f.setSize(f.getGraphicsConfiguration().getBounds().width,f.getGraphicsConfiguration().getBounds().height);
-	        f.add(OVERLAY);
-	        f.setBackground(new Color(0,0,0,0));
+	        FRAME.setSize(FRAME.getGraphicsConfiguration().getBounds().width,FRAME.getGraphicsConfiguration().getBounds().height);
+	        FRAME.add(OVERLAY);
+	        FRAME.setBackground(new Color(0,0,0,0));
         } else {
-    		RunTests();
-        	f.setSize(1362, 1036);
-        	f.add(p);
+    		if (DEBUG_MODE) {
+    			RunTests();
+    		}
+    		FRAME.addComponentListener(p);
+		    FRAME.addWindowListener(p);
+		    FRAME.addMouseListener(p);
+		    if (DrawCanvas.configData.containsKey("WIDTH")&&DrawCanvas.configData.containsKey("HEIGHT")) {
+		    	try {
+		    		FRAME.setSize(
+		    				Integer.parseInt(DrawCanvas.configData.get("WIDTH")),
+		    				Integer.parseInt(DrawCanvas.configData.get("HEIGHT")));
+		    	} catch (NumberFormatException e) {
+			    	FRAME.setSize(640, 480);
+		    	}
+		    } else {
+		    	FRAME.setSize(640, 480);
+		    }
+			CP = new ColorPanel();
+			DM = new DisplayManager();
+        	FRAME.add(p);
         }
-        f.setVisible(true);
-	    f.setTitle("DivaBot");
+        FRAME.setIconImage(ImageIO.read(new File("cross.png")));
+        FRAME.setVisible(true);
+	    FRAME.setTitle("DivaBot");
 	    title = new JTextField();
 	    title.setSize(200,100);
 	    title.setText((currentSong>=SONGNAMES.length)?"DONE!":SONGNAMES[currentSong].name);

@@ -282,6 +282,10 @@ public class FileUtils {
 		}
 	  
 	  public static void writetoFile(String[] data, String filename) {
+		  writetoFile(data,filename,true);
+	  }
+	  
+	  public static void writetoFile(String[] data, String filename, boolean append) {
 		  File file = new File(filename);
 			try {
 
@@ -289,10 +293,10 @@ public class FileUtils {
 					file.createNewFile();
 				}
 
-				OutputStream out = new FileOutputStream(file,true);
+				OutputStream out = new FileOutputStream(file,append);
 			    Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
 				PrintWriter pw = new PrintWriter(writer);
-				pw.print('\uFEFF');
+				//pw.print('\uFEFF');
 				for (String s : data) {
 					pw.println(s);
 				}

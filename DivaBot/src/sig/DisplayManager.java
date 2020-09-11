@@ -11,29 +11,62 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.swing.DefaultListModel;
+import javax.swing.DropMode;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-public class DisplayManager extends JPanel implements MouseListener{
+public class DisplayManager extends JPanel implements MouseListener,ListSelectionListener{
 	JFrame f = new JFrame();
 	GridBagConstraints g = new GridBagConstraints();
 	Font[] fontList = null;
 	ColorButton colorButton;
 	ColorButton colorButton2;
 	JTextField fontSizeInput;
+	JTextField widthInput;
+	JTextField heightInput;
+	JTextField delayInput;
+	DefaultListModel model = new DefaultListModel();
+	DefaultListModel model2 = new DefaultListModel();
+	JList labels = new JList(model);
+	JList displayedLabels = new JList(model2);
+	String[] AVAILABLELABELS = new String[] {
+			"Best Play",
+			"Overall Rating",
+			"Song Difficulty",
+			"Song Title (Japanese)",
+			"Song Title (Romanized)",
+			"Song Title (English)",
+			"Play",
+			"Play/Pass Count (+%)",
+			"Play/Pass Count (+%)",
+			"FC Count",
+			"FC/Play Count",
+			"FC/Play Count (+%)"
+	};
 	
-	DisplayManager() {
-		
+	DisplayManager() throws IOException {
+
+        f.setIconImage(ImageIO.read(new File("cross.png")));
+        f.setTitle("Create Display");
+        
 		List<Font> tempFontList = new ArrayList(Arrays.asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts()));
 		
 		for (int i=0;i<tempFontList.size();i++) {
@@ -67,29 +100,82 @@ public class DisplayManager extends JPanel implements MouseListener{
 		g.anchor=GridBagConstraints.WEST;
 		colorButton = (ColorButton)addComponent(4,5,4,1,new ColorButton("Color"));
 		g.anchor=GridBagConstraints.EAST;
-		addComponent(1,7,3,1,new JLabel("Width"));
+		addComponent(1,7,1,1,new JLabel("Width"));
 		g.anchor=GridBagConstraints.WEST;
-		fontSizeInput = (JTextField)addComponent(4,7,1,1,new JTextField() {
+		widthInput = (JTextField)addComponent(3,7,1,1,new JTextField() {
 			@Override 
 			public Dimension getPreferredSize() {
 				return new Dimension(50,20);
 			}	
 		});
 		g.anchor=GridBagConstraints.EAST;
-		addComponent(5,7,2,1,new JLabel("Height"));
+		addComponent(4,7,2,1,new JLabel("Height"));
 		g.anchor=GridBagConstraints.WEST;
-		fontSizeInput = (JTextField)addComponent(7,7,1,1,new JTextField() {
+		heightInput = (JTextField)addComponent(6,7,2,1,new JTextField() {
 			@Override 
 			public Dimension getPreferredSize() {
 				return new Dimension(50,20);
 			}	
 		});
-		addComponent(1,2,3,1,new JLabel(" "));
-		addComponent(1,4,3,1,new JLabel(" "));
-		addComponent(1,6,3,1,new JLabel(" "));
+		g.anchor=GridBagConstraints.WEST;
+		addComponent(1,10,6,1,new JLabel(" "));
+		g.anchor=GridBagConstraints.WEST;
+		delayInput = (JTextField)addComponent(5,10,1,1,new JTextField() {
+			@Override 
+			public Dimension getPreferredSize() {
+				return new Dimension(50,20);
+			}	
+		});
+		g.anchor=GridBagConstraints.WEST;
+		addComponent(6,10,1,1,new JLabel("ms"));
+		
+		addComponent(1,2,12,1,new JLabel(" "));
+		addComponent(1,4,12,1,new JLabel(" "));
+		addComponent(1,6,12,1,new JLabel(" "));
+		addComponent(1,8,12,1,new JLabel(" "));
+		addComponent(1,9,20,1,new JLabel("Label Delay (Time between each Display)"));
+		addComponent(1,11,12,1,new JLabel(" "));
+		
+		
+		labels.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		JScrollPane pane = new JScrollPane(labels);
+		pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+		labels.setDragEnabled(true);
+		labels.setDropMode(DropMode.INSERT);
+		
+		pane.setPreferredSize(new Dimension(200,100));
+		labels.addListSelectionListener(this);
+		labels.setTransferHandler(new ListTransferHandler());
+		labels.setBackground(new Color(160,160,160));
+		for (int i=0;i<AVAILABLELABELS.length;i++) {
+			model.addElement(AVAILABLELABELS[i]);
+		}
+		displayedLabels.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		JScrollPane pane2 = new JScrollPane(displayedLabels);
+		pane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		displayedLabels.setDragEnabled(true);
+		displayedLabels.setDropMode(DropMode.INSERT);
+		
+		pane2.setPreferredSize(new Dimension(200,100));
+		displayedLabels.addListSelectionListener(this);
+		displayedLabels.setTransferHandler(new ListTransferHandler());
+
+		g.anchor=GridBagConstraints.WEST;
+		addComponent(1,13,5,1,pane);
+		addComponent(7,13,5,1,pane2);
+		g.anchor=GridBagConstraints.WEST;
+		addComponent(1,12,2,1,new JLabel("Available Labels:"));
+		addComponent(7,12,2,1,new JLabel("Active Labels:"));
+		
+		widthInput.setText("200");
+		heightInput.setText("200");
+		delayInput.setText("10000");
 		f.add(this);
 		f.pack();
-		f.setVisible(true);
+		f.setResizable(false);
+		//f.setVisible(true);
 	}
 	private Component addComponent(int x, int y, int w, int h,Component component) {
 		g.gridx=x;
@@ -181,6 +267,11 @@ public class DisplayManager extends JPanel implements MouseListener{
 	}
 	@Override
 	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -506,7 +506,8 @@ public class MyRobot{
 	}
 	
 	void go() throws FontFormatException, IOException {
-	    initialize();        
+	    initialize();      
+        p = new DrawCanvas();  
 	    DrawCanvas.loadConfig();
 	    //gotoxy(100, 100);
 	    SCREEN = new Color[SCREEN_X][SCREEN_Y];
@@ -517,7 +518,6 @@ public class MyRobot{
 		 System.setProperty("awt.useSystemAAFontSettings","on");
 	    FRAME = new JFrame();
         FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        p = new DrawCanvas();
         p.difficulty="EXEX";
         p.songname = "Dear";
         int condition = JComponent.WHEN_IN_FOCUSED_WINDOW;

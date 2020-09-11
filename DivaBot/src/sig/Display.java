@@ -19,6 +19,23 @@ public class Display {
 	String currentText;
 	int cycle=0;
 	boolean deleted=false;
+	/**
+	 * Load a display from a save formatted string.
+	 * */
+	Display(String loadString) {
+		this();
+		String[] split = loadString.split("\\*");
+		backgroundCol=new Color(Integer.parseInt(split[0]));
+		textCol=new Color(Integer.parseInt(split[1]));
+		fontSize=Integer.parseInt(split[2]);
+		font=new Font(split[3],Font.PLAIN,fontSize);
+		width=Integer.parseInt(split[4]);
+		height=Integer.parseInt(split[5]);
+		delay=Integer.parseInt(split[6]);
+		labels=split[7].split("\\|");
+		x=Integer.parseInt(split[8]);
+		y=Integer.parseInt(split[9]);
+	}
 	Display() {
 		HashMap<String,String> config = MyRobot.p.configData;
 		if (config.containsKey("LAST_BACKGROUND")) {
@@ -104,6 +121,32 @@ public class Display {
 		g.drawString(currentText,x,y+fontSize);
 	}
 	
+	public String getSaveString() {
+		StringBuilder sb = new StringBuilder();
+		return sb.append(backgroundCol.getRGB()).append("*")
+				.append(textCol.getRGB()).append("*")
+				.append(fontSize).append("*")
+				.append(font.getFontName()).append("*")
+				.append(width).append("*")
+				.append(height).append("*")
+				.append(delay).append("*")
+				.append(combineLabels()).append("*")
+				.append(x).append("*")
+				.append(y).append("*")
+				.toString();
+	}
+	
+	private String combineLabels() {
+		StringBuilder sb = new StringBuilder();
+		for (int i=0;i<labels.length;i++) {
+			if (sb.length()>0) {
+				sb.append("|");
+			}
+			sb.append(labels[i].replaceAll("\\|","").replaceAll("\\*",""));
+		}
+		return sb.toString();
+	}
+
 	private String interpretLabel(String string){
 		DrawCanvas data = MyRobot.p;
 		try {

@@ -84,7 +84,7 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
     public static Display selectedDisplay = null;
     public static Display draggedDisplay = null;
 	DrawCanvas() throws FontFormatException, IOException {
-		loadConfig();
+		//loadConfig();
 		addConfigButton = ImageIO.read(new File("addDisplay.png"));
 		backgroundColorButton = ImageIO.read(new File("backgroundCol.png"));
 		Thread t = new Thread() {
@@ -200,6 +200,18 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 		if (MyRobot.p!=null) {
 			MyRobot.p.repaint(0, 0, MyRobot.p.getWidth(),MyRobot.p.getHeight());
 		}
+		loadDisplays();
+	}
+
+	private static void loadDisplays() {
+		if (configData.containsKey("DISPLAYDATA")) {
+			String[] displaySplit = configData.get("DISPLAYDATA").split("~");
+			for (int i=0;i<displaySplit.length;i++) {
+				MyRobot.p.displays.add(
+						new Display(displaySplit[i])
+						);
+			}
+		}
 	}
 
 	public void paintComponent(Graphics g) {
@@ -304,7 +316,19 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 
 	@Override
 	public void windowClosing(WindowEvent e) {
+		saveDisplays();
 		saveConfig();
+	}
+
+	private void saveDisplays() {
+		StringBuilder sb = new StringBuilder();
+		for (int i=0;i<displays.size();i++) {
+			if (sb.length()>0) {
+				sb.append("~");
+			}
+			sb.append(displays.get(i).getSaveString());
+		}
+		configData.put("DISPLAYDATA",sb.toString());
 	}
 
 	@Override

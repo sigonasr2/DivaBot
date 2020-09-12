@@ -157,6 +157,7 @@ public class MyRobot{
     public static boolean DEBUG_MODE=false;
     public static ColorPanel CP;
     public static DisplayManager DM;
+    public static AdditionalOptions AO;
     public static boolean FUTURETONE = false;
     
     public static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -579,10 +580,11 @@ public class MyRobot{
 		    OVERLAY = new Overlay();
 		    OVERLAY.setBounds(FRAME.getGraphicsConfiguration().getBounds());
 		    OVERLAY.setOpaque(false);
+		    FRAME.setAlwaysOnTop(true);
 		    FRAME.addMouseListener(OVERLAY);
 		    FRAME.addMouseMotionListener(OVERLAY);
 	        screenSize=new Dimension(FRAME.getGraphicsConfiguration().getBounds().width,FRAME.getGraphicsConfiguration().getBounds().height);
-	        FRAME.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+	        //FRAME.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 		    //f.add(p);
 	        //System.out.println(f.getGraphicsConfiguration().getBounds().width+"/"+f.getGraphicsConfiguration().getBounds().height);
 	        FRAME.setSize(FRAME.getGraphicsConfiguration().getBounds().width,FRAME.getGraphicsConfiguration().getBounds().height);
@@ -610,6 +612,7 @@ public class MyRobot{
 		    }
 			CP = new ColorPanel();
 			DM = new DisplayManager();
+			//AO = new AdditionalOptions();
         	FRAME.add(p);
         }
         FRAME.setIconImage(ImageIO.read(new File("cross.png")));
@@ -770,7 +773,7 @@ public class MyRobot{
 				FUTURETONE=true;
 				onSongSelect=true;
 			}
-			System.out.println(c);
+			//System.out.println(c);
 		}
 		//System.out.println(onSongSelect+"/"+c);
 		

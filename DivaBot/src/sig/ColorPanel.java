@@ -20,7 +20,7 @@ public class ColorPanel extends JPanel{
 					return JColorChooser.showDialog(this, "Color Picker", Color.MAGENTA);
 				}
 			} else {
-				System.out.println("Running");
+				//System.out.println("Running");
 				return JColorChooser.showDialog(this, "Color Picker", Color.MAGENTA);
 			}
 		}

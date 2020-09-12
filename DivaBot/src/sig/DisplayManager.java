@@ -73,7 +73,7 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 	DisplayManager() throws IOException {
 
         f.setIconImage(ImageIO.read(new File("cross.png")));
-        f.setTitle("Create Display");
+        f.setTitle("DivaBot - Create Display");
         
 		List<Font> tempFontList = new ArrayList(Arrays.asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts()));
 		

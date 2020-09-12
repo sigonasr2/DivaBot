@@ -1,12 +1,14 @@
 package sig;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import sig.utils.FileUtils;
@@ -56,7 +58,24 @@ public class Calibrator{
 		if (failed) {return;}
 		failed=CalibrationStage8();
 		if (failed) {return;}
-		MyRobot.CALIBRATIONSTATUS="First calibration set done: X"+(x-MyRobot.STARTDRAG.x)+" Y"+(y-MyRobot.STARTDRAG.y);
+		MyRobot.CALIBRATIONSTATUS="Calibration is complete! - X"+(MyRobot.STARTDRAG.x)+" Y"+(MyRobot.STARTDRAG.y)+" W"+(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)+" H"+(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y)+" R"+((float)(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)/(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y));
+
+		MyRobot.FRAME.setCursor(Cursor.getDefaultCursor());
+
+		Overlay.started=false;
+		if (((float)(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)/(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y))<=16/9f-0.04||
+				((float)(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)/(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y))>=16/9f+0.04) {
+			int dialogResult = JOptionPane.showConfirmDialog (null, "Could not detect Megamix properly!\n\nYour calibration cut a bit "+((((float)(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)/(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y))<=16/9f-0.04)?"more":"less")+" than expected. Do you want to try selecting a more accurate region?","Warning",JOptionPane.YES_NO_OPTION);
+			if(dialogResult == JOptionPane.YES_OPTION){
+				MyRobot.STARTDRAG=null;
+				MyRobot.ENDDRAG=null;
+				Overlay.OVERLAY.setVisible(true);
+				MyRobot.CALIBRATIONSTATUS="";
+				return;
+			}
+		}
+		Overlay.OVERLAY.setVisible(true);
+		
 //		failed=CalibrationStage3(p);
 //		if (failed) {return;}
 //		failed=CalibrationStage4(p);

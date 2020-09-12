@@ -3,13 +3,18 @@ package sig;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
+
+import sig.utils.TextUtils;
 
 public class Display {
 	Color backgroundCol=Color.BLUE;
 	Color textCol=Color.WHITE;
 	Font font=new Font("Batang",Font.PLAIN,32);
 	int fontSize=32;
+	Font modifiedfont=font;
 	int x;
 	int y;
 	int width=200;
@@ -97,6 +102,7 @@ public class Display {
 				try {
 					while (!deleted) {
 						AdvanceCycle();
+						updateFont();
 						MyRobot.p.repaint();
 						Thread.sleep(delay);
 					}
@@ -115,12 +121,25 @@ public class Display {
 		t.start();
 	}
 	
+	public void updateFont() {
+		//modifiedfont
+		int currentSize=fontSize;
+		modifiedfont = font;
+		Rectangle2D bounds = TextUtils.calculateStringBoundsFont(currentText, font);
+		while (currentSize>1&&bounds.getWidth()>width) {
+			currentSize-=2;
+			if (currentSize<=1) {break;}
+			modifiedfont = new Font(font.getFontName(),Font.PLAIN,currentSize);
+			bounds = TextUtils.calculateStringBoundsFont(currentText, modifiedfont);
+		}
+	}
+	
 	public void draw(Graphics g) {
 		g.setColor(backgroundCol);
 		g.fill3DRect(x, y, width, height, true);
 		g.setColor(textCol);
-		g.setFont(font);
-		g.drawString(currentText,x,y+fontSize);
+		g.setFont(modifiedfont);
+		g.drawString(currentText,x,y+modifiedfont.getSize()+((height-modifiedfont.getSize())/2));
 	}
 	
 	public String getSaveString() {

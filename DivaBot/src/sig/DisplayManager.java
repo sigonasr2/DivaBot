@@ -144,6 +144,7 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 				try {
 					selectedDisplay.font=new Font(selectedDisplay.font.getFontName(),Font.PLAIN,Integer.parseInt(e.getDocument().getText(0, e.getDocument().getLength())));
 					selectedDisplay.fontSize=Integer.parseInt(e.getDocument().getText(0, e.getDocument().getLength()));
+					selectedDisplay.updateFont();
 					MyRobot.p.repaint();
 					c.setBackground(Color.WHITE);
 				} catch (NullPointerException | NumberFormatException | BadLocationException e1) {
@@ -184,6 +185,7 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 			void updateField(JTextField c, DocumentEvent e) {
 				try {
 					selectedDisplay.width=Integer.parseInt(e.getDocument().getText(0, e.getDocument().getLength()));
+					selectedDisplay.updateFont();
 					MyRobot.p.repaint();
 					c.setBackground(Color.WHITE);
 				} catch (NullPointerException | NumberFormatException | BadLocationException e1) {

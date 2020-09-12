@@ -72,6 +72,10 @@ public class CustomRobot extends Robot{
 		return ImageUtils.toBufferedImage(currentScreen.getScaledInstance(1227, 690, BufferedImage.SCALE_AREA_AVERAGING)).getSubimage(r.x, r.y, r.width, r.height);
 		//return img2.getSubimage(r.x-418, r.y-204, r.width, r.height);
 	}
+	public synchronized BufferedImage createScreenCapture() {
+		return ImageUtils.toBufferedImage(currentScreen.getScaledInstance(1227, 690, BufferedImage.SCALE_AREA_AVERAGING));
+		//return img2.getSubimage(r.x-418, r.y-204, r.width, r.height);
+	}
 	public synchronized BufferedImage createScoreScreenCapture() {
 		return scoreCurrentScreen;
 	}

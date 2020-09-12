@@ -95,7 +95,7 @@ public class MyRobot{
 	/*static String FUTURETONESONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","packaged","Palette","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失 -DEAD END-","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク","ブレス・ユア・ブレス","恋は戦争","あなたの歌姫","Starduster","StargazeR","リンリンシグナル","Rosary Pale","多重未来のカルテット～QUARTET THEME～","LIKE THE WIND","AFTER BURNER",
 	"ストロボナイツ","VOiCE","恋色病棟","ねこみみスイッチ","パラジクロロベンゼン","カラフル×セクシィ","劣等上等","Star Story","パズル","キップル・インダストリー","夢の続き","MEGANE","Change me"};*/
 	static SongInfo SONGNAMES[] = new SongInfo[] {};
-	static String NEWSONGS[] = new String[] {"Catch the Wave"};
+	static String NEWSONGS[] = new String[] {};
 	int SCREEN_X;
 	int SCREEN_Y;
 	int WINDOW_X;
@@ -213,7 +213,7 @@ public class MyRobot{
 									Calibrator c = new Calibrator();
 								}
 							} else {
-								//ImageIO.write(MYROBOT.createScreenCapture(),"png",new File("testscreen2.png"));
+								//ImageIO.write(MYROBOT.createScreenCapture(),"png",new File("testscreen.png"));
 								if (checkSongSelect()) {
 									if (!overlayHidden) {
 										overlayHidden=true;
@@ -538,40 +538,42 @@ public class MyRobot{
             public void actionPerformed(ActionEvent e) {
     			//BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(460,426,WIDTH,HEIGHT)));
             	//Buffered img ImageUtils.toCompatibleImage(
-            	try {
-					MYROBOT.refreshScreen();
-				} catch (IOException e2) {
-					e2.printStackTrace();
-				}
-            	BufferedImage img = null;
-            	try {
-					ImageIO.write(img=MYROBOT.createScreenCapture(new Rectangle(812,380,WIDTH,HEIGHT)),"png",new File("test.png"));
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-    			Color[] col = new Color[WIDTH*HEIGHT];
-    			for (int i=0;i<WIDTH;i++) {
-    				for (int j=0;j<HEIGHT;j++) {
-    					col[i*HEIGHT+j]=new Color(img.getRGB(i,j),true);
-    				}
-    			}
-    			SongData.saveSongToFile(NEWSONGS[currentSong],col);
-    		    try {
-					SongData.loadSongsFromFile();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-    		    currentSong+=1;
-    		    if (currentSong>=NEWSONGS.length) {
-        			System.out.println("DONE!");
-    		    } else {
-        		    for (SongInfo i : SONGNAMES) {
-        		    	if (i.name.equalsIgnoreCase(NEWSONGS[currentSong])) {
-                			System.out.println(NEWSONGS[currentSong]+" - "+((i.romanized_name.length()>0)?i.romanized_name:i.english_name));
-        		    		break;
-        		    	}
-        		    }
-    		    }
+            	if (NEWSONGS.length>0) {
+	            	try {
+						MYROBOT.refreshScreen();
+					} catch (IOException e2) {
+						e2.printStackTrace();
+					}
+	            	BufferedImage img = null;
+	            	try {
+						ImageIO.write(img=MYROBOT.createScreenCapture(new Rectangle(812,380,WIDTH,HEIGHT)),"png",new File("test.png"));
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+	    			Color[] col = new Color[WIDTH*HEIGHT];
+	    			for (int i=0;i<WIDTH;i++) {
+	    				for (int j=0;j<HEIGHT;j++) {
+	    					col[i*HEIGHT+j]=new Color(img.getRGB(i,j),true);
+	    				}
+	    			}
+	    			SongData.saveSongToFile(NEWSONGS[currentSong],col);
+	    		    try {
+						SongData.loadSongsFromFile();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+	    		    currentSong+=1;
+	    		    if (currentSong>=NEWSONGS.length) {
+	        			System.out.println("DONE!");
+	    		    } else {
+	        		    for (SongInfo i : SONGNAMES) {
+	        		    	if (i.name.equalsIgnoreCase(NEWSONGS[currentSong])) {
+	                			System.out.println(NEWSONGS[currentSong]+" - "+((i.romanized_name.length()>0)?i.romanized_name:i.english_name));
+	        		    		break;
+	        		    	}
+	        		    }
+	    		    }
+            	}
             }
          });
         if (CALIBRATION_MODE) {
@@ -762,7 +764,7 @@ public class MyRobot{
 	
 	public static boolean checkSongSelect() throws IOException {
 		Color c = new Color(MYROBOT.createScreenCapture(new Rectangle(845,638,1,1)).getRGB(0, 0));
-		onSongSelect = c.getRed()==43 && c.getGreen()==88 && c.getBlue()==213;
+		onSongSelect = (c.getRed()>=30 && c.getRed()<=45 && c.getGreen()>=85 && c.getGreen()<=90 && c.getBlue()>=205 && c.getBlue()<=230);
 		
 		if (onSongSelect) {
 			FUTURETONE=false;

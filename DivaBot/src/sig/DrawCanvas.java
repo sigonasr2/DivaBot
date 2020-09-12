@@ -134,20 +134,20 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 							romanizedname = currentSong.romanized_name;
 							englishname = currentSong.english_name;
 							artist = currentSong.artist;
-							JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/bestplay/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
+							JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/bestplay/"+MyRobot.USERNAME+"/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
 							if (obj.has("cool")) {
 								bestPlay = new Result(MyRobot.p.songname,difficulty,obj.getInt("cool"),obj.getInt("fine"),obj.getInt("safe"),obj.getInt("sad"),obj.getInt("worst"),(float)obj.getDouble("percent"));
 								lastScore = obj.getDouble("score");
 							} else {
 								bestPlay = null;
 							}
-							obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/playcount/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
+							obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/playcount/"+MyRobot.USERNAME+"/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
 							plays = obj.getInt("playcount");
-							obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/songpasscount/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
+							obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/songpasscount/"+MyRobot.USERNAME+"/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
 							passes = obj.getInt("passcount");
-							obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/songfccount/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
+							obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/songfccount/"+MyRobot.USERNAME+"/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
 							fcCount = obj.getInt("fccount");
-							/*obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/sigonasr2");
+							/*obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/"+MyRobot.USERNAME);
 							lastRating = overallrating;
 							overallrating = (int)obj.getDouble("rating");
 							if (lastRating<overallrating) {ratingTime=System.currentTimeMillis();}

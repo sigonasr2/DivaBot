@@ -159,6 +159,8 @@ public class MyRobot{
     public static DisplayManager DM;
     public static AdditionalOptions AO;
     public static boolean FUTURETONE = false;
+    public static String USERNAME = "";
+    public static String AUTHTOKEN = "";
     
     public static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     
@@ -171,6 +173,8 @@ public class MyRobot{
 			if (args[0].equalsIgnoreCase("debug")) {
 				DEBUG_MODE=true;
 			}
+		} else {
+			AuthenticateUser();
 		}
 		JSONObject obj = FileUtils.readJsonFromUrl("http://www.projectdivar.com/songs");
 		SONGNAMES = new SongInfo[JSONObject.getNames(obj).length];
@@ -179,6 +183,79 @@ public class MyRobot{
 		}
 		finishbutton = ImageIO.read(new File("finish.png"));
 	    new MyRobot().go();
+	}
+
+	private static void AuthenticateUser() throws IOException {
+		File authentication_token = new File("authToken.txt");
+		if (!authentication_token.exists()) {
+			String enteredValue = "";
+			String username = "";
+			boolean success = false;
+			do {
+				username = "";
+				enteredValue = JOptionPane.showInputDialog("First time boot!\n\nPlease login on http://www.projectdivar.com and paste your App Authentication Token here.\nThe App Authentication token is used to record your scores and verify who you are! Do <b>not</b> share it with others!!!", "XXXXX-XXXXX-XXXXX");
+				if (enteredValue==null) {
+					System.exit(0);
+				}
+				if (!enteredValue.isEmpty()) {
+					do {
+						username = JOptionPane.showInputDialog("Please enter your <b>Project DivaR</b> username:","");
+					} while (username.isEmpty());
+					if (username==null) {
+						System.exit(0);
+					}
+					success = SendAuthenticationRequest(enteredValue, username);
+				}
+			} while (!success);
+		} else {
+			String[] data = FileUtils.readFromFile("authToken.txt");
+			String username = data[0];
+			String authenticationToken = data[1];
+			boolean success = SendAuthenticationRequest(data[1], data[0]);
+			if (!success) {
+				authentication_token.delete();
+				AuthenticateUser();
+			}
+		}
+	}
+
+	private static boolean SendAuthenticationRequest(String authenticationToken, String username) {
+		HttpClient httpclient = HttpClients.createDefault();
+		HttpPost httppost = new HttpPost("http://projectdivar.com/authenticateuser");
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("username", username));
+		params.add(new BasicNameValuePair("authenticationToken", authenticationToken));
+		try {
+			httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		HttpResponse response = null;
+		try {
+			response = httpclient.execute(httppost);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		HttpEntity entity = response.getEntity();
+		if (entity != null) {
+		    try (InputStream instream = entity.getContent()) {
+		    	Scanner s = new Scanner(instream).useDelimiter("\\A");
+		    	String result = s.hasNext() ? s.next() : "";
+		    	System.out.println(result);
+		    	if (result.equalsIgnoreCase("\"authentication success!\"")) {
+		    		FileUtils.writetoFile(new String[] {username,authenticationToken,"The App Authentication token is used to record your scores and verify who you are! Do <b>not</b> share it with others!!!"}, "authToken.txt", false);
+		    		USERNAME=username;
+		    		AUTHTOKEN=authenticationToken;
+		    		return true;
+		    	} else {
+		    		JOptionPane.showMessageDialog(null,"Authentication Failed!\n\nPlease check your credentials and try again!");
+		    	}
+		    	instream.close();
+		    } catch (UnsupportedOperationException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
 	}
 
 	boolean textFailPixel(BufferedImage img) {
@@ -190,7 +267,7 @@ public class MyRobot{
 	
 	void BotMain() {
 		try {
-			JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/sigonasr2");
+			JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/"+USERNAME);
 			p.lastRating = p.overallrating;
 			p.overallrating = (int)obj.getDouble("rating");
 			if (p.lastRating<p.overallrating) {p.ratingTime=System.currentTimeMillis();}
@@ -320,8 +397,8 @@ public class MyRobot{
 													// Request parameters and other properties.
 													List<NameValuePair> params = new ArrayList<NameValuePair>();
 													params.add(new BasicNameValuePair("song", r.songName));
-													params.add(new BasicNameValuePair("username", "sigonasr2"));
-													params.add(new BasicNameValuePair("authentication_token", "sig"));
+													params.add(new BasicNameValuePair("username", USERNAME));
+													params.add(new BasicNameValuePair("authentication_token", AUTHTOKEN));
 													params.add(new BasicNameValuePair("difficulty", r.difficulty));
 													params.add(new BasicNameValuePair("cool", Integer.toString(r.cool)));
 													params.add(new BasicNameValuePair("fine", Integer.toString(r.fine)));
@@ -362,8 +439,8 @@ public class MyRobot{
 												results.clear();
 	
 												try {
-													JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/sigonasr2");
-													JSONObject obj2 = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/bestplay/sigonasr2/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
+													JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/"+USERNAME);
+													JSONObject obj2 = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/bestplay/"+USERNAME+"/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
 													p.lastRating = p.overallrating;
 													if (obj2.has("score")) {
 														double newScore = obj2.getDouble("score");

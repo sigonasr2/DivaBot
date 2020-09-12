@@ -80,7 +80,7 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
     boolean targetBuffer=false;
     static Color background = new Color(170,170,170);
     public static HashMap<String,String> configData = new HashMap<String,String>();
-    List<Display> displays = new ArrayList<Display>();
+    static List<Display> displays = new ArrayList<Display>();
     public static Display selectedDisplay = null;
     public static Display draggedDisplay = null;
 	DrawCanvas() throws FontFormatException, IOException {
@@ -101,6 +101,13 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 			}
 		};
 		t.start();
+	}
+	
+	public static void refreshAllLabels() {
+		for (Display d : displays) {
+			d.forceUpdate=true;
+			d.nextUpdateTime=System.currentTimeMillis()-1;
+		}
 	}
 	
 	public void pullData(final String songname,final String difficulty) {
@@ -162,6 +169,7 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 							}
 							scrollX = 0;*/
 							MyRobot.p.repaint();
+							MyRobot.p.refreshAllLabels();
 							}
 						}
 					} catch (JSONException | IOException e) {

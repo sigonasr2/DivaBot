@@ -20,6 +20,8 @@ public class Display {
 	int width=200;
 	int height=48;
 	int delay=10000;
+	long nextUpdateTime = System.currentTimeMillis();
+	boolean forceUpdate=false;
 	String[] labels;
 	String currentText;
 	int cycle=0;
@@ -101,10 +103,17 @@ public class Display {
 			public void run() {
 				try {
 					while (!deleted) {
-						AdvanceCycle();
-						updateFont();
-						MyRobot.p.repaint();
-						Thread.sleep(delay);
+						if (System.currentTimeMillis()>nextUpdateTime) {
+							if (!forceUpdate) {
+								AdvanceCycle();
+							}
+							updateFont();
+							currentText=interpretLabel(labels[cycle]);
+							MyRobot.p.repaint();
+							nextUpdateTime=System.currentTimeMillis()+delay;
+							forceUpdate=false;
+						}
+						Thread.sleep(50);
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -205,19 +214,40 @@ public class Display {
 					return (data.songname + " - " + ((data.romanizedname.length()>0)?(data.romanizedname.equalsIgnoreCase(data.englishname))?data.romanizedname:data.romanizedname+" ("+data.englishname+")":data.englishname))  + " by "+data.artist;
 				}
 				case "Play Count":{
-					return Integer.toString(data.plays)+" play"+((data.plays!=1)?"s":"");
+					if (data.plays>0) {
+						return Integer.toString(data.plays)+" play"+((data.plays!=1)?"s":"");
+					} else {
+						return "No Plays";
+					}
 				}
 				case "Pass/Play Count":{
-					return Integer.toString(data.passes) + "/" + Integer.toString(data.plays)+" play"+((data.plays!=1)?"s":"");
+					if (data.plays>0) {
+						return Integer.toString(data.passes) + "/" + Integer.toString(data.plays)+" play"+((data.plays!=1)?"s":"");
+					}
+					 else {
+						return "No Plays";
+					}
 				}
 				case "Pass/Play Count (+%)":{
-					return (data.passes)+"/"+(data.plays)+" play"+((data.plays!=1)?"s":"")+" "+"("+((int)(Math.floor(((float)data.passes)/data.plays*100)))+"% pass rate)";
+					if (data.plays>0) {
+						return (data.passes)+"/"+(data.plays)+" play"+((data.plays!=1)?"s":"")+" "+"("+((int)(Math.floor(((float)data.passes)/data.plays*100)))+"% pass rate)";
+					} else {
+						return "No Plays";
+					}
 				}
 				case "FC Count":{
-					return data.fcCount +" FC"+(data.fcCount==1?"":"s");
+					if (data.plays>0) {
+						return data.fcCount +" FC"+(data.fcCount==1?"":"s");
+					} else {
+						return "No Plays";
+					}
 				}
 				case "FC Count (+%)":{
-					return data.fcCount +" FC"+(data.fcCount==1?"":"s")+"    "+((int)(Math.floor(((float)data.fcCount)/data.plays*100)))+"% FC rate";
+					if (data.plays>0) {
+						return data.fcCount +" FC"+(data.fcCount==1?"":"s")+"    "+((int)(Math.floor(((float)data.fcCount)/data.plays*100)))+"% FC rate";
+					} else {
+						return "No Plays";
+					}
 				}
 				default:{
 					return string;

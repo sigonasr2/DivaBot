@@ -63,6 +63,8 @@ public class Calibrator{
 		MyRobot.FRAME.setCursor(Cursor.getDefaultCursor());
 
 		Overlay.started=false;
+		MyRobot.FRAME.setAlwaysOnTop(false);
+		Overlay.OVERLAY.setVisible(true);
 		if (((float)(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)/(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y))<=16/9f-0.04||
 				((float)(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)/(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y))>=16/9f+0.04) {
 			int dialogResult = JOptionPane.showConfirmDialog (null, "Could not detect Megamix properly!\n\nYour calibration cut a bit "+((((float)(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)/(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y))<=16/9f-0.04)?"more":"less")+" than expected. Do you want to try selecting a more accurate region?","Warning",JOptionPane.YES_NO_OPTION);
@@ -74,7 +76,7 @@ public class Calibrator{
 				return;
 			}
 		}
-		Overlay.OVERLAY.setVisible(true);
+		MyRobot.FRAME.setAlwaysOnTop(true);
 		
 //		failed=CalibrationStage3(p);
 //		if (failed) {return;}

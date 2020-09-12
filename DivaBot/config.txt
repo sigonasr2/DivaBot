@@ -1,4 +1,4 @@
-DISPLAYDATA	-16776961*-13369549*100*Gungsuh*600*90*300*Song Title (Japanese+Romanized)*176*136*~-16776961*-13369549*24*Gulim*400*40*300*Overall Rating|Song Title (Romanized)|FC Count*176*240*
+DISPLAYDATA	-16776961*-13369549*100*Gungsuh*600*90*5000*Song Title (Japanese+Romanized)*176*136*~-16776961*-13369549*24*Gulim*400*40*300*Overall Rating|Song Title (Romanized)|FC Count*176*240*~-16776961*-13369549*24*Gulim*400*40*300*Best Play*0*0*
 LAST_HEIGHT	40
 WIDTH	1127
 HEIGHT	765

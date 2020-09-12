@@ -165,9 +165,9 @@ public class Calibrator{
 			//ImageIO.write(miniImg,"png",new File("capture_3_"+System.nanoTime()+".png"));
 			Color col = new Color(miniImg.getRGB(0, 0));
 			System.out.println("Checking "+col);
-			if (!(col.getRed()>=55&&col.getRed()<=90&&
-					col.getGreen()>=25&&col.getGreen()<=55&&
-					col.getBlue()>=55&&col.getBlue()<=90)) {
+			if (!(col.getRed()>=40&&col.getRed()<=90&&
+					col.getGreen()>=10&&col.getGreen()<=55&&
+					col.getBlue()>=40&&col.getBlue()<=90)) {
 				//This is the max X. Calibration on this side good.
 				MyRobot.ENDDRAG.x--;
 				System.out.println("End at "+MyRobot.STARTDRAG.x);
@@ -196,9 +196,9 @@ public class Calibrator{
 			//ImageIO.write(miniImg,"png",new File("capture_4_"+System.nanoTime()+".png"));
 			Color col = new Color(miniImg.getRGB(0, 0));
 			System.out.println("Checking "+col);
-			if (!(col.getRed()>=55&&col.getRed()<=90&&
-					col.getGreen()>=25&&col.getGreen()<=55&&
-					col.getBlue()>=55&&col.getBlue()<=90)) {
+			if (!(col.getRed()>=40&&col.getRed()<=90&&
+					col.getGreen()>=10&&col.getGreen()<=55&&
+					col.getBlue()>=40&&col.getBlue()<=90)) {
 				//This is the max Y. Calibration on this side good.
 				MyRobot.ENDDRAG.y--;
 				System.out.println("End at "+MyRobot.ENDDRAG.y);
@@ -290,9 +290,9 @@ public class Calibrator{
 				//ImageIO.write(miniImg,"png",new File("capture_3_"+System.nanoTime()+".png"));
 				Color col = new Color(miniImg.getRGB(0, 0));
 				System.out.println("Checking "+col);
-				if ((col.getRed()>=55&&col.getRed()<=90&&
-						col.getGreen()>=25&&col.getGreen()<=55&&
-						col.getBlue()>=55&&col.getBlue()<=90)) {
+				if ((col.getRed()>=40&&col.getRed()<=90&&
+						col.getGreen()>=10&&col.getGreen()<=55&&
+						col.getBlue()>=40&&col.getBlue()<=90)) {
 					//This is the max X. Calibration on this side good.
 					MyRobot.ENDDRAG.y=MyRobot.ENDDRAG.y-i;
 					MyRobot.ENDDRAG.x++;
@@ -323,9 +323,9 @@ public class Calibrator{
 				//ImageIO.write(miniImg,"png",new File("capture_4_"+System.nanoTime()+".png"));
 				Color col = new Color(miniImg.getRGB(0, 0));
 				System.out.println("Checking "+col);
-				if ((col.getRed()>=55&&col.getRed()<=90&&
-						col.getGreen()>=25&&col.getGreen()<=55&&
-						col.getBlue()>=55&&col.getBlue()<=90)) {
+				if ((col.getRed()>=40&&col.getRed()<=90&&
+						col.getGreen()>=10&&col.getGreen()<=55&&
+						col.getBlue()>=40&&col.getBlue()<=90)) {
 					MyRobot.ENDDRAG.x=MyRobot.ENDDRAG.x-i;
 					//This is the max Y. Calibration on this side good.
 					System.out.println("End at "+MyRobot.ENDDRAG.y);

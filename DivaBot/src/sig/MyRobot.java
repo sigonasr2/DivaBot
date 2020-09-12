@@ -129,7 +129,7 @@ public class MyRobot{
     static Point STARTDRAG = null;
     static Point ENDDRAG = null;
     
-    int lastcool,lastfine,lastsafe,lastsad,lastworst,lastcombo,lastscore;
+    int lastcool=-1,lastfine=-1,lastsafe=-1,lastsad=-1,lastworst=-1,lastcombo=-1,lastscore=-1;
     float lastpercent;
     boolean lastfail;
     long lastSongSelectTime = System.currentTimeMillis();
@@ -294,7 +294,7 @@ public class MyRobot{
 								if (checkSongSelect()) {
 									if (!overlayHidden) {
 										overlayHidden=true;
-										p.repaint(0, 0, 1400, 1000);
+										MyRobot.p.repaint();
 									}
 									GetCurrentSong();
 									GetCurrentDifficulty();
@@ -318,7 +318,7 @@ public class MyRobot{
 								} else {
 									if (overlayHidden) {
 										overlayHidden=false;
-										p.repaint(0, 0, 1400, 1000);
+										MyRobot.p.repaint();
 									}
 									if ((selectedSong!=null && difficulty!=null)) {
 										if (OnResultsScreen() && !recordedResults && !recordingResults && results.size()==0) {
@@ -480,8 +480,8 @@ public class MyRobot{
 						Color c2 = new Color(MYROBOT.createScreenCapture(new Rectangle(31,196,40,40)).getRGB(0, 0));
 						Color c3 = new Color(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)).getRGB(0, 0));
 						//System.out.println(c1+"/"+c2+"/"+c3);
-						return c1.getRed()>=254 && c1.getGreen()>=254 && c1.getBlue()>=254 && c2.getRed()==16 && c2.getGreen()==222 && c2.getBlue()==202 &&
-								c3.getRed()>=219 && c3.getRed()<=255 && c3.getGreen()>=213 && c3.getGreen()<=255 && c3.getBlue()>=160 && c3.getBlue()<=220;
+						return c1.getRed()>=250 && c1.getGreen()>=250 && c1.getBlue()>=250 && c2.getRed()>=10 && c2.getRed()<=25 && c2.getGreen()>=200 && c2.getGreen()<=240 && c2.getBlue()>=180 && c2.getBlue()<=220 &&
+								c3.getRed()>=200 && c3.getRed()<=255 && c3.getGreen()>=200 && c3.getGreen()<=255 && c3.getBlue()>=140 && c3.getBlue()<=220;
 					}
 
 					private void GetCurrentDifficulty() {
@@ -744,6 +744,7 @@ public class MyRobot{
 		RunTest("test29.png",354,112,4,3,43,67.73f,"EXEX","HS",55,331060,true);
 		RunTest("test30.png",390,90,8,9,22,74.95f,"N","HS",82,326560,false);
 		RunTest("test31.png",329,69,8,1,34,72.15f,"EX","HS",40,358760,false);
+		RunTest("test32.png",0,1,1,0,57,0.57f,"EX","HS",1,1890,true);
 		RunTest("testimage.png",371,40,3,4,3,97.63f,"EX","HS",233,523750,false);
 		RunTest("testimage2.png",942,71,1,0,3,97.02f,"EXEX","",714,951020,false);
 		RunTest("testimage3.png",546,52,0,0,0,101.77f,"EX","",598,567430,false);
@@ -842,14 +843,14 @@ public class MyRobot{
 	
 	public static boolean checkSongSelect() throws IOException {
 		Color c = new Color(MYROBOT.createScreenCapture(new Rectangle(845,638,1,1)).getRGB(0, 0));
-		onSongSelect = (c.getRed()>=30 && c.getRed()<=45 && c.getGreen()>=85 && c.getGreen()<=90 && c.getBlue()>=205 && c.getBlue()<=230);
+		onSongSelect = (c.getRed()>=15 && c.getRed()<=45 && c.getGreen()>=75 && c.getGreen()<=90 && c.getBlue()>=200 && c.getBlue()<=230);
 		
 		if (onSongSelect) {
 			FUTURETONE=false;
 		} else
 		{
 			c = new Color(MYROBOT.createScreenCapture(new Rectangle(743,173,1,1)).getRGB(0, 0));
-			if (!onSongSelect&&(c.getRed()>=165&&c.getRed()<=185&&c.getGreen()<=10&&c.getBlue()>=185&&c.getBlue()<=200)) {
+			if (!onSongSelect&&(c.getRed()>=160&&c.getRed()<=185&&c.getGreen()<=15&&c.getBlue()>=170&&c.getBlue()<=200)) {
 				FUTURETONE=true;
 				onSongSelect=true;
 			}

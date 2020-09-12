@@ -91,9 +91,9 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 			public void run() {
 				while (true) {
 						displayTimer++;
-						MyRobot.p.repaint(0, 0, MyRobot.p.getWidth(),MyRobot.p.getHeight());
+						MyRobot.p.repaint();
 					try {
-						Thread.sleep(10000);
+						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -126,7 +126,7 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 					artist = obj.getString("artist");*/
 					if (MyRobot.p.songname!=null) {
 						SongInfo currentSong = SongInfo.getByTitle(MyRobot.p.songname);
-						FileUtils.writetoFile(new String[] {MyRobot.p.songname}, "testencode.txt");
+						//FileUtils.writetoFile(new String[] {MyRobot.p.songname}, "testencode.txt");
 						if (currentSong!=null) {
 							if (currentSong.rating.has(difficulty)) {
 								difficultyRating = currentSong.rating.getDouble(difficulty);
@@ -134,6 +134,7 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 							romanizedname = currentSong.romanized_name;
 							englishname = currentSong.english_name;
 							artist = currentSong.artist;
+							MyRobot.p.repaint();
 							JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/bestplay/"+MyRobot.USERNAME+"/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
 							if (obj.has("cool")) {
 								bestPlay = new Result(MyRobot.p.songname,difficulty,obj.getInt("cool"),obj.getInt("fine"),obj.getInt("safe"),obj.getInt("sad"),obj.getInt("worst"),(float)obj.getDouble("percent"));

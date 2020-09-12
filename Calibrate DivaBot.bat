@@ -1,2 +1,2 @@
 cd DivaBot
-java -jar "DivaBot.jar" calibrate
+java -ea -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -jar "DivaBot.jar" calibrate

@@ -305,6 +305,7 @@ public class MyRobot{
 											p.pullData(selectedSong.title,difficulty);
 											prevSongTitle=selectedSong.title;
 											prevDifficulty=difficulty;
+											MyRobot.p.repaint();
 											MYROBOT.keyPress(KeyEvent.VK_CONTROL);
 											MYROBOT.keyPress(KeyEvent.VK_SHIFT);
 											MYROBOT.keyPress(KeyEvent.VK_F11);

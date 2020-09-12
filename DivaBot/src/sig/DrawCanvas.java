@@ -160,7 +160,7 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 								scrolling=false;
 							}
 							scrollX = 0;*/
-							MyRobot.p.repaint(0,0,MyRobot.p.getWidth(),MyRobot.p.getHeight());
+							MyRobot.p.repaint();
 							}
 						}
 					} catch (JSONException | IOException e) {

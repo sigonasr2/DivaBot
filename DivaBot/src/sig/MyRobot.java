@@ -193,13 +193,13 @@ public class MyRobot{
 			boolean success = false;
 			do {
 				username = "";
-				enteredValue = JOptionPane.showInputDialog("First time boot!\n\nPlease login on http://www.projectdivar.com and paste your App Authentication Token here.\nThe App Authentication token is used to record your scores and verify who you are! Do <b>not</b> share it with others!!!", "XXXXX-XXXXX-XXXXX");
+				enteredValue = JOptionPane.showInputDialog("First time boot!\n\nPlease login on http://www.projectdivar.com and paste your App Authentication Token here.\nThe App Authentication token is used to record your scores and verify who you are! Do not share it with others!!!", "XXXXX-XXXXX-XXXXX");
 				if (enteredValue==null) {
 					System.exit(0);
 				}
 				if (!enteredValue.isEmpty()) {
 					do {
-						username = JOptionPane.showInputDialog("Please enter your <b>Project DivaR</b> username:","");
+						username = JOptionPane.showInputDialog("Please enter your Project DivaR username:","");
 					} while (username.isEmpty());
 					if (username==null) {
 						System.exit(0);
@@ -243,7 +243,7 @@ public class MyRobot{
 		    	String result = s.hasNext() ? s.next() : "";
 		    	System.out.println(result);
 		    	if (result.equalsIgnoreCase("\"authentication success!\"")) {
-		    		FileUtils.writetoFile(new String[] {username,authenticationToken,"The App Authentication token is used to record your scores and verify who you are! Do <b>not</b> share it with others!!!"}, "authToken.txt", false);
+		    		FileUtils.writetoFile(new String[] {username,authenticationToken,"The App Authentication token is used to record your scores and verify who you are! Do not share it with others!!!"}, "authToken.txt", false);
 		    		USERNAME=username;
 		    		AUTHTOKEN=authenticationToken;
 		    		return true;

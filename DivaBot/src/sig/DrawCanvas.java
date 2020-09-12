@@ -153,13 +153,13 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 							if (lastRating<overallrating) {ratingTime=System.currentTimeMillis();}
 							*/
 							String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate"+((fcCount>0)?"  -  "+fcCount+" FC"+(fcCount==1?"":"s")+"    "+((int)(Math.floor(((float)fcCount)/plays*100)))+"% FC rate":"")+")":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():"")+"     Overall Rating: "+overallrating;
-							Rectangle2D bounds = TextUtils.calculateStringBoundsFont(text, programFont);
+							/*Rectangle2D bounds = TextUtils.calculateStringBoundsFont(text, programFont);
 							if (bounds.getWidth()>1345) {
 								scrolling=true;
 							} else {
 								scrolling=false;
 							}
-							scrollX = 0;
+							scrollX = 0;*/
 							MyRobot.p.repaint(0,0,MyRobot.p.getWidth(),MyRobot.p.getHeight());
 							}
 						}

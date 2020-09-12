@@ -106,8 +106,10 @@ public class Display {
 			}
 
 			private void AdvanceCycle() {
-				cycle=(cycle+1)%labels.length;
-				currentText=interpretLabel(labels[cycle]);
+				if (labels.length!=0) {
+					cycle=(cycle+1)%labels.length;
+					currentText=interpretLabel(labels[cycle]);
+				}
 			}
 		};
 		t.start();

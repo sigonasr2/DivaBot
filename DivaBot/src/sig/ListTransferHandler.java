@@ -35,7 +35,7 @@ public class ListTransferHandler extends TransferHandler {
         JList list = (JList)c;
         start = (DefaultListModel)list.getModel();
         indices = list.getSelectedIndices();
-        System.out.println("Selected indexes: "+Arrays.toString(indices));
+        //System.out.println("Selected indexes: "+Arrays.toString(indices));
         
         Object[] values = list.getSelectedValues();
         
@@ -48,7 +48,7 @@ public class ListTransferHandler extends TransferHandler {
                 buff.append("\n");
             }
         }
-        System.out.println(buff.toString());
+       // System.out.println(buff.toString());
         
         return new StringSelection(buff.toString());
     }
@@ -90,11 +90,11 @@ public class ListTransferHandler extends TransferHandler {
         addIndex = index;
         addCount = values.length;
         
-        //System.out.println(Arrays.toString(values));
+        //System.out.println(listModel);
+        for (int i=0;i<values.length;i++) {
+        	listModel.add(listModel.getSize(),values[i]);
+        }
         if (!start.equals(listModel)) {
-	        for (int i=0;i<values.length;i++) {
-	        	listModel.add(listModel.getSize(),values[i]);
-	        }
 	        for (int i=0;i<values.length;i++) {
 	        	for (int j=0;j<start.getSize();j++) {
 	        		if (values[i].equals(start.get(j))) {
@@ -104,11 +104,21 @@ public class ListTransferHandler extends TransferHandler {
 	        	}
 	        }
         }
-        String[] labels = new String[listModel.getSize()];
-        for (int i=0;i<listModel.getSize();i++) {
-        	labels[i]=(String)listModel.get(i);
+        //System.out.println(start);
+        //System.out.println(listModel);
+        if (listModel.equals(DisplayManager.model2)) {
+	        String[] labels = new String[listModel.getSize()];
+	        for (int i=0;i<listModel.getSize();i++) {
+	        	labels[i]=(String)listModel.get(i);
+	        }
+	        DisplayManager.selectedDisplay.labels=labels;
+        } else {
+	        String[] labels = new String[start.getSize()];
+	        for (int i=0;i<start.getSize();i++) {
+	        	labels[i]=(String)start.get(i);
+	        }
+	        DisplayManager.selectedDisplay.labels=labels;
         }
-        DisplayManager.selectedDisplay.labels=labels;
         MyRobot.p.repaint();
         //System.out.println("Selected indexes: "+Arrays.toString(indices));
         for (int i=0;i<indices.length;i++) {
@@ -123,6 +133,7 @@ public class ListTransferHandler extends TransferHandler {
 	        	listModel.remove(indices[i]);
         	}
         }
+        //System.out.println(listModel);
         return true;
     }
 

@@ -155,6 +155,7 @@ public class MyRobot{
     public static boolean DEBUG_MODE=false;
     public static ColorPanel CP;
     public static DisplayManager DM;
+    public static boolean FUTURETONE = false;
     
     public static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     
@@ -220,6 +221,7 @@ public class MyRobot{
 									Calibrator c = new Calibrator();
 								}
 							} else {
+								//ImageIO.write(MYROBOT.currentScreen,"png",new File("test.png"));
 								if (checkSongSelect()) {
 									if (!overlayHidden) {
 										overlayHidden=true;
@@ -767,7 +769,17 @@ public class MyRobot{
 	public static boolean checkSongSelect() throws IOException {
 		Color c = new Color(MYROBOT.createScreenCapture(new Rectangle(845,638,1,1)).getRGB(0, 0));
 		onSongSelect = c.getRed()==43 && c.getGreen()==88 && c.getBlue()==213;
+		
+		if (onSongSelect) {
+			FUTURETONE=false;
+		} else
+		if (!onSongSelect&&(c.getRed()>=165&&c.getRed()<=185&&c.getGreen()<=10&&c.getBlue()>=185&&c.getBlue()<=200)) {
+			FUTURETONE=true;
+			onSongSelect=true;
+		}
 		//System.out.println(onSongSelect+"/"+c);
+		
+		//777,179 FUTURE TONE
 		return onSongSelect;
 	}
 	

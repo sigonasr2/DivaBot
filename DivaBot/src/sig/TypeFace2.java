@@ -47,7 +47,7 @@ public class TypeFace2 {
 	final static Rectangle RECT_SEARCH_WORST=new Rectangle(866+XOFFSET,400,100+XOFFSET+1,22+8);
 	final static Rectangle RECT_SEARCH_PCT=new Rectangle(1182+XOFFSET,163,1132,8);
 	final static Rectangle RECT_SEARCH_PCT2=new Rectangle(1123+XOFFSET,163,1051,8);
-	final static Rectangle RECT_SEARCH_SCORE=new Rectangle(859+XOFFSET,578-2,250+XOFFSET+1,32+10);
+	final static Rectangle RECT_SEARCH_SCORE=new Rectangle(859+XOFFSET,578-4,250+XOFFSET+1,32+14);
 	final static Rectangle RECT_SEARCH_COMBO=new Rectangle(1010+XOFFSET,435-2,100+XOFFSET+1,22+8);
 
 	public Result getAllData(BufferedImage img, boolean debug) throws IOException,NumberFormatException,IndexOutOfBoundsException {
@@ -506,7 +506,7 @@ public class TypeFace2 {
 		ypointer=0;
 		String total = "";
 		trialloop:
-		while (ypointer<8) {
+		while (ypointer<12) {
 			xpointer=RECT_SEARCH_SCORE.width-1;
 			while (xpointer>31) {
 				int distance = 0;

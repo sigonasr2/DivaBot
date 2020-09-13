@@ -245,7 +245,7 @@ public class MyRobot{
 		    	Scanner s = new Scanner(instream).useDelimiter("\\A");
 		    	String result = s.hasNext() ? s.next() : "";
 		    	System.out.println(result);
-		    	if (result.equalsIgnoreCase("\"authentication success!\"")) {
+		    	if (result.equalsIgnoreCase("authentication success!")) {
 		    		FileUtils.writetoFile(new String[] {username,authenticationToken,"The App Authentication token is used to record your scores and verify who you are! Do not share it with others!!!"}, "authToken.txt", false);
 		    		USERNAME=username;
 		    		AUTHTOKEN=authenticationToken;
@@ -355,7 +355,7 @@ public class MyRobot{
 						tmp.mkdir();
 					}
 					try {
-						Result data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
+						final Result data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
 						System.out.println(data);
 						//ImageIO.write(MYROBOT.,"png",new File("test.png"));
 						if (data.cool==-1 || data.fine==-1 || data.safe==-1 || data.sad==-1 || data.worst==-1 || data.percent<0f || data.percent>110f || data.combo==-1 || data.score==-1) {
@@ -372,7 +372,7 @@ public class MyRobot{
 							}
 							File[] songFolderFiles = songFolder.listFiles();
 							int playId = songFolderFiles.length;
-							File playFolder = new File(selectedSong.title+"/"+difficulty+"/"+playId);
+							final File playFolder = new File(selectedSong.title+"/"+difficulty+"/"+playId);
 							playFolder.mkdir();
 							recordedResults=true;
 							lastcool=data.cool;
@@ -384,10 +384,12 @@ public class MyRobot{
 							lastcombo=data.combo;
 							lastscore=data.score;
 							lastfail=data.fail;
-							new File("scoreimage.png").renameTo(new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+data.cool+"_"+data.fine+"_"+data.safe+"_"+data.sad+"_"+data.worst+"_"+data.percent+""
-									+ "_"+data.combo+"_"+data.score+".png"));
-							results.add(new Result(selectedSong.title,difficulty,data.cool,data.fine,data.safe,data.sad,data.worst,data.percent,data.mod,data.combo,data.score,data.fail));
+							File resultImage=new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+data.cool+"_"+data.fine+"_"+data.safe+"_"+data.sad+"_"+data.worst+"_"+data.percent+""
+									+ "_"+data.combo+"_"+data.score+".png");
+							new File("scoreimage.png").renameTo(resultImage);
+							results.add(new Result(selectedSong.title,difficulty,data.cool,data.fine,data.safe,data.sad,data.worst,data.percent,data.mod,data.combo,data.score,data.fail,resultImage));
 							SoundUtils.playSound("collect_item.wav");
+							
 							//gotoxy(800,64);
 							//click();
 							MYROBOT.setAutoDelay(0);
@@ -405,7 +407,7 @@ public class MyRobot{
 				} else {
 					if (results.size()>0) {
 						recordingResults=true;
-						for (Result r  : results) {
+						for (final Result r  : results) {
 							r.songName=r.songName.equalsIgnoreCase("PIANOGIRL")?"PIANO*GIRL":(r.songName.equalsIgnoreCase("16 -out of the gravity-"))?"1/6 -out of the gravity-":r.songName;
 							HttpClient httpclient = HttpClients.createDefault();
 							HttpPost httppost = new HttpPost("http://45.33.13.215:4501/submit");
@@ -440,17 +442,33 @@ public class MyRobot{
 								e.printStackTrace();
 							}
 							HttpEntity entity = response.getEntity();
+							
+							JSONObject report = null;
 
 							if (entity != null) {
 							    try (InputStream instream = entity.getContent()) {
 							    	Scanner s = new Scanner(instream).useDelimiter("\\A");
 							    	String result = s.hasNext() ? s.next() : "";
-							    	System.out.println(result);
+							    	report=new JSONObject(result);
 							    	instream.close();
 							    } catch (UnsupportedOperationException | IOException e) {
 									e.printStackTrace();
 								}
 							}
+							
+							final JSONObject finalReport=report;
+
+							System.out.println("Submitting screenshot for "+r.f);
+							Thread t = new Thread() {
+								public void run() {
+									HashMap<String,String> s = new HashMap<>();
+									s.put("username",USERNAME);
+									s.put("authentication_token",AUTHTOKEN);
+									s.put("playid",Integer.toString(finalReport.getInt("id")));
+									WebUtils.POSTimage("http://projectdivar.com/upload", r.f, s);
+								}
+							};
+							t.start();
 						}
 						results.clear();
 

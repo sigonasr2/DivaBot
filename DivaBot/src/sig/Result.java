@@ -12,6 +12,7 @@ public class Result {
 	public String mod;
 	public int combo,score;
 	public boolean isResult;
+	public File f;
 	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent) {
 		this.songName=song;
 		this.difficulty=diff;
@@ -39,6 +40,10 @@ public class Result {
 		this.combo=combo;
 		this.score=score;
 		this.mod=mod;
+	}
+	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent,String mod,int combo, int score,boolean fail,File f) {
+		this(song,diff,cool,fine,safe,sad,worst,percent,mod,combo,score,fail);
+		this.f=f;
 	}
 	public String display() {
 		return new StringBuilder(Integer.toString(cool)).append("/").append(fine)

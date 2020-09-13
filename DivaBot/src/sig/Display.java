@@ -107,8 +107,14 @@ public class Display {
 							if (!forceUpdate) {
 								AdvanceCycle();
 							}
+							if (labels.length>0) {
+								if (labels.length>cycle) {
+									currentText=interpretLabel(labels[cycle]);
+								} else {
+									currentText=interpretLabel(labels[0]);
+								}
+							}
 							updateFont();
-							currentText=interpretLabel(labels[cycle]);
 							MyRobot.p.repaint();
 							nextUpdateTime=System.currentTimeMillis()+delay;
 							forceUpdate=false;

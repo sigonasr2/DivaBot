@@ -11,6 +11,7 @@ public class Result {
 	public boolean fail;
 	public String mod;
 	public int combo,score;
+	public boolean isResult;
 	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent) {
 		this.songName=song;
 		this.difficulty=diff;

@@ -64,6 +64,8 @@ public class TypeFace2 {
 				RECT_SEARCH_WORST,
 		};
 		
+		//result.isResult=MyRobot.IsResultsScreenshot(ImageUtils.toBufferedImage(img2.getScaledInstance(1227, 690, Image.SCALE_SMOOTH)));
+		
 		for (int i=0;i<ranges.length;i++) {
 			Rectangle r = ranges[i];
 
@@ -75,7 +77,9 @@ public class TypeFace2 {
 			
 			finalNumbers[i]=extractNumbersFromImage(img2.getSubimage(
 					r.x,r.y,r.width,r.height),debug);
-			
+			if (finalNumbers[i]==-1) {
+				return result;
+			}
 		}
 		result.cool = finalNumbers[0];
 		result.fine = finalNumbers[1];
@@ -84,7 +88,9 @@ public class TypeFace2 {
 		result.worst = finalNumbers[4];
 		
 		float percent = extractPercentFromImage(img2,debug);
-		
+		if (percent<0) {
+			return result;
+		}
 		result.percent=percent;
 		// result.percent = ??
 		
@@ -109,9 +115,15 @@ public class TypeFace2 {
 		//1109,435
 		result.combo = extractNumbersFromImage(img2.getSubimage(
 				RECT_SEARCH_COMBO.x,RECT_SEARCH_COMBO.y,RECT_SEARCH_COMBO.width,RECT_SEARCH_COMBO.height),debug);
+		if (result.combo<0) {
+			return result;
+		}
 		
 		result.score = extractScoreNumbersFromImage(img2.getSubimage(
 				RECT_SEARCH_SCORE.x,RECT_SEARCH_SCORE.y,RECT_SEARCH_SCORE.width,RECT_SEARCH_SCORE.height),debug);
+		if (result.score<0) {
+			return result;
+		}
 		
 		return result;
 	}
@@ -374,8 +386,11 @@ public class TypeFace2 {
 			}
 			ypointer++;
 		}
-		
-		return Float.parseFloat(integer+"."+decimal);
+		if (integer.length()>0&&decimal.length()>0) {
+			return Float.parseFloat(integer+"."+decimal);
+		} else {
+			return -1.0f;
+		}
 	}
 
 	private boolean lightColorCheck(Color pixel) {

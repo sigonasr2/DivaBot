@@ -141,6 +141,7 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 							romanizedname = currentSong.romanized_name;
 							englishname = currentSong.english_name;
 							artist = currentSong.artist;
+							MyRobot.p.refreshAllLabels();
 							MyRobot.p.repaint();
 							JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/bestplay/"+MyRobot.USERNAME+"/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
 							if (obj.has("cool")) {
@@ -160,7 +161,7 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 							overallrating = (int)obj.getDouble("rating");
 							if (lastRating<overallrating) {ratingTime=System.currentTimeMillis();}
 							*/
-							String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate"+((fcCount>0)?"  -  "+fcCount+" FC"+(fcCount==1?"":"s")+"    "+((int)(Math.floor(((float)fcCount)/plays*100)))+"% FC rate":"")+")":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():"")+"     Overall Rating: "+overallrating;
+							//String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate"+((fcCount>0)?"  -  "+fcCount+" FC"+(fcCount==1?"":"s")+"    "+((int)(Math.floor(((float)fcCount)/plays*100)))+"% FC rate":"")+")":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():"")+"     Overall Rating: "+overallrating;
 							/*Rectangle2D bounds = TextUtils.calculateStringBoundsFont(text, programFont);
 							if (bounds.getWidth()>1345) {
 								scrolling=true;
@@ -337,7 +338,9 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 			}
 			sb.append(displays.get(i).getSaveString());
 		}
-		configData.put("DISPLAYDATA",sb.toString());
+		if (displays.size()>0) {
+			configData.put("DISPLAYDATA",sb.toString());
+		}
 	}
 
 	@Override

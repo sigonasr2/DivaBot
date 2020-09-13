@@ -313,8 +313,8 @@ public class MyRobot{
 			if (selectedSong!=null && difficulty!=null) {
 				if (!prevSongTitle.equalsIgnoreCase(selectedSong.title) || !prevDifficulty.equalsIgnoreCase(difficulty)) {
 					System.out.println("On Song Select Screen: Current Song-"+selectedSong.title+" Diff:"+difficulty);
-					MyRobot.p.refreshAllLabels();
 					p.pullData(selectedSong.title,difficulty);
+					MyRobot.p.refreshAllLabels();
 					prevSongTitle=selectedSong.title;
 					prevDifficulty=difficulty;
 					MyRobot.p.repaint();
@@ -495,6 +495,19 @@ public class MyRobot{
 		return c1.getRed()>=250 && c1.getGreen()>=250 && c1.getBlue()>=250 && c2.getRed()>=10 && c2.getRed()<=25 && c2.getGreen()>=200 && c2.getGreen()<=240 && c2.getBlue()>=180 && c2.getBlue()<=220 &&
 				c3.getRed()>=200 && c3.getRed()<=255 && c3.getGreen()>=200 && c3.getGreen()<=255 && c3.getBlue()>=140 && c3.getBlue()<=220;
 	}
+	
+	public static boolean IsResultsScreenshot(BufferedImage img) throws IOException {
+		//r.x-418, r.y-204
+		/*ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(31,230,40,40)),"png",new File("color1.png"));
+		ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(31,196,40,40)),"png",new File("color2.png"));
+		ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)),"png",new File("color3.png"));*/
+		Color c1 = new Color(img.getSubimage(31,230,40,40).getRGB(0, 0));
+		Color c2 = new Color(img.getSubimage(31,196,40,40).getRGB(0, 0));
+		Color c3 = new Color(img.getSubimage(483,256,40,40).getRGB(0, 0));
+		//System.out.println(c1+"/"+c2+"/"+c3);
+		return c1.getRed()>=250 && c1.getGreen()>=250 && c1.getBlue()>=250 && c2.getRed()>=10 && c2.getRed()<=100 && c2.getGreen()>=200 && c2.getGreen()<=255 && c2.getBlue()>=180 && c2.getBlue()<=230 &&
+				c3.getRed()>=150 && c3.getRed()<=255 && c3.getGreen()>=150 && c3.getGreen()<=255 && c3.getBlue()>=100 && c3.getBlue()<=240;
+	}
 
 	private void GetCurrentDifficulty() {
 		Color c = new Color(MYROBOT.createScreenCapture(new Rectangle(320,274,10,10)).getRGB(0, 0));
@@ -518,6 +531,7 @@ public class MyRobot{
 	private void GetCurrentSong() throws IOException {
 		BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(812-10,380-10,WIDTH+20,HEIGHT+20)));
 		boolean found=false;
+		SongData newPick = null;
 		LOOP1:
 		for (int x=0;x<10;x++) {
 			for (int y=0;y<10;y++) {
@@ -529,7 +543,7 @@ public class MyRobot{
 				}
 				SongData ss = SongData.compareData(col);
 				if (ss!=null) {
-					selectedSong = ss;
+					newPick = ss;
 					found=true;
 					break LOOP1;
 				}
@@ -543,7 +557,7 @@ public class MyRobot{
 				}
 				SongData ss = SongData.compareData(col);
 				if (ss!=null) {
-					selectedSong = ss;
+					newPick = ss;
 					found=true;
 					break LOOP1;
 				}
@@ -561,7 +575,7 @@ public class MyRobot{
 					}
 					SongData ss = SongData.compareData(col);
 					if (ss!=null) {
-						selectedSong = ss;
+						newPick = ss;
 						found=true;
 						break LOOP2;
 					}
@@ -575,12 +589,15 @@ public class MyRobot{
 					}
 					SongData ss = SongData.compareData(col);
 					if (ss!=null) {
-						selectedSong = ss;
+						newPick = ss;
 						found=true;
 						break LOOP2;
 					}
 				}
 			}
+		}
+		if (found) {
+			selectedSong = newPick;
 		}
 	}
 	
@@ -751,7 +768,9 @@ public class MyRobot{
 		RunTest("test29.png",354,112,4,3,43,67.73f,"EXEX","HS",55,331060,true);
 		RunTest("test30.png",390,90,8,9,22,74.95f,"N","HS",82,326560,false);
 		RunTest("test31.png",329,69,8,1,34,72.15f,"EX","HS",40,358760,false);
-		RunTest("test32.png",0,1,1,0,57,0.57f,"EX","HS",1,1890,true);
+		//RunTest("test32.png",0,1,1,0,57,0.57f,"EX","HS",1,1890,true);
+		//RunTest("test33.png",181,84,10,2,5,71.04f,"E","",149,157020,false);
+		//RunTest("test34.png",28,10,0,0,25,3.66f,"EX","",20,26790,true);
 		RunTest("testimage.png",371,40,3,4,3,97.63f,"EX","HS",233,523750,false);
 		RunTest("testimage2.png",942,71,1,0,3,97.02f,"EXEX","",714,951020,false);
 		RunTest("testimage3.png",546,52,0,0,0,101.77f,"EX","",598,567430,false);
@@ -815,6 +834,7 @@ public class MyRobot{
 		}
 		Result data = typeface1.getAllData(img,debug);
 		try {
+			//assert data.isResult == true : "Expected a result screenshot.";
 			assert data.cool == _cool : "Expected cool count to be "+_cool+", got "+data.cool;
 			assert data.fine == _fine : "Expected fine count to be "+_fine+", got "+data.fine;
 			assert data.safe == _safe : "Expected safe count to be "+_safe+", got "+data.safe;

@@ -42,32 +42,39 @@ public class SongData {
 					closestSong.distance=distance;
 					closestDistance=distance;
 				}
-				/*if (distance>=MAXTHRESHOLD && distance<closestMaxThresholdDistance) {
-					System.out.println(distance+" pixels diff: "+s.title);
-					closestMaxThresholdDistance=distance;
-				}*/
 			}
 		}
 		return closestSong;
 	}
 	
-	public static void saveSongToFile(String title, long r, long g, long b) {
+	public static void saveSongToFile(String title, long r, long g, long b) throws IOException {
+		boolean found=false;
 		StringBuilder sb = new StringBuilder(title);
 		sb.append(":");
-		boolean first = true;
-		/*for (Color pixel : data) {
-			if (first) {
-				first=false;
-			} else {
-				sb.append(",");
-			}
-			sb.append(pixel.getRGB());
-			//Color c = new Color(9,true);
-		}*/
+		
 		sb.append(r).append(",")
 		.append(g).append(",")
 		.append(b);
-		FileUtils.logToFile(sb.toString(),"colorData");
+		String[] fileData = FileUtils.readFromFile("colorData");
+		for (int i=0;i<fileData.length;i++) {
+			String[] split = fileData[i].split(":");
+			if (split.length>0) {
+				//System.out.println(split[0]+"/"+title);
+				if (split[0].equalsIgnoreCase(title)) {
+					//System.out.println("Updated color data with new data for "+title+"!");
+					fileData[i]=sb.toString();
+					found=true;
+					break;
+				}
+			}
+		}
+		if (!found) {
+			FileUtils.logToFile(sb.toString(),"colorData");
+			System.out.println("Appended color data with new data for "+title+"!");
+		} else {
+			FileUtils.writetoFile(fileData, "colorData",false);
+			System.out.println("Updated color data with new data for "+title+"!");
+		}
 	}
 	public static void loadSongsFromFile() throws IOException {
 		String[] data = FileUtils.readFromFile("colorData");
@@ -76,6 +83,7 @@ public class SongData {
 			SongData sd = ParseSong(data[i]);
 			MyRobot.SONGS[i]=sd;
 		}
+		MyRobot.firstTwentyPixels= new int[20];
 	}
 	
 	public static SongData ParseSong(String s) {

@@ -154,7 +154,7 @@ public class Display {
 	
 	public void draw(Graphics g) {
 		g.setColor(backgroundCol);
-		g.fill3DRect(x, y, width, height, true);
+		g.fillRect(x, y, width, height);
 		g.setColor(textCol);
 		g.setFont(modifiedfont);
 		g.drawString(currentText,x,y+height/2+fontHeight/4);

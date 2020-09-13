@@ -65,7 +65,7 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 	double difficultyRating = 0;
 	Result bestPlay=null;
 	int overallrating = 0;
-	BufferedImage addConfigButton,backgroundColorButton;
+	BufferedImage addConfigButton,backgroundColorButton,reloadSongButton;
     long ratingTime = System.currentTimeMillis()-10000;
     long bestPlayTime = System.currentTimeMillis()-10000;
     int lastRating = -1;
@@ -88,6 +88,7 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 		//loadConfig();
 		addConfigButton = ImageIO.read(new File("addDisplay.png"));
 		backgroundColorButton = ImageIO.read(new File("backgroundCol.png"));
+		reloadSongButton = ImageIO.read(new File("reloadSong.png"));
 		Thread t = new Thread() {
 			public void run() {
 				while (true) {
@@ -238,6 +239,7 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 		
 		g2.drawImage(addConfigButton,getWidth()-addConfigButton.getWidth()+1,0,this);
 		g2.drawImage(backgroundColorButton,getWidth()-backgroundColorButton.getWidth()+1,backgroundColorButton.getHeight()+1,this);
+		g2.drawImage(reloadSongButton,getWidth()-reloadSongButton.getWidth()+1,reloadSongButton.getHeight()*2+1,this);
 		
 		for (int i=0;i<displays.size();i++) {
 			displays.get(i).draw(g);
@@ -451,12 +453,22 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 					applyConfig();
 				}
 				return;
+			} else
+			if (cursor.x>=getWidth()-addConfigButton.getWidth()&&
+			cursor.x<=getWidth()&&
+			cursor.y>=addConfigButton.getHeight()*2+1&&
+			cursor.y<=addConfigButton.getHeight()*2+1+addConfigButton.getHeight()) {
+				//System.out.println("Click");
+				MyRobot.AO.f.setVisible(true);
+				return;
 			}
 			
-			Display previousDisplay = selectedDisplay;
-			if (selectedDisplay.equals(previousDisplay)) {
-				//System.out.println("Double click");
-				DisplayManager.setupSettings(selectedDisplay);
+			if (selectedDisplay!=null) {
+				Display previousDisplay = selectedDisplay;
+				if (selectedDisplay.equals(previousDisplay)) {
+					//System.out.println("Double click");
+					DisplayManager.setupSettings(selectedDisplay);
+				}
 			}
 		}break;
 	}

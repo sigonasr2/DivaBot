@@ -83,6 +83,7 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
     static List<Display> displays = new ArrayList<Display>();
     public static Display selectedDisplay = null;
     public static Display draggedDisplay = null;
+    public static Point initialDragPoint = null;
 	DrawCanvas() throws FontFormatException, IOException {
 		//loadConfig();
 		addConfigButton = ImageIO.read(new File("addDisplay.png"));
@@ -380,70 +381,25 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 	@Override
 	public void mousePressed(MouseEvent e) {
 		Point cursor = GetCursorPosition(e);
-		switch (e.getButton()) {
-			case MouseEvent.BUTTON3:{
-				selectedDisplay=null;
-				for (int i=0;i<displays.size();i++) {
-					Display d = displays.get(i);
-					if (cursor.x>=d.x&&
-						cursor.x<=d.x+d.width&&
-						cursor.y>=d.y&&
-						cursor.y<=d.y+d.height) {
-						selectedDisplay=d;
-						break;
-					}
-				}
-				DeleteDisplay();
-			}break;
-			case MouseEvent.BUTTON1:{
-				//System.out.println(cursor+"/"+addConfigButton.getHeight());
-				if (cursor.x>=getWidth()-addConfigButton.getWidth()&&
-						cursor.x<=getWidth()&&
-						cursor.y>=0&&
-						cursor.y<=addConfigButton.getHeight()) {
-						Display d = new Display();
-						displays.add(d);
-						selectedDisplay=d;
-						DisplayManager.setupSettings(selectedDisplay);
-						return;
-					} else
-				if (cursor.x>=getWidth()-addConfigButton.getWidth()&&
-				cursor.x<=getWidth()&&
-				cursor.y>=addConfigButton.getHeight()+1&&
-				cursor.y<=addConfigButton.getHeight()+1+addConfigButton.getHeight()) {
-					Color c = MyRobot.CP.getBackgroundColor();
-					if (c!=null) {
-						configData.put("BACKGROUND",Integer.toString(c.getRGB()));
-						applyConfig();
-					}
-					return;
-				}
-				
-				Display previousDisplay = selectedDisplay;
-				selectedDisplay=null;
-				for (int i=0;i<displays.size();i++) {
-					Display d = displays.get(i);
-					if (cursor.x>=d.x&&
-						cursor.x<=d.x+d.width&&
-						cursor.y>=d.y&&
-						cursor.y<=d.y+d.height) {
-						selectedDisplay=d;
-						break;
-					}
-				}
-				
-				if (selectedDisplay==null) {
-					MyRobot.FRAME.setCursor(Cursor.getDefaultCursor());
-					DisplayManager.f.setVisible(false);
-				} else {
-					MyRobot.FRAME.setCursor(new Cursor(Cursor.MOVE_CURSOR));
-					draggedDisplay=selectedDisplay;
-					if (selectedDisplay.equals(previousDisplay)) {
-						//System.out.println("Double click");
-						DisplayManager.setupSettings(selectedDisplay);
-					}
-				}
-			}break;
+		initialDragPoint=cursor;
+		selectedDisplay=null;
+		for (int i=0;i<displays.size();i++) {
+			Display d = displays.get(i);
+			if (cursor.x>=d.x&&
+				cursor.x<=d.x+d.width&&
+				cursor.y>=d.y&&
+				cursor.y<=d.y+d.height) {
+				selectedDisplay=d;
+				break;
+			}
+		}
+		
+		if (selectedDisplay==null) {
+			MyRobot.FRAME.setCursor(Cursor.getDefaultCursor());
+			DisplayManager.f.setVisible(false);
+		} else {
+			MyRobot.FRAME.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+			draggedDisplay=selectedDisplay;
 		}
 	}
 
@@ -455,7 +411,55 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		Point cursor = GetCursorPosition(e);
 		draggedDisplay=null;
+		MyRobot.FRAME.setCursor(Cursor.getDefaultCursor());
+		switch (e.getButton()) {
+		case MouseEvent.BUTTON3:{
+			selectedDisplay=null;
+			for (int i=0;i<displays.size();i++) {
+				Display d = displays.get(i);
+				if (cursor.x>=d.x&&
+					cursor.x<=d.x+d.width&&
+					cursor.y>=d.y&&
+					cursor.y<=d.y+d.height) {
+					selectedDisplay=d;
+					break;
+				}
+			}
+			DeleteDisplay();
+		}break;
+		case MouseEvent.BUTTON1:{
+			//System.out.println(cursor+"/"+addConfigButton.getHeight());
+			if (cursor.x>=getWidth()-addConfigButton.getWidth()&&
+					cursor.x<=getWidth()&&
+					cursor.y>=0&&
+					cursor.y<=addConfigButton.getHeight()) {
+					Display d = new Display();
+					displays.add(d);
+					selectedDisplay=d;
+					DisplayManager.setupSettings(selectedDisplay);
+					return;
+				} else
+			if (cursor.x>=getWidth()-addConfigButton.getWidth()&&
+			cursor.x<=getWidth()&&
+			cursor.y>=addConfigButton.getHeight()+1&&
+			cursor.y<=addConfigButton.getHeight()+1+addConfigButton.getHeight()) {
+				Color c = MyRobot.CP.getBackgroundColor();
+				if (c!=null) {
+					configData.put("BACKGROUND",Integer.toString(c.getRGB()));
+					applyConfig();
+				}
+				return;
+			}
+			
+			Display previousDisplay = selectedDisplay;
+			if (selectedDisplay.equals(previousDisplay)) {
+				//System.out.println("Double click");
+				DisplayManager.setupSettings(selectedDisplay);
+			}
+		}break;
+	}
 	}
 
 	@Override
@@ -474,9 +478,19 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 	public void mouseDragged(MouseEvent e) {
 		if (draggedDisplay!=null) {
 			Point cursor = GetCursorPosition(e);
-			draggedDisplay.x=(int)(Math.floor((cursor.x-draggedDisplay.width/2)/8)*8);
-			draggedDisplay.y=(int)(Math.floor((cursor.y-draggedDisplay.height/2)/8)*8);
-			MyRobot.p.repaint();
+			if (initialDragPoint!=null) {
+				if ((Math.abs(cursor.x-initialDragPoint.x)>24||
+					Math.abs(cursor.y-initialDragPoint.y)>24)) {
+					draggedDisplay.x=(int)(Math.floor((cursor.x-draggedDisplay.width/2)/8)*8);
+					draggedDisplay.y=(int)(Math.floor((cursor.y-draggedDisplay.height/2)/8)*8);
+					MyRobot.p.repaint();
+					initialDragPoint=null;
+				}
+			} else {
+				draggedDisplay.x=(int)(Math.floor((cursor.x-draggedDisplay.width/2)/8)*8);
+				draggedDisplay.y=(int)(Math.floor((cursor.y-draggedDisplay.height/2)/8)*8);
+				MyRobot.p.repaint();
+			}
 		}
 	}
 

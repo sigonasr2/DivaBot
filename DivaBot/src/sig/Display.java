@@ -12,13 +12,14 @@ import sig.utils.TextUtils;
 public class Display {
 	Color backgroundCol=Color.BLUE;
 	Color textCol=Color.WHITE;
-	Font font=new Font("Batang",Font.PLAIN,32);
+	Font font=new Font("Dialog.bold",Font.PLAIN,32);
 	int fontSize=32;
 	Font modifiedfont=font;
 	int x;
 	int y;
 	int width=200;
 	int height=48;
+	int fontHeight=0;
 	int delay=10000;
 	long nextUpdateTime = System.currentTimeMillis();
 	boolean forceUpdate=false;
@@ -137,16 +138,18 @@ public class Display {
 	}
 	
 	public void updateFont() {
-		//modifiedfont
 		int currentSize=fontSize;
 		modifiedfont = font;
 		Rectangle2D bounds = TextUtils.calculateStringBoundsFont(currentText, font);
+		fontHeight = (int)bounds.getHeight();
 		while (currentSize>1&&bounds.getWidth()>width) {
 			currentSize-=2;
 			if (currentSize<=1) {break;}
 			modifiedfont = new Font(font.getFontName(),Font.PLAIN,currentSize);
 			bounds = TextUtils.calculateStringBoundsFont(currentText, modifiedfont);
+			fontHeight = (int)bounds.getHeight();
 		}
+		forceUpdate=true;
 	}
 	
 	public void draw(Graphics g) {
@@ -154,7 +157,7 @@ public class Display {
 		g.fill3DRect(x, y, width, height, true);
 		g.setColor(textCol);
 		g.setFont(modifiedfont);
-		g.drawString(currentText,x,y+modifiedfont.getSize()+((height-modifiedfont.getSize())/2));
+		g.drawString(currentText,x,y+height/2+fontHeight/4);
 	}
 	
 	public String getSaveString() {
@@ -205,19 +208,30 @@ public class Display {
 					return data.difficultyRating + " - " + fullNameDifficulty(data.difficulty);
 				}
 				case "Song Title (Japanese)":{
-					return data.songname + " by "+data.artist;
+					return data.songname;
 				}
 				case "Song Title (Romanized)":{
-					return ((data.romanizedname.length()>0)?data.romanizedname:data.englishname) + " by "+data.artist;
+					return ((data.romanizedname.length()>0)?data.romanizedname:data.englishname);
 				}
 				case "Song Title (Japanese+Romanized)":{
-					return (data.songname + " - " + ((data.romanizedname.length()>0)?data.romanizedname:data.englishname))  + " by "+data.artist;
+					if (data.songname.equalsIgnoreCase(((data.romanizedname.length()>0)?data.romanizedname:data.englishname))) {
+						return data.songname;
+					} else {
+						return (data.songname + " - " + ((data.romanizedname.length()>0)?data.romanizedname:data.englishname));
+					}
 				}
 				case "Song Title (English)":{
-					return data.englishname  + " by "+data.artist;
+					return data.englishname;
 				}
 				case "Song Title (Japanese+Romanized+ENG)":{
-					return (data.songname + " - " + ((data.romanizedname.length()>0)?(data.romanizedname.equalsIgnoreCase(data.englishname))?data.romanizedname:data.romanizedname+" ("+data.englishname+")":data.englishname))  + " by "+data.artist;
+					if (data.songname.equalsIgnoreCase(((data.romanizedname.length()>0)?data.romanizedname:data.englishname))) {
+						return data.songname;
+					} else {
+						return (data.songname + " - " + ((data.romanizedname.length()>0)?(data.romanizedname.equalsIgnoreCase(data.englishname))?data.romanizedname:data.romanizedname+" ("+data.englishname+")":data.englishname));
+					}
+				}
+				case "Song Artist":{
+					return "Artist: "+data.artist;
 				}
 				case "Play Count":{
 					if (data.plays>0) {

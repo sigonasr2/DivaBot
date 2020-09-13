@@ -67,7 +67,8 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 			"Pass/Play Count",
 			"Pass/Play Count (+%)",
 			"FC Count",
-			"FC Count (+%)"
+			"FC Count (+%)",
+			"Song Artist",
 	};
 	
 	DisplayManager() throws IOException {
@@ -79,7 +80,7 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 		
 		for (int i=0;i<tempFontList.size();i++) {
 			//System.out.println(tempFontList.get(i));
-			if (!tempFontList.get(i).canDisplay(12479) || tempFontList.get(i).getFontName().equals("Dialog.plain")) {
+			if (!tempFontList.get(i).canDisplay(12479) || !tempFontList.get(i).canDisplay(12540) || tempFontList.get(i).getFontName().equals("Dialog.plain")) {
 				tempFontList.remove(i--);
 			}
 		}
@@ -489,6 +490,7 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 	public void itemStateChanged(ItemEvent e) {
 		if (selectedDisplay!=null) {
 			selectedDisplay.font=new Font(((Font)fonts.getSelectedItem()).getFontName(),Font.PLAIN,selectedDisplay.fontSize);
+			selectedDisplay.updateFont();
 			MyRobot.p.repaint();
 		}
 	}

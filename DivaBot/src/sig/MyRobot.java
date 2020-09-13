@@ -95,7 +95,8 @@ public class MyRobot{
 	/*static String FUTURETONESONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","packaged","Palette","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失 -DEAD END-","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク","ブレス・ユア・ブレス","恋は戦争","あなたの歌姫","Starduster","StargazeR","リンリンシグナル","Rosary Pale","多重未来のカルテット～QUARTET THEME～","LIKE THE WIND","AFTER BURNER",
 	"ストロボナイツ","VOiCE","恋色病棟","ねこみみスイッチ","パラジクロロベンゼン","カラフル×セクシィ","劣等上等","Star Story","パズル","キップル・インダストリー","夢の続き","MEGANE","Change me"};*/
 	static SongInfo SONGNAMES[] = new SongInfo[] {};
-	static String NEWSONGS[] = new String[] {};
+	static String NEWSONGS[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","packaged","Palette","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失 -DEAD END-","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク","ブレス・ユア・ブレス","恋は戦争","あなたの歌姫","Starduster","StargazeR","リンリンシグナル","Rosary Pale","多重未来のカルテット～QUARTET THEME～","LIKE THE WIND","AFTER BURNER",
+			"ストロボナイツ","VOiCE","恋色病棟","ねこみみスイッチ","パラジクロロベンゼン","カラフル×セクシィ","劣等上等","Star Story","パズル","キップル・インダストリー","夢の続き","MEGANE","Change me"};
 	int SCREEN_X;
 	int SCREEN_Y;
 	int WINDOW_X;
@@ -128,6 +129,8 @@ public class MyRobot{
     static boolean CALIBRATION = true;
     static Point STARTDRAG = null;
     static Point ENDDRAG = null;
+    public static long smallestSongColor = Long.MAX_VALUE;
+    public static int[] firstTwentyPixels = new int[20];
     
     int lastcool=-1,lastfine=-1,lastsafe=-1,lastsad=-1,lastworst=-1,lastcombo=-1,lastscore=-1;
     float lastpercent;
@@ -529,75 +532,26 @@ public class MyRobot{
 		}
 	}
 	private void GetCurrentSong() throws IOException {
-		BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(812-10,380-10,WIDTH+20,HEIGHT+20)));
-		boolean found=false;
-		SongData newPick = null;
-		LOOP1:
-		for (int x=0;x<10;x++) {
-			for (int y=0;y<10;y++) {
-				Color[] col = new Color[WIDTH*HEIGHT];
-				for (int i=0;i<WIDTH;i++) {
-					for (int j=0;j<HEIGHT;j++) {
-						col[i*HEIGHT+j]=new Color(img.getRGB(i+10+x,j+10+y),true);
-					}
-				}
-				SongData ss = SongData.compareData(col);
-				if (ss!=null) {
-					newPick = ss;
-					found=true;
-					break LOOP1;
-				}
-			}
-			for (int y=-1;y>-10;y--) {
-				Color[] col = new Color[WIDTH*HEIGHT];
-				for (int i=0;i<WIDTH;i++) {
-					for (int j=0;j<HEIGHT;j++) {
-						col[i*HEIGHT+j]=new Color(img.getRGB(i+10+x,j+10+y),true);
-					}
-				}
-				SongData ss = SongData.compareData(col);
-				if (ss!=null) {
-					newPick = ss;
-					found=true;
-					break LOOP1;
-				}
+		BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(630,80,580,380)));
+		long r=0,g=0,b=0;
+		int count=0;
+		for (int i=0;i<20;i++) {
+			if (img.getRGB(i, i)!=firstTwentyPixels[i]) {
+				firstTwentyPixels[i]=img.getRGB(i,i);
+			} else {
+				//System.out.println("Same image as last frame. Ignoring.");
+				return;
 			}
 		}
-		if (!found) {
-			LOOP2:
-			for (int x=0;x>-10;x--) {
-				for (int y=0;y<10;y++) {
-					Color[] col = new Color[WIDTH*HEIGHT];
-					for (int i=0;i<WIDTH;i++) {
-						for (int j=0;j<HEIGHT;j++) {
-							col[i*HEIGHT+j]=new Color(img.getRGB(i+10+x,j+10+y),true);
-						}
-					}
-					SongData ss = SongData.compareData(col);
-					if (ss!=null) {
-						newPick = ss;
-						found=true;
-						break LOOP2;
-					}
-				}
-				for (int y=-1;y>-10;y--) {
-					Color[] col = new Color[WIDTH*HEIGHT];
-					for (int i=0;i<WIDTH;i++) {
-						for (int j=0;j<HEIGHT;j++) {
-							col[i*HEIGHT+j]=new Color(img.getRGB(i+10+x,j+10+y),true);
-						}
-					}
-					SongData ss = SongData.compareData(col);
-					if (ss!=null) {
-						newPick = ss;
-						found=true;
-						break LOOP2;
-					}
-				}
+		for (int i=0;i<580;i++) {
+			for (int j=0;j<380;j++) {
+				r+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
+				g+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
+				b+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
 			}
 		}
-		if (found) {
-			selectedSong = newPick;
+		if (r+g+b>=MyRobot.smallestSongColor) {
+			selectedSong = SongData.compareData(r,g,b);
 		}
 	}
 	
@@ -648,17 +602,21 @@ public class MyRobot{
 					}
 	            	BufferedImage img = null;
 	            	try {
-						ImageIO.write(img=MYROBOT.createScreenCapture(new Rectangle(812,380,WIDTH,HEIGHT)),"png",new File("test.png"));
+						ImageIO.write(img=MYROBOT.createScreenCapture(new Rectangle(630,80,580,380)),"png",new File("test.png"));
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
-	    			Color[] col = new Color[WIDTH*HEIGHT];
-	    			for (int i=0;i<WIDTH;i++) {
-	    				for (int j=0;j<HEIGHT;j++) {
-	    					col[i*HEIGHT+j]=new Color(img.getRGB(i,j),true);
+	    			long totalr=0;
+	    			long totalg=0;
+	    			long totalb=0;
+	    			for (int i=0;i<580;i++) {
+	    				for (int j=0;j<380;j++) {
+	    					totalr+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
+	    					totalg+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
+	    					totalb+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
 	    				}
 	    			}
-	    			SongData.saveSongToFile(NEWSONGS[currentSong],col);
+	    			SongData.saveSongToFile(NEWSONGS[currentSong],totalr,totalg,totalb);
 	    		    try {
 						SongData.loadSongsFromFile();
 					} catch (IOException e1) {
@@ -734,7 +692,7 @@ public class MyRobot{
 	
 	static void RunTests() throws IOException {
 		
-		selectedSong=new SongData("LIKE THE WIND",new Color[] {});
+		selectedSong=new SongData("LIKE THE WIND",0,0,0);
 		difficulty="H";
 		
 		RunTest("test1.jpg",393,127,28,10,48,72.28f,"EXEX","",85,577160,false);

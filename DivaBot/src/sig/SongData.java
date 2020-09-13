@@ -7,13 +7,17 @@ import sig.utils.ImageUtils;
 
 public class SongData {
 	String title;
-	Color[] songCode;
-	int distance=0;
-	static int MAXTHRESHOLD=400000;
+	long r;
+	long g;
+	long b;
+	long distance=0;
+	static int MAXTHRESHOLD=200000;
 	final static float TOLERANCE = 0.95f;
-	public SongData(String title,Color[] songCode) {
+	public SongData(String title,long r,long g,long b) {
 		this.title=title;
-		this.songCode=songCode;
+		this.r=r;
+		this.g=g;
+		this.b=b;
 	}
 	
 	public static SongData getByTitle(String title) {
@@ -25,22 +29,15 @@ public class SongData {
 		return null;
 	}
 	
-	public static SongData compareData(Color[] data) {
-		int closestDistance = Integer.MAX_VALUE;
-		int closestMaxThresholdDistance = Integer.MAX_VALUE;
+	public static SongData compareData(long r,long g,long b) {
+		long closestDistance = Long.MAX_VALUE;
 		SongData closestSong = null;
 		for (SongData s : MyRobot.SONGS) {
-			int distance = 0;
-			if (s!=null&&s.songCode!=null) {
-				for (int i=0;i<s.songCode.length;i++) {
-					distance += ImageUtils.distanceToColor(s.songCode[i],data[i]);
-					/*if (distance>MAXTHRESHOLD) {
-						distance=MAXTHRESHOLD+1;
-						break;
-					}*/
-				}
+			long distance = 0;
+			if (s!=null) {
+				distance = (long)(Math.pow(r-s.r,2)+Math.pow(g-s.g,2)+Math.pow(b-s.b, 2));
 				if (/*distance<=MAXTHRESHOLD &&*/ distance<closestDistance) {
-					//System.out.println(distance+" pixels matched for song "+s.title);
+					//System.out.println(distance+" pixels matched for song "+s.title+"/");
 					closestSong=s;
 					closestSong.distance=distance;
 					closestDistance=distance;
@@ -49,18 +46,16 @@ public class SongData {
 					System.out.println(distance+" pixels diff: "+s.title);
 					closestMaxThresholdDistance=distance;
 				}*/
-			} else {
-				continue;
 			}
 		}
 		return closestSong;
 	}
 	
-	public static void saveSongToFile(String title, Color[] data) {
+	public static void saveSongToFile(String title, long r, long g, long b) {
 		StringBuilder sb = new StringBuilder(title);
 		sb.append(":");
 		boolean first = true;
-		for (Color pixel : data) {
+		/*for (Color pixel : data) {
 			if (first) {
 				first=false;
 			} else {
@@ -68,7 +63,10 @@ public class SongData {
 			}
 			sb.append(pixel.getRGB());
 			//Color c = new Color(9,true);
-		}
+		}*/
+		sb.append(r).append(",")
+		.append(g).append(",")
+		.append(b);
 		FileUtils.logToFile(sb.toString(),"colorData");
 	}
 	public static void loadSongsFromFile() throws IOException {
@@ -84,11 +82,9 @@ public class SongData {
 		String[] split = s.split(":");
 		String title = split[0];
 		String[] data = split[1].split(",");
-		Color[] colors = new Color[data.length];
-		for (int i=0;i<data.length;i++) {
-			colors[i]=new Color(Integer.parseInt(data[i]),true);
+		if (Math.pow(Long.parseLong(data[0]),2)+Math.pow(Long.parseLong(data[1]),2)+Math.pow(Long.parseLong(data[2]),2)<MyRobot.smallestSongColor) {
+			MyRobot.smallestSongColor=(long)Long.parseLong(data[0])+Long.parseLong(data[1])+Long.parseLong(data[2]);
 		}
-		System.out.println("Store "+title+"/"+colors);
-		return new SongData(title,colors);
+		return new SongData(title,Long.parseLong(data[0]),Long.parseLong(data[1]),Long.parseLong(data[2]));
 	}
 }

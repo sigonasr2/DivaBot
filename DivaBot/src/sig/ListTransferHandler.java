@@ -119,6 +119,8 @@ public class ListTransferHandler extends TransferHandler {
 	        }
 	        DisplayManager.selectedDisplay.labels=labels;
         }
+        DisplayManager.selectedDisplay.nextUpdateTime=0;
+        DisplayManager.selectedDisplay.forceUpdate=true;
         MyRobot.p.repaint();
         //System.out.println("Selected indexes: "+Arrays.toString(indices));
         for (int i=0;i<indices.length;i++) {

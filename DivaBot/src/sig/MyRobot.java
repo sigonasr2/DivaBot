@@ -269,19 +269,6 @@ public class MyRobot{
 	
 	void BotMain() {
 		lastmainlooptime=System.currentTimeMillis();
-		while (true) {
-			try {
-				RunMainLoop();
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	
-	private void RunMainLoop() {
-		try {
 		try {
 			JSONObject obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/"+USERNAME);
 			p.lastRating = p.overallrating;
@@ -295,6 +282,19 @@ public class MyRobot{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		while (true) {
+			try {
+				RunMainLoop();
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	
+	private void RunMainLoop() {
+		try {
 	if (CALIBRATION_MODE) {
 		if (MyRobot.calibrating) {
 			MyRobot.calibrating=false;
@@ -845,14 +845,14 @@ public class MyRobot{
 			FUTURETONE=false;
 		} else
 		{
-			c = new Color(MYROBOT.createScreenCapture(new Rectangle(743,173,1,1)).getRGB(0, 0));
-			if (!onSongSelect&&(c.getRed()>=160&&c.getRed()<=185&&c.getGreen()<=15&&c.getBlue()>=170&&c.getBlue()<=200)) {
-				FUTURETONE=true;
-				onSongSelect=true;
-			}
-			//System.out.println(c);
+			//TODO FUTURE TONE SUPPORT DISABLED FOR NOW.
+//			c = new Color(MYROBOT.createScreenCapture(new Rectangle(743,173,1,1)).getRGB(0, 0));
+//			if (!onSongSelect&&(c.getRed()>=160&&c.getRed()<=185&&c.getGreen()<=15&&c.getBlue()>=170&&c.getBlue()<=200)) {
+//				FUTURETONE=true;
+//				onSongSelect=true;
+//			}
+			
 		}
-		//System.out.println(onSongSelect+"/"+c);
 		
 		//777,179 FUTURE TONE
 		return onSongSelect;

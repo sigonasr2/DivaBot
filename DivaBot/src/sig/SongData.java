@@ -49,7 +49,7 @@ public class SongData {
 	
 	public static void saveSongToFile(String title, long r, long g, long b) throws IOException {
 		boolean found=false;
-		StringBuilder sb = new StringBuilder(title);
+		StringBuilder sb = new StringBuilder(title.replaceAll(":", "-COLON-"));
 		sb.append(":");
 		
 		sb.append(r).append(",")
@@ -60,7 +60,7 @@ public class SongData {
 			String[] split = fileData[i].split(":");
 			if (split.length>0) {
 				//System.out.println(split[0]+"/"+title);
-				if (split[0].equalsIgnoreCase(title)) {
+				if (split[0].replaceAll("-COLON-", ":").equalsIgnoreCase(title)) {
 					//System.out.println("Updated color data with new data for "+title+"!");
 					fileData[i]=sb.toString();
 					found=true;
@@ -88,7 +88,7 @@ public class SongData {
 	
 	public static SongData ParseSong(String s) {
 		String[] split = s.split(":");
-		String title = split[0];
+		String title = split[0].replaceAll("-COLON-", ":");
 		String[] data = split[1].split(",");
 		if (Math.pow(Long.parseLong(data[0]),2)+Math.pow(Long.parseLong(data[1]),2)+Math.pow(Long.parseLong(data[2]),2)<MyRobot.smallestSongColor) {
 			MyRobot.smallestSongColor=(long)Long.parseLong(data[0])+Long.parseLong(data[1])+Long.parseLong(data[2]);

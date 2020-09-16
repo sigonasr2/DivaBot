@@ -35,16 +35,11 @@ import sig.utils.FileUtils;
 
 public class ReloadSong extends JPanel implements ItemListener,MouseListener{
 	public static JFrame f = new JFrame();
-	public static HashMap<String,JSONObject> SONGARRAY = new HashMap<>();
-	public static JComboBox<JSONObject> songs;
+	//public static HashMap<String,JSONObject> SONGARRAY = new HashMap<>();
+	public static JComboBox<SongInfo> songs;
 	static GridBagConstraints g = new GridBagConstraints();
 	ReloadSong() throws IOException{
-		JSONObject obj = FileUtils.readJsonFromUrl("http://projectdivar.com/songs");
-		
-		for (String s : JSONObject.getNames(obj)) {
-			JSONObject songdata = obj.getJSONObject(s);
-			SONGARRAY.put(songdata.getString("name"),songdata);
-		}
+		//JSONObject obj = FileUtils.readJsonFromUrl("http://projectdivar.com/songs");
 		
 		f = new JFrame();
         f.setIconImage(ImageIO.read(new File("cross.png")));
@@ -53,18 +48,18 @@ public class ReloadSong extends JPanel implements ItemListener,MouseListener{
 		g.anchor=GridBagConstraints.EAST;
 		addComponent(1,1,2,1,new JLabel("Select correct song:"));
 		
-		JSONObject[] songList = new JSONObject[SONGARRAY.size()];
+		SongInfo[] songList = new SongInfo[MyRobot.SONGNAMES.length];
 		int count = 0;
-		for (String s : SONGARRAY.keySet()) {
-			songList[count++]=SONGARRAY.get(s);
+		for (SongInfo s : MyRobot.SONGNAMES) {
+			songList[count++]=s;
 		}
 		
 		for (int i = 0; i < count; i++) 
         {
             for (int j = i + 1; j < count; j++) { 
-                if (songList[i].getString("english_name").toLowerCase().compareTo(songList[j].getString("english_name").toLowerCase())>0) 
+                if (songList[i].english_name.toLowerCase().compareTo(songList[j].english_name.toLowerCase())>0) 
                 {
-                    JSONObject temp = songList[i];
+                    SongInfo temp = songList[i];
                     songList[i] = songList[j];
                     songList[j] = temp;
                 }
@@ -98,7 +93,7 @@ public class ReloadSong extends JPanel implements ItemListener,MouseListener{
 		f.add(this);
 		f.pack();
 		f.setResizable(false);
-		f.setVisible(true);
+		f.setVisible(false);
 	}
 	private Component addComponent(int x, int y, int w, int h,Component component) {
 		g.gridx=x;
@@ -124,7 +119,7 @@ public class ReloadSong extends JPanel implements ItemListener,MouseListener{
 		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
-			JSONObject selectedSong = ((JSONObject)value);
+			SongInfo selectedSong = ((SongInfo)value);
 
 	        if (isSelected) {
 	            setBackground(list.getSelectionBackground());
@@ -133,11 +128,11 @@ public class ReloadSong extends JPanel implements ItemListener,MouseListener{
 	            setBackground(list.getBackground());
 	            setForeground(list.getForeground());
 	        }
-	        setText(selectedSong.getString("english_name")
+	        setText(selectedSong.english_name
 	        		+" - "
-	        		+((selectedSong.getString("romanized_name").length()>0)?
-	        				(!selectedSong.getString("romanized_name").equalsIgnoreCase(selectedSong.getString("name")))?
-	        				selectedSong.getString("romanized_name")+"("+selectedSong.getString("name")+")":"":selectedSong.getString("name")));
+	        		+((selectedSong.romanized_name.length()>0)?
+	        				(!selectedSong.romanized_name.equalsIgnoreCase(selectedSong.name))?
+	        				selectedSong.romanized_name+"("+selectedSong.name+")":"":selectedSong.name));
 			return this;
 		}
 	
@@ -166,7 +161,7 @@ public class ReloadSong extends JPanel implements ItemListener,MouseListener{
 			}
 		}
 		try {
-			SongData.saveSongToFile(((JSONObject)songs.getSelectedItem()).getString("name"),totalr,totalg,totalb);
+			SongData.saveSongToFile(((SongInfo)songs.getSelectedItem()).name,totalr,totalg,totalb);
 		} catch (JSONException | IOException e2) {
 			e2.printStackTrace();
 		}

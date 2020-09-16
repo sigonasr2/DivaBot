@@ -9,7 +9,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import sig.utils.FileUtils;
 
@@ -19,10 +18,6 @@ public class Calibrator{
 	
 	Calibrator() throws IOException, InterruptedException {
 		boolean failed=false;
-		int x = Math.min(MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.x);
-		int y = Math.min(MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.y);
-		int width = (Math.max(MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.x)-Math.min(MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.x));
-		int height = (Math.max(MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.y)-Math.min(MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.y));
 		
 		if (MyRobot.STARTDRAG.x>MyRobot.ENDDRAG.x) {
 			int xTemp=MyRobot.STARTDRAG.x;
@@ -35,11 +30,6 @@ public class Calibrator{
 			MyRobot.ENDDRAG.y=yTemp;
 		}
 		
-		/*Rectangle currentPointer = new Rectangle(
-				x,y,
-				(int)Math.floor(x+width*0.03984375d),
-				(int)Math.floor(y+height*0.30833333333333333333333333333333d));
-		calibrationline=currentPointer;*/
 		img = MyRobot.MYROBOT.getSizedCapture(new Rectangle(0,0,MyRobot.screenSize.width,MyRobot.screenSize.height));
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture_5.png"));
 		failed=CalibrationStage1();
@@ -78,11 +68,6 @@ public class Calibrator{
 		}
 		MyRobot.FRAME.setAlwaysOnTop(true);
 		
-//		failed=CalibrationStage3(p);
-//		if (failed) {return;}
-//		failed=CalibrationStage4(p);
-//		if (failed) {return;}
-		//MyRobot.CALIBRATIONSTATUS="First calibration set done: X"+(x-MyRobot.STARTDRAG.x)+" Y"+(y-MyRobot.STARTDRAG.y);
 		img = MyRobot.MYROBOT.getSizedCapture(new Rectangle(0,0,MyRobot.screenSize.width,MyRobot.screenSize.height));
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture_5.png"));
 		FileUtils.deleteFile("calibration_data.txt");
@@ -96,15 +81,11 @@ public class Calibrator{
 		boolean calibrated=false;
 		int MAXTRIES=10000;
 		MyRobot.CALIBRATIONSTATUS="Calibration Stage 1...";
-		//ImageIO.write(MYROBOT.getSizedCapture(new Rectangle(x,y,width,height)),"png",new File("capture.png"));
-		//BufferedImage currentScreen = MyRobot.MYROBOT.getSizedCapture(new Rectangle(0,0,MyRobot.screenSize.width,MyRobot.screenSize.height));
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture.png"));
 		while (!calibrated&&MAXTRIES>0) {
 			//Try moving left until the difference is too high or the colors are not right anymore.
 			MyRobot.STARTDRAG.x-=1;
-			//BufferedImage pixel = MYROBOT.getSizedCapture(new Rectangle(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,1,1));
 			BufferedImage miniImg = img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,1,1);
-			//ImageIO.write(miniImg,"png",new File("capture_"+System.nanoTime()+".png"));
 			Color col = new Color(miniImg.getRGB(0, 0));
 			System.out.println("Checking "+col);
 			if (!(col.getRed()>=5&&col.getRed()<=40&&
@@ -126,16 +107,11 @@ public class Calibrator{
 		boolean calibrated=false;
 		int MAXTRIES=10000;
 		MyRobot.CALIBRATIONSTATUS="Calibration Stage 2...";
-		//ImageIO.write(MYROBOT.getSizedCapture(new Rectangle(x,y,width,height)),"png",new File("capture.png"));
-		//BufferedImage currentScreen = MYROBOT.getSizedCapture(new Rectangle(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG,height));
-		//BufferedImage currentScreen = MyRobot.MYROBOT.getSizedCapture(new Rectangle(0,0,MyRobot.screenSize.width,MyRobot.screenSize.height));
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture_2.png"));
 		while (!calibrated&&MAXTRIES>0) {
 			//Try moving left until the difference is too high or the colors are not right anymore.
 			MyRobot.STARTDRAG.y-=1;
-			//currentScreen.setRGB(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y, new Color(0,0,0).getRGB());
 			BufferedImage miniImg = img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,1,1);
-			//ImageIO.write(miniImg,"png",new File("capture_2_"+System.nanoTime()+".png"));
 			Color col = new Color(miniImg.getRGB(0, 0));
 			System.out.println("Checking "+col);
 			if (!(col.getRed()>=5&&col.getRed()<=100&&
@@ -156,15 +132,11 @@ public class Calibrator{
 		boolean calibrated=false;
 		int MAXTRIES=10000;
 		MyRobot.CALIBRATIONSTATUS="Calibration Stage 3...";
-		//ImageIO.write(MYROBOT.getSizedCapture(new Rectangle(x,y,width,height)),"png",new File("capture.png"));
-		//BufferedImage currentScreen = MyRobot.MYROBOT.getSizedCapture(new Rectangle(0,0,MyRobot.screenSize.width,MyRobot.screenSize.height));
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture_3.png"));
 		while (!calibrated&&MAXTRIES>0) {
 			//Try moving left until the difference is too high or the colors are not right anymore.
 			MyRobot.ENDDRAG.x+=1;
-			//BufferedImage pixel = MYROBOT.getSizedCapture(new Rectangle(MyRobot.ENDDRAG.x,MyRobot.ENDDRAG.y,1,1));
 			BufferedImage miniImg = img.getSubimage(MyRobot.ENDDRAG.x,MyRobot.ENDDRAG.y,1,1);
-			//ImageIO.write(miniImg,"png",new File("capture_3_"+System.nanoTime()+".png"));
 			Color col = new Color(miniImg.getRGB(0, 0));
 			System.out.println("Checking "+col);
 			if (!(col.getRed()>=40&&col.getRed()<=90&&
@@ -186,16 +158,11 @@ public class Calibrator{
 		boolean calibrated=false;
 		int MAXTRIES=10000;
 		MyRobot.CALIBRATIONSTATUS="Calibration Stage 4...";
-		//ImageIO.write(MYROBOT.getSizedCapture(new Rectangle(x,y,width,height)),"png",new File("capture.png"));
-		//BufferedImage currentScreen = MYROBOT.getSizedCapture(new Rectangle(MyRobot.ENDDRAG.x,MyRobot.ENDDRAG.y,MyRobot.ENDDRAG,height));
-		//BufferedImage currentScreen = MyRobot.MYROBOT.getSizedCapture(new Rectangle(0,0,MyRobot.screenSize.width,MyRobot.screenSize.height));
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture_4.png"));
 		while (!calibrated&&MAXTRIES>0) {
 			//Try moving left until the difference is too high or the colors are not right anymore.
 			MyRobot.ENDDRAG.y+=1;
-			//currentScreen.setRGB(MyRobot.ENDDRAG.x,MyRobot.ENDDRAG.y, new Color(0,0,0).getRGB());
 			BufferedImage miniImg = img.getSubimage(MyRobot.ENDDRAG.x,MyRobot.ENDDRAG.y,1,1);
-			//ImageIO.write(miniImg,"png",new File("capture_4_"+System.nanoTime()+".png"));
 			Color col = new Color(miniImg.getRGB(0, 0));
 			System.out.println("Checking "+col);
 			if (!(col.getRed()>=40&&col.getRed()<=90&&
@@ -216,16 +183,12 @@ public class Calibrator{
 		boolean calibrated=false;
 		int MAXTRIES=100;
 		MyRobot.CALIBRATIONSTATUS="Calibration Stage 5...";
-		//ImageIO.write(MYROBOT.getSizedCapture(new Rectangle(x,y,width,height)),"png",new File("capture.png"));
-		//BufferedImage currentScreen = MyRobot.MYROBOT.getSizedCapture(new Rectangle(0,0,MyRobot.screenSize.width,MyRobot.screenSize.height));
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture.png"));
 		while (!calibrated&&MAXTRIES>0) {
 			//Try moving left until the difference is too high or the colors are not right anymore.
 			MyRobot.STARTDRAG.x+=1;
-			//BufferedImage pixel = MYROBOT.getSizedCapture(new Rectangle(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,1,1));
 			for (int i=0;i<100;i++) {
 				BufferedImage miniImg = img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y+i,1,1);
-				//ImageIO.write(miniImg,"png",new File("capture_"+System.nanoTime()+".png"));
 				Color col = new Color(miniImg.getRGB(0, 0));
 				System.out.println("Checking "+col);
 				if ((col.getRed()>=5&&col.getRed()<=75&&
@@ -233,7 +196,6 @@ public class Calibrator{
 						col.getBlue()>=180&&col.getBlue()<=250)) {
 					//This is the max X. Calibration on this side good.
 					MyRobot.STARTDRAG.y=MyRobot.STARTDRAG.y+i;
-					//MyRobot.STARTDRAG.x--;
 					System.out.println("End at "+MyRobot.STARTDRAG.x);
 					return false;
 				}
@@ -248,17 +210,12 @@ public class Calibrator{
 		boolean calibrated=false;
 		int MAXTRIES=100;
 		MyRobot.CALIBRATIONSTATUS="Calibration Stage 6...";
-		//ImageIO.write(MYROBOT.getSizedCapture(new Rectangle(x,y,width,height)),"png",new File("capture.png"));
-		//BufferedImage currentScreen = MYROBOT.getSizedCapture(new Rectangle(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG,height));
-		//BufferedImage currentScreen = MyRobot.MYROBOT.getSizedCapture(new Rectangle(0,0,MyRobot.screenSize.width,MyRobot.screenSize.height));
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture_2.png"));
 		while (!calibrated&&MAXTRIES>0) {
 			//Try moving left until the difference is too high or the colors are not right anymore.
 			MyRobot.STARTDRAG.y+=1;
-			//currentScreen.setRGB(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y, new Color(0,0,0).getRGB());
 			for (int i=0;i<100;i++) {
 				BufferedImage miniImg = img.getSubimage(MyRobot.STARTDRAG.x+i,MyRobot.STARTDRAG.y,1,1);
-				//ImageIO.write(miniImg,"png",new File("capture_2_"+System.nanoTime()+".png"));
 				Color col = new Color(miniImg.getRGB(0, 0));
 				System.out.println("Checking "+col);
 				if ((col.getRed()>=5&&col.getRed()<=100&&
@@ -280,16 +237,12 @@ public class Calibrator{
 		boolean calibrated=false;
 		int MAXTRIES=100;
 		MyRobot.CALIBRATIONSTATUS="Calibration Stage 7...";
-		//ImageIO.write(MYROBOT.getSizedCapture(new Rectangle(x,y,width,height)),"png",new File("capture.png"));
-		//BufferedImage currentScreen = MyRobot.MYROBOT.getSizedCapture(new Rectangle(0,0,MyRobot.screenSize.width,MyRobot.screenSize.height));
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture_3.png"));
 		while (!calibrated&&MAXTRIES>0) {
 			//Try moving left until the difference is too high or the colors are not right anymore.
 			MyRobot.ENDDRAG.x-=1;
-			//BufferedImage pixel = MYROBOT.getSizedCapture(new Rectangle(MyRobot.ENDDRAG.x,MyRobot.ENDDRAG.y,1,1));
 			for (int i=0;i<100;i++) {
 				BufferedImage miniImg = img.getSubimage(MyRobot.ENDDRAG.x,MyRobot.ENDDRAG.y-i,1,1);
-				//ImageIO.write(miniImg,"png",new File("capture_3_"+System.nanoTime()+".png"));
 				Color col = new Color(miniImg.getRGB(0, 0));
 				System.out.println("Checking "+col);
 				if ((col.getRed()>=40&&col.getRed()<=90&&
@@ -312,17 +265,12 @@ public class Calibrator{
 		boolean calibrated=false;
 		int MAXTRIES=100;
 		MyRobot.CALIBRATIONSTATUS="Calibration Stage 8...";
-		//ImageIO.write(MYROBOT.getSizedCapture(new Rectangle(x,y,width,height)),"png",new File("capture.png"));
-		//BufferedImage currentScreen = MYROBOT.getSizedCapture(new Rectangle(MyRobot.ENDDRAG.x,MyRobot.ENDDRAG.y,MyRobot.ENDDRAG,height));
-		//BufferedImage currentScreen = MyRobot.MYROBOT.getSizedCapture(new Rectangle(0,0,MyRobot.screenSize.width,MyRobot.screenSize.height));
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture_4.png"));
 		while (!calibrated&&MAXTRIES>0) {
 			//Try moving left until the difference is too high or the colors are not right anymore.
 			MyRobot.ENDDRAG.y-=1;
-			//currentScreen.setRGB(MyRobot.ENDDRAG.x,MyRobot.ENDDRAG.y, new Color(0,0,0).getRGB());
 			for (int i=0;i<100;i++) {
 				BufferedImage miniImg = img.getSubimage(MyRobot.ENDDRAG.x-i,MyRobot.ENDDRAG.y,1,1);
-				//ImageIO.write(miniImg,"png",new File("capture_4_"+System.nanoTime()+".png"));
 				Color col = new Color(miniImg.getRGB(0, 0));
 				System.out.println("Checking "+col);
 				if ((col.getRed()>=40&&col.getRed()<=90&&

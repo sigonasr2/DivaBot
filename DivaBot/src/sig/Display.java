@@ -21,6 +21,7 @@ public class Display {
 	int height=48;
 	int fontHeight=0;
 	int delay=10000;
+	String header="";
 	long nextUpdateTime = System.currentTimeMillis();
 	boolean forceUpdate=false;
 	String[] labels;
@@ -43,6 +44,9 @@ public class Display {
 		labels=split[7].split("\\|");
 		x=Integer.parseInt(split[8]);
 		y=Integer.parseInt(split[9]);
+		if (split.length>=11) {
+			header=split[10];
+		}
 	}
 	Display() {
 		HashMap<String,String> config = MyRobot.p.configData;
@@ -98,6 +102,7 @@ public class Display {
 				font = new Font("Batang",Font.PLAIN,fontSize);
 			}
 		}
+		header = "";
 		labels = new String[]{"Add a label!"};
 		currentText=interpretLabel(labels[cycle]);
 		Thread t = new Thread() {
@@ -172,6 +177,7 @@ public class Display {
 				.append(combineLabels()).append("*")
 				.append(x).append("*")
 				.append(y).append("*")
+				.append(header).append("*")
 				.toString();
 	}
 	
@@ -194,55 +200,55 @@ public class Display {
 					if (data.bestPlayTime>System.currentTimeMillis()-10000) {
 						return "New Record!";
 					} else {
-						return ((data.bestPlay!=null)?data.bestPlay.display():"");
+						return header+((data.bestPlay!=null)?data.bestPlay.display():"No plays");
 					}
 				}
 				case "Overall Rating":{
 					if (data.ratingTime>System.currentTimeMillis()-10000) {
 						return "Rating up! "+data.lastRating+" -> "+data.overallrating;
 					} else {
-						return Integer.toString(data.overallrating);
+						return header+Integer.toString(data.overallrating);
 					}
 				}
 				case "Song Difficulty":{
-					return data.difficultyRating + " - " + fullNameDifficulty(data.difficulty);
+					return header+data.difficultyRating + " - " + fullNameDifficulty(data.difficulty);
 				}
 				case "Song Title (Japanese)":{
-					return data.songname;
+					return header+data.songname;
 				}
 				case "Song Title (Romanized)":{
-					return ((data.romanizedname.length()>0)?data.romanizedname:data.englishname);
+					return header+((data.romanizedname.length()>0)?data.romanizedname:data.englishname);
 				}
 				case "Song Title (Japanese+Romanized)":{
 					if (data.songname.equalsIgnoreCase(((data.romanizedname.length()>0)?data.romanizedname:data.englishname))) {
-						return data.songname;
+						return header+data.songname;
 					} else {
-						return (data.songname + " - " + ((data.romanizedname.length()>0)?data.romanizedname:data.englishname));
+						return header+(data.songname + " - " + ((data.romanizedname.length()>0)?data.romanizedname:data.englishname));
 					}
 				}
 				case "Song Title (English)":{
-					return data.englishname;
+					return header+data.englishname;
 				}
 				case "Song Title (Japanese+Romanized+ENG)":{
 					if (data.songname.equalsIgnoreCase(((data.romanizedname.length()>0)?data.romanizedname:data.englishname))) {
-						return data.songname;
+						return header+data.songname;
 					} else {
-						return (data.songname + " - " + ((data.romanizedname.length()>0)?(data.romanizedname.equalsIgnoreCase(data.englishname))?data.romanizedname:data.romanizedname+" ("+data.englishname+")":data.englishname));
+						return header+(data.songname + " - " + ((data.romanizedname.length()>0)?(data.romanizedname.equalsIgnoreCase(data.englishname))?data.romanizedname:data.romanizedname+" ("+data.englishname+")":data.englishname));
 					}
 				}
 				case "Song Artist":{
-					return "Artist: "+data.artist;
+					return header+data.artist;
 				}
 				case "Play Count":{
 					if (data.plays>0) {
-						return Integer.toString(data.plays)+" play"+((data.plays!=1)?"s":"");
+						return header+Integer.toString(data.plays)+" play"+((data.plays!=1)?"s":"");
 					} else {
 						return "No Plays";
 					}
 				}
 				case "Pass/Play Count":{
 					if (data.plays>0) {
-						return Integer.toString(data.passes) + "/" + Integer.toString(data.plays)+" play"+((data.plays!=1)?"s":"");
+						return header+Integer.toString(data.passes) + "/" + Integer.toString(data.plays)+" play"+((data.plays!=1)?"s":"");
 					}
 					 else {
 						return "No Plays";
@@ -250,31 +256,31 @@ public class Display {
 				}
 				case "Pass/Play Count (+%)":{
 					if (data.plays>0) {
-						return (data.passes)+"/"+(data.plays)+" play"+((data.plays!=1)?"s":"")+" "+"("+((int)(Math.floor(((float)data.passes)/data.plays*100)))+"% pass rate)";
+						return header+(data.passes)+"/"+(data.plays)+" play"+((data.plays!=1)?"s":"")+" "+"("+((int)(Math.floor(((float)data.passes)/data.plays*100)))+"% pass rate)";
 					} else {
 						return "No Plays";
 					}
 				}
 				case "FC Count":{
 					if (data.plays>0) {
-						return data.fcCount +" FC"+(data.fcCount==1?"":"s");
+						return header+header+data.fcCount +" FC"+(data.fcCount==1?"":"s");
 					} else {
 						return "No Plays";
 					}
 				}
 				case "FC Count (+%)":{
 					if (data.plays>0) {
-						return data.fcCount +" FC"+(data.fcCount==1?"":"s")+"    "+((int)(Math.floor(((float)data.fcCount)/data.plays*100)))+"% FC rate";
+						return header+data.fcCount +" FC"+(data.fcCount==1?"":"s")+"    "+((int)(Math.floor(((float)data.fcCount)/data.plays*100)))+"% FC rate";
 					} else {
 						return "No Plays";
 					}
 				}
 				default:{
-					return string;
+					return header+string;
 				}
 			}
 		} catch(NullPointerException e) {
-			return string;
+			return header+string;
 		}
 	}
 	private String fullNameDifficulty(String difficulty) {
@@ -292,7 +298,7 @@ public class Display {
 				return "Extreme";
 			}
 			case "EXEX":{
-				return "Extra Extreme";
+				return "EX Extreme";
 			}
 		}
 		return "";

@@ -48,6 +48,7 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 	static JTextField widthInput;
 	static JTextField heightInput;
 	static JTextField delayInput;
+	static JTextField headerInput;
 	static DefaultListModel model = new DefaultListModel();
 	static DefaultListModel model2 = new DefaultListModel();
 	static JComboBox fonts;
@@ -145,6 +146,8 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 				try {
 					selectedDisplay.font=new Font(selectedDisplay.font.getFontName(),Font.PLAIN,Integer.parseInt(e.getDocument().getText(0, e.getDocument().getLength())));
 					selectedDisplay.fontSize=Integer.parseInt(e.getDocument().getText(0, e.getDocument().getLength()));
+					selectedDisplay.nextUpdateTime=0;
+					selectedDisplay.forceUpdate=true;
 					selectedDisplay.updateFont();
 					MyRobot.p.repaint();
 					c.setBackground(Color.WHITE);
@@ -186,6 +189,8 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 			void updateField(JTextField c, DocumentEvent e) {
 				try {
 					selectedDisplay.width=Integer.parseInt(e.getDocument().getText(0, e.getDocument().getLength()));
+					selectedDisplay.nextUpdateTime=0;
+					selectedDisplay.forceUpdate=true;
 					selectedDisplay.updateFont();
 					MyRobot.p.repaint();
 					c.setBackground(Color.WHITE);
@@ -226,6 +231,8 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 			void updateField(JTextField c, DocumentEvent e) {
 				try {
 					selectedDisplay.height=Integer.parseInt(e.getDocument().getText(0, e.getDocument().getLength()));
+					selectedDisplay.nextUpdateTime=0;
+					selectedDisplay.forceUpdate=true;
 					MyRobot.p.repaint();
 					c.setBackground(Color.WHITE);
 				} catch (NullPointerException | NumberFormatException | BadLocationException e1) {
@@ -262,6 +269,8 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 			void updateField(JTextField c, DocumentEvent e) {
 				try {
 					selectedDisplay.delay=Integer.parseInt(e.getDocument().getText(0, e.getDocument().getLength()));
+					selectedDisplay.nextUpdateTime=0;
+					selectedDisplay.forceUpdate=true;
 					MyRobot.p.repaint();
 					c.setBackground(Color.WHITE);
 				} catch (NullPointerException | NumberFormatException | BadLocationException e1) {
@@ -289,13 +298,52 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 		}
 		g.anchor=GridBagConstraints.WEST;
 		addComponent(6,10,1,1,new JLabel("ms"));
-		
+
 		addComponent(1,2,12,1,new JLabel(" "));
 		addComponent(1,4,12,1,new JLabel(" "));
 		addComponent(1,6,12,1,new JLabel(" "));
 		addComponent(1,8,12,1,new JLabel(" "));
 		addComponent(1,9,20,1,new JLabel("Label Delay (Time between each Display)"));
 		addComponent(1,11,12,1,new JLabel(" "));
+
+		g.anchor=GridBagConstraints.EAST;
+		addComponent(7,7,1,1,new JLabel(" Header:"));
+		g.anchor=GridBagConstraints.WEST;
+		headerInput = (JTextField)addComponent(8,7,2,1,new JTextField() {
+			@Override 
+			public Dimension getPreferredSize() {
+				return new Dimension(50,20);
+			}	
+		});
+		headerInput.getDocument().addDocumentListener(new DocumentListener() {
+
+			void updateField(JTextField c, DocumentEvent e) {
+				try {
+					selectedDisplay.header=e.getDocument().getText(0, e.getDocument().getLength());
+					selectedDisplay.nextUpdateTime=0;
+					selectedDisplay.forceUpdate=true;
+					MyRobot.p.repaint();
+					c.setBackground(Color.WHITE);
+				} catch (NullPointerException | NumberFormatException | BadLocationException e1) {
+					c.setBackground(Color.RED);
+				}
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateField(headerInput,e);
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateField(headerInput,e);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+			}
+			
+		});
 		
 		
 		labels.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -368,6 +416,7 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 		MyRobot.p.configData.put("LAST_DELAY",Integer.toString(d.delay));
 		fontSizeInput.setText(Integer.toString(d.fontSize));
 		MyRobot.p.configData.put("LAST_FONTSIZE",Integer.toString(d.fontSize));
+		headerInput.setText(d.header);
 		model.clear();
 		model2.clear();
 		for (int i=0;i<d.labels.length;i++) {
@@ -490,6 +539,8 @@ public class DisplayManager extends JPanel implements MouseListener,ListSelectio
 	public void itemStateChanged(ItemEvent e) {
 		if (selectedDisplay!=null) {
 			selectedDisplay.font=new Font(((Font)fonts.getSelectedItem()).getFontName(),Font.PLAIN,selectedDisplay.fontSize);
+			selectedDisplay.nextUpdateTime=0;
+			selectedDisplay.forceUpdate=true;
 			selectedDisplay.updateFont();
 			MyRobot.p.repaint();
 		}

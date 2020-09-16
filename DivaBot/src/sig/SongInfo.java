@@ -9,7 +9,6 @@ public class SongInfo {
 	public String english_name;
 	public String artist;
 	public String vocaloid;
-	public int bpm;
 	public String album_art;
 	public JSONObject rating;
 	public JSONObject notecount;
@@ -21,7 +20,6 @@ public class SongInfo {
 		english_name = jsonData.getString("english_name");
 		artist = jsonData.getString("artist");
 		vocaloid = jsonData.getString("vocaloid");
-		bpm = jsonData.getInt("bpm");
 		album_art = jsonData.getString("album_art");
 		rating = jsonData.getJSONObject("rating");
 		notecount = jsonData.getJSONObject("notecount");

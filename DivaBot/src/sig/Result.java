@@ -12,6 +12,7 @@ public class Result {
 	public String mod;
 	public int combo,score;
 	public boolean isResult;
+	public Mode mode;
 	public File f;
 	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent) {
 		this.songName=song;
@@ -25,6 +26,7 @@ public class Result {
 		this.mod="";
 		this.combo=-1;
 		this.score=-1;
+		this.mode=null;
 	}
 	public Result(String song,String diff,int cool,int fine,int safe,int sad,int worst,float percent,boolean fail) {
 		this(song,diff,cool,fine,safe,sad,worst,percent);

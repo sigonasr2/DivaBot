@@ -136,7 +136,7 @@ public class MyRobot{
     boolean lastfail;
     long lastSongSelectTime = System.currentTimeMillis();
     
-    static TypeFace2 typeface1,typeface2; 
+    static TypeFace2 typeface1,typeface2,typeface3; 
     static Thread t = null;
     
     String prevSongTitle = "";
@@ -586,7 +586,9 @@ public class MyRobot{
 	        	typeface1 = new TypeFace2(
 	    				ImageIO.read(new File("typeface.png")),
 	    				ImageIO.read(new File("typeface2.png")),
-	    				ImageIO.read(new File("typeface3.png"))
+	    				ImageIO.read(new File("typeface3.png")),
+	    				ImageIO.read(new File("typeface4.png")),
+	    				ImageIO.read(new File("typeface5.png"))
 	    				);
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -706,85 +708,99 @@ public class MyRobot{
 		selectedSong=new SongData("LIKE THE WIND",0,0,0);
 		difficulty="H";
 		
-		RunTest("test1.jpg",393,127,28,10,48,72.28f,"EXEX","",85,577160,false);
-		RunTest("test2.jpg",518,144,17,3,23,81.94f,"H","",98,580090,false);
-		RunTest("test3.jpg",646,54,1,0,0,103.06f,"EX","",691,666410,false);
-		RunTest("test4.jpg",518,64,0,0,0,102.57f,"H","",582,470770,false);
-		RunTest("test5.jpg",276,58,3,0,0,89.64f,"E","",215,238240,false);
-		RunTest("test6.jpg",448,129,17,7,42,79.22f,"EXEX","",90,760770,false);
-		RunTest("test7.jpg",419,227,28,7,20,75.76f,"EX","",154,473340,false);
-		RunTest("test8.jpg",567,26,0,0,0,104.31f,"EX","",593,569500,false);
-		RunTest("test9.jpg",197,51,0,0,0,100.02f,"H","",248,194700,false);
-		RunTest("test10.jpg",486,245,46,22,59,65.34f,"H","SD",89,495850,false);
-		RunTest("test11.jpg",0,0,0,0,159,0.00f,"EX","SD",0,0,true);
-		RunTest("test12.jpg",0,0,0,0,79,0.08f,"EX","HD",0,580,true);
-		RunTest("test13.jpg",245,19,4,0,2,87.04f,"E","",103,179360,false);
-		RunTest("test14.png",623,39,1,0,0,100.83f,"EXEX","HS",350,869180,false);
-		RunTest("test15.png",540,57,1,0,3,98.05f,"EX","HS",225,602000,false);
-		RunTest("test16.png",320,46,2,0,4,93.26f,"EXEX","HS",135,463170,false);
-		RunTest("test17.png",431,30,3,0,3,100.51f,"EXEX","HS",386,581700,false);
-		RunTest("test18.png",427,86,5,1,4,92.45f,"EX","HS",136,526740,false);
-		RunTest("test19.png",4,2,2,0,95,0.42f,"EXEX","HS",2,4130,true);
-		RunTest("test20.png",3,1,1,2,58,0.75f,"EX","HS",2,7810,true);
-		RunTest("test21.png",13,19,15,6,41,2.16f,"EX","HS",5,17860,true);
-		RunTest("test22.png",49,37,21,15,26,4.68f,"EX","HS",10,42210,true);
-		RunTest("test23.png",10,20,10,7,72,3.85f,"EXEX","HS",11,20050,true);
-		RunTest("test24.png",35,29,19,22,11,7.85f,"N","HD",17,29600,true);
-		RunTest("test25.png",175,75,13,10,32,50.84f,"E","SD",26,122670,false);
-		RunTest("test26.png",29,24,6,7,35,3.12f,"EXEX","HS",26,28100,true);
-		RunTest("test27.png",45,35,8,6,22,7.00f,"EX","HS",27,69780,true);
-		RunTest("test28.png",463,139,10,2,50,72.96f,"EXEX","HS",99,479170,false);
-		RunTest("test29.png",354,112,4,3,43,67.73f,"EXEX","HS",55,331060,true);
-		RunTest("test30.png",390,90,8,9,22,74.95f,"N","HS",82,326560,false);
-		RunTest("test31.png",329,69,8,1,34,72.15f,"EX","HS",40,358760,false);
-		//RunTest("test32.png",0,1,1,0,57,0.57f,"EX","HS",1,1890,true);
-		//RunTest("test33.png",181,84,10,2,5,71.04f,"E","",149,157020,false);
-		//RunTest("test34.png",28,10,0,0,25,3.66f,"EX","",20,26790,true);
-		RunTest("testimage.png",371,40,3,4,3,97.63f,"EX","HS",233,523750,false);
-		RunTest("testimage2.png",942,71,1,0,3,97.02f,"EXEX","",714,951020,false);
-		RunTest("testimage3.png",546,52,0,0,0,101.77f,"EX","",598,567430,false);
-		RunTest("testimage4.png",279,81,16,2,3,75.40f,"N","",85,228100,false);
-		RunTest("testimage5.png",276,184,6,1,11,82.16f,"EXEX","HS",78,549870,false);
-		RunTest("testimage6.png",455,60,2,0,8,93.48f,"EXEX","HS",272,532470,false);
-		RunTest("testimage7.png",452,128,8,2,16,88.28f,"EXEX","HS",146,773150,false);
-		RunTest("testimage8.png",229,38,2,0,13,83.25f,"EXEX","HS",65,300120,false);
-		RunTest("testimage9.png",413,70,1,0,21,82.66f,"EXEX","HS",94,443050,false);
-		RunTest("16 -out of the gravity-.jpg",554,45,1,0,1,101.36f,"EX","HS",339,606780,false);
-		RunTest("＊ハロー、プラネット。 (I.M.PLSE-EDIT).jpg",336,128,24,6,93,58.85f,"EX","",52,308760,true);
+		RunTest("test1.jpg",393,127,28,10,48,72.28f,"EXEX","",85,577160,false,Mode.MEGAMIX);
+		RunTest("test2.jpg",518,144,17,3,23,81.94f,"H","",98,580090,false,Mode.MEGAMIX);
+		RunTest("test3.jpg",646,54,1,0,0,103.06f,"EX","",691,666410,false,Mode.MEGAMIX);
+		RunTest("test4.jpg",518,64,0,0,0,102.57f,"H","",582,470770,false,Mode.MEGAMIX);
+		RunTest("test5.jpg",276,58,3,0,0,89.64f,"E","",215,238240,false,Mode.MEGAMIX);
+		RunTest("test6.jpg",448,129,17,7,42,79.22f,"EXEX","",90,760770,false,Mode.MEGAMIX);
+		RunTest("test7.jpg",419,227,28,7,20,75.76f,"EX","",154,473340,false,Mode.MEGAMIX);
+		RunTest("test8.jpg",567,26,0,0,0,104.31f,"EX","",593,569500,false,Mode.MEGAMIX);
+		RunTest("test9.jpg",197,51,0,0,0,100.02f,"H","",248,194700,false,Mode.MEGAMIX);
+		RunTest("test10.jpg",486,245,46,22,59,65.34f,"H","SD",89,495850,false,Mode.MEGAMIX);
+		RunTest("test11.jpg",0,0,0,0,159,0.00f,"EX","SD",0,0,true,Mode.MEGAMIX);
+		RunTest("test12.jpg",0,0,0,0,79,0.08f,"EX","HD",0,580,true,Mode.MEGAMIX);
+		RunTest("test13.jpg",245,19,4,0,2,87.04f,"E","",103,179360,false,Mode.MEGAMIX);
+		RunTest("test14.png",623,39,1,0,0,100.83f,"EXEX","HS",350,869180,false,Mode.MEGAMIX);
+		RunTest("test15.png",540,57,1,0,3,98.05f,"EX","HS",225,602000,false,Mode.MEGAMIX);
+		RunTest("test16.png",320,46,2,0,4,93.26f,"EXEX","HS",135,463170,false,Mode.MEGAMIX);
+		RunTest("test17.png",431,30,3,0,3,100.51f,"EXEX","HS",386,581700,false,Mode.MEGAMIX);
+		RunTest("test18.png",427,86,5,1,4,92.45f,"EX","HS",136,526740,false,Mode.MEGAMIX);
+		RunTest("test19.png",4,2,2,0,95,0.42f,"EXEX","HS",2,4130,true,Mode.MEGAMIX);
+		RunTest("test20.png",3,1,1,2,58,0.75f,"EX","HS",2,7810,true,Mode.MEGAMIX);
+		RunTest("test21.png",13,19,15,6,41,2.16f,"EX","HS",5,17860,true,Mode.MEGAMIX);
+		RunTest("test22.png",49,37,21,15,26,4.68f,"EX","HS",10,42210,true,Mode.MEGAMIX);
+		RunTest("test23.png",10,20,10,7,72,3.85f,"EXEX","HS",11,20050,true,Mode.MEGAMIX);
+		RunTest("test24.png",35,29,19,22,11,7.85f,"N","HD",17,29600,true,Mode.MEGAMIX);
+		RunTest("test25.png",175,75,13,10,32,50.84f,"E","SD",26,122670,false,Mode.MEGAMIX);
+		RunTest("test26.png",29,24,6,7,35,3.12f,"EXEX","HS",26,28100,true,Mode.MEGAMIX);
+		RunTest("test27.png",45,35,8,6,22,7.00f,"EX","HS",27,69780,true,Mode.MEGAMIX);
+		RunTest("test28.png",463,139,10,2,50,72.96f,"EXEX","HS",99,479170,false,Mode.MEGAMIX);
+		RunTest("test29.png",354,112,4,3,43,67.73f,"EXEX","HS",55,331060,true,Mode.MEGAMIX);
+		RunTest("test30.png",390,90,8,9,22,74.95f,"N","HS",82,326560,false,Mode.MEGAMIX);
+		RunTest("test31.png",329,69,8,1,34,72.15f,"EX","HS",40,358760,false,Mode.MEGAMIX);
+		//RunTest("test32.png",0,1,1,0,57,0.57f,"EX","HS",1,1890,true,Mode.MEGAMIX);
+		//RunTest("test33.png",181,84,10,2,5,71.04f,"E","",149,157020,false,Mode.MEGAMIX);
+		//RunTest("test34.png",28,10,0,0,25,3.66f,"EX","",20,26790,true,Mode.MEGAMIX);
+		RunTest("testimage.png",371,40,3,4,3,97.63f,"EX","HS",233,523750,false,Mode.MEGAMIX);
+		RunTest("testimage2.png",942,71,1,0,3,97.02f,"EXEX","",714,951020,false,Mode.MEGAMIX);
+		RunTest("testimage3.png",546,52,0,0,0,101.77f,"EX","",598,567430,false,Mode.MEGAMIX);
+		RunTest("testimage4.png",279,81,16,2,3,75.40f,"N","",85,228100,false,Mode.MEGAMIX);
+		RunTest("testimage5.png",276,184,6,1,11,82.16f,"EXEX","HS",78,549870,false,Mode.MEGAMIX);
+		RunTest("testimage6.png",455,60,2,0,8,93.48f,"EXEX","HS",272,532470,false,Mode.MEGAMIX);
+		RunTest("testimage7.png",452,128,8,2,16,88.28f,"EXEX","HS",146,773150,false,Mode.MEGAMIX);
+		RunTest("testimage8.png",229,38,2,0,13,83.25f,"EXEX","HS",65,300120,false,Mode.MEGAMIX);
+		RunTest("testimage9.png",413,70,1,0,21,82.66f,"EXEX","HS",94,443050,false,Mode.MEGAMIX);
+		RunTest("16 -out of the gravity-.jpg",554,45,1,0,1,101.36f,"EX","HS",339,606780,false,Mode.MEGAMIX);
+		RunTest("＊ハロー、プラネット。 (I.M.PLSE-EDIT).jpg",336,128,24,6,93,58.85f,"EX","",52,308760,true,Mode.MEGAMIX);
 		
-		RunTest("39.jpg",531,71,2,0,2,97.82f,"EXEX","HS",324,832390,false);
-		RunTest("39みゅーじっく！.jpg",573,175,5,0,18,91.22f,"EX","HS",354,754140,false);
-		RunTest("1925.jpg",510,115,14,7,22,77.79f,"EX","HS",85,564860,false);
-		RunTest("ACUTE.jpg",478,64,1,1,5,95.76f,"EX","HS",197,505210,false);
-		RunTest("AFTER BURNER.jpg",370,113,25,16,30,68.76f,"EX","HS",94,386390,true);
-		RunTest("Blackjack.jpg",415,123,15,7,50,71.22f,"EX","HS",79,443260,false);
-		RunTest("Catch the Wave.jpg",603,72,0,0,1,100.65f,"EX","HS",559,773570,false);
-		RunTest("Dear.jpg",402,64,0,0,1,100.90f,"EXEX","HS",394,587740,false);
-		RunTest("DECORATOR.jpg",436,100,1,0,6,93.52f,"EX","HS",217,560180,false);
-		RunTest("DYE.jpg",530,106,7,2,13,84.77f,"EX","HS",143,486360,false);
-		RunTest("erase or zero.jpg",442,70,0,0,2,100.12f,"EX","HS",265,731120,false);
-		RunTest("FREELY TOMORROW.jpg",367,57,0,0,0,102.84f,"EX","HS",424,498640,false);
-		RunTest("from Y to Y.jpg",350,49,6,1,8,86.35f,"EXEX","HS",139,427650,false);
-		RunTest("Glory 3usi9.jpg",468,43,0,0,2,101.62f,"EX","HS",382,549780,false);
-		RunTest("Hand in Hand.jpg",401,54,1,0,3,97.58f,"EX","HS",176,610040,false);
-		RunTest("Hello, Worker.jpg",439,118,7,1,14,89.93f,"EXEX","HS",147,930290,false);
-		RunTest("Just Be Friends.jpg",510,107,6,0,12,89.38f,"EXEX","HS",203,602080,false);
-		RunTest("Knife.jpg",327,85,14,9,27,51.96f,"EX","HS",124,395170,true);
-		RunTest("LIKE THE WIND.jpg",330,144,20,9,20,72.06f,"EX","HS",65,425970,false);
-		RunTest("LOL -lots of laugh-.jpg",489,59,1,2,2,96.36f,"EX","HS",183,641920,false);
-		RunTest("magnet.jpg",435,101,18,4,35,76.98f,"EXEX","HS",115,480540,false);
-		RunTest("No Logic.jpg",491,101,11,5,15,86.32f,"EX","HS",186,476910,false);
-		RunTest("Nostalogic.jpg",346,70,15,7,16,83.61f,"EX","HS",94,486030,false);
-		RunTest("WORLD'S END UMBRELLA.jpg",437,136,6,1,3,90.59f,"H","",215,475120,false);
-		RunTest("ぽっぴっぽー.jpg",350,46,7,6,3,80.39f,"N","",175,263630,false);
-		RunTest("サマーアイドル.jpg",245,19,4,0,2,87.04f,"E","",103,179360,false);
+		RunTest("39.jpg",531,71,2,0,2,97.82f,"EXEX","HS",324,832390,false,Mode.MEGAMIX);
+		RunTest("39みゅーじっく！.jpg",573,175,5,0,18,91.22f,"EX","HS",354,754140,false,Mode.MEGAMIX);
+		RunTest("1925.jpg",510,115,14,7,22,77.79f,"EX","HS",85,564860,false,Mode.MEGAMIX);
+		RunTest("ACUTE.jpg",478,64,1,1,5,95.76f,"EX","HS",197,505210,false,Mode.MEGAMIX);
+		RunTest("AFTER BURNER.jpg",370,113,25,16,30,68.76f,"EX","HS",94,386390,true,Mode.MEGAMIX);
+		RunTest("Blackjack.jpg",415,123,15,7,50,71.22f,"EX","HS",79,443260,false,Mode.MEGAMIX);
+		RunTest("Catch the Wave.jpg",603,72,0,0,1,100.65f,"EX","HS",559,773570,false,Mode.MEGAMIX);
+		RunTest("Dear.jpg",402,64,0,0,1,100.90f,"EXEX","HS",394,587740,false,Mode.MEGAMIX);
+		RunTest("DECORATOR.jpg",436,100,1,0,6,93.52f,"EX","HS",217,560180,false,Mode.MEGAMIX);
+		RunTest("DYE.jpg",530,106,7,2,13,84.77f,"EX","HS",143,486360,false,Mode.MEGAMIX);
+		RunTest("erase or zero.jpg",442,70,0,0,2,100.12f,"EX","HS",265,731120,false,Mode.MEGAMIX);
+		RunTest("FREELY TOMORROW.jpg",367,57,0,0,0,102.84f,"EX","HS",424,498640,false,Mode.MEGAMIX);
+		RunTest("from Y to Y.jpg",350,49,6,1,8,86.35f,"EXEX","HS",139,427650,false,Mode.MEGAMIX);
+		RunTest("Glory 3usi9.jpg",468,43,0,0,2,101.62f,"EX","HS",382,549780,false,Mode.MEGAMIX);
+		RunTest("Hand in Hand.jpg",401,54,1,0,3,97.58f,"EX","HS",176,610040,false,Mode.MEGAMIX);
+		RunTest("Hello, Worker.jpg",439,118,7,1,14,89.93f,"EXEX","HS",147,930290,false,Mode.MEGAMIX);
+		RunTest("Just Be Friends.jpg",510,107,6,0,12,89.38f,"EXEX","HS",203,602080,false,Mode.MEGAMIX);
+		RunTest("Knife.jpg",327,85,14,9,27,51.96f,"EX","HS",124,395170,true,Mode.MEGAMIX);
+		RunTest("LIKE THE WIND.jpg",330,144,20,9,20,72.06f,"EX","HS",65,425970,false,Mode.MEGAMIX);
+		RunTest("LOL -lots of laugh-.jpg",489,59,1,2,2,96.36f,"EX","HS",183,641920,false,Mode.MEGAMIX);
+		RunTest("magnet.jpg",435,101,18,4,35,76.98f,"EXEX","HS",115,480540,false,Mode.MEGAMIX);
+		RunTest("No Logic.jpg",491,101,11,5,15,86.32f,"EX","HS",186,476910,false,Mode.MEGAMIX);
+		RunTest("Nostalogic.jpg",346,70,15,7,16,83.61f,"EX","HS",94,486030,false,Mode.MEGAMIX);
+		RunTest("WORLD'S END UMBRELLA.jpg",437,136,6,1,3,90.59f,"H","",215,475120,false,Mode.MEGAMIX);
+		RunTest("ぽっぴっぽー.jpg",350,46,7,6,3,80.39f,"N","",175,263630,false,Mode.MEGAMIX);
+		RunTest("サマーアイドル.jpg",245,19,4,0,2,87.04f,"E","",103,179360,false,Mode.MEGAMIX);
+		RunTest("test34.png",515,65,2,0,3,95.67f,"H","",294,512237,false,Mode.FUTURETONE);
+		RunTest("test35.png",0,0,0,0,57,0.0f,"N","HD",0,0,true,Mode.FUTURETONE);
+		RunTest("test36.png",0,0,0,0,57,0.0f,"N","SD",0,0,true,Mode.FUTURETONE);
+		RunTest("test37.png",0,0,0,0,62,0.0f,"E","",0,0,true,Mode.FUTURETONE);
+		RunTest("test38.jpg",345,49,6,2,2,94.53f,"H","",232,347990,false,Mode.MEGAMIX);
+		RunTest("test39.jpg",556,127,5,0,4,92.63f,"H","",237,546040,false,Mode.MEGAMIX);
+		RunTest("scoreimage36.png",312,36,0,1,0,101.60f,"H","",334,305679,false,Mode.FUTURETONE);
+		RunTest("scoreimage155.png",527,91,2,2,5,91.63f,"H","",254,483780,false,Mode.FUTURETONE);
+		RunTest("scoreimage255.png",581,211,31,9,54,65.89f,"EXEX","HS",149,501743,true,Mode.FUTURETONE);
+		RunTest("scoreimage306.png",382,58,3,3,4,92.56f,"EXEX","HS",99,661705,false,Mode.FUTURETONE);
+		RunTest("scoreimage314.png",342,88,14,5,24,80.85f,"EXEX","HS",62,625251,false,Mode.FUTURETONE);
+		RunTest("scoreimage325.png",201,34,8,9,17,38.86f,"EXEX","HS",69,293062,true,Mode.FUTURETONE);
+		RunTest("scoreimage340.png",449,35,0,0,2,100.94f,"EX","HS",202,648571,false,Mode.FUTURETONE);
+		RunTest("scoreimage342.png",392,41,0,0,0,102.14f,"EXEX","HS",433,713988,false,Mode.FUTURETONE);
 	}
 	
-	static void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail) throws IOException {
-		RunTest(_img,_cool,_fine,_safe,_sad,_worst,_percent,_difficulty,_mod,_combo,_score,_fail,false);
+	static void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail, Mode _mode) throws IOException {
+		RunTest(_img,_cool,_fine,_safe,_sad,_worst,_percent,_difficulty,_mod,_combo,_score,_fail,_mode,false);
 	}
 	
-	static void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail,boolean debug) throws IOException {
+	static void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail,Mode _mode,boolean debug) throws IOException {
 		System.out.println("Running test "+_img);
 		long startTime = System.currentTimeMillis();
 		String testdir="testsuite";
@@ -804,6 +820,7 @@ public class MyRobot{
 		Result data = typeface1.getAllData(img,debug);
 		try {
 			//assert data.isResult == true : "Expected a result screenshot.";
+			assert data.mode == _mode : "Expected mode to be "+_mode+", got "+data.mode;
 			assert data.cool == _cool : "Expected cool count to be "+_cool+", got "+data.cool;
 			assert data.fine == _fine : "Expected fine count to be "+_fine+", got "+data.fine;
 			assert data.safe == _safe : "Expected safe count to be "+_safe+", got "+data.safe;
@@ -830,7 +847,7 @@ public class MyRobot{
 						e1.printStackTrace();
 					}
 				}
-				RunTest(_img,_cool,_fine,_safe,_sad,_worst,_percent,_difficulty,_mod,_combo,_score,_fail,true);
+				RunTest(_img,_cool,_fine,_safe,_sad,_worst,_percent,_difficulty,_mod,_combo,_score,_fail,_mode,true);
 			}
 			System.exit(1);
 		}

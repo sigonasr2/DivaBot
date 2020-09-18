@@ -221,21 +221,6 @@ public class FutureToneBot{
 							difficulty="H";
 						}
 					}
-					private void GetCurrentSong() throws IOException {
-						BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(460,426,WIDTH,HEIGHT)));
-						Color[] col = new Color[WIDTH*HEIGHT];
-						for (int i=0;i<WIDTH;i++) {
-							for (int j=0;j<HEIGHT;j++) {
-								col[i*HEIGHT+j]=new Color(img.getRGB(i,j),true);
-							}
-						}
-						/*File f = new File("test.png");
-						ImageIO.write(img,"png",f);*/
-						SongData ss = SongData.compareData(col);
-						if (ss!=null) {
-							selectedSong = ss;
-						}
-					}
 					
 				},
                 0,
@@ -252,7 +237,7 @@ public class FutureToneBot{
 	
 	void RunTests() throws IOException {
 		
-		selectedSong=new SongData("LIKE THE WIND",new Color[] {});
+		//selectedSong=new SongData("LIKE THE WIND",new Color[] {});
 		difficulty="H";
 		
 		RunTest("test1.jpg",393,127,28,10,48,72.28f,"EXEX","",85,577160,false);

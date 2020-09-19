@@ -55,15 +55,15 @@ public class TypeFace2 {
 	final static Rectangle MEGAMIX_RECT_SEARCH_PCT2=new Rectangle(1123+XOFFSET,163,1051,8);
 	final static Rectangle MEGAMIX_RECT_SEARCH_SCORE=new Rectangle(859+XOFFSET,578-4,250+XOFFSET+1,32+14);
 	final static Rectangle MEGAMIX_RECT_SEARCH_COMBO=new Rectangle(1010+XOFFSET,435-2,100+XOFFSET+1,22+8);
-	final static Rectangle FUTURETONE_RECT_SEARCH_COOL=new Rectangle(872+XOFFSET,221,100+XOFFSET+1,22+8);
-	final static Rectangle FUTURETONE_RECT_SEARCH_FINE=new Rectangle(872+XOFFSET,256,100+XOFFSET+1,22+8);
-	final static Rectangle FUTURETONE_RECT_SEARCH_SAFE=new Rectangle(872+XOFFSET,292,100+XOFFSET+1,22+8);
-	final static Rectangle FUTURETONE_RECT_SEARCH_SAD=new Rectangle(872+XOFFSET,328,100+XOFFSET+1,22+8);
-	final static Rectangle FUTURETONE_RECT_SEARCH_WORST=new Rectangle(872+XOFFSET,365,100+XOFFSET+1,22+8);
-	final static Rectangle FUTURETONE_RECT_SEARCH_PCT=new Rectangle(1174+XOFFSET,150,1125,8);
-	final static Rectangle FUTURETONE_RECT_SEARCH_PCT2=new Rectangle(1114+XOFFSET,150,1045,8);
-	final static Rectangle FUTURETONE_RECT_SEARCH_SCORE=new Rectangle(866+XOFFSET,543-4,250+XOFFSET+1,32+14);
-	final static Rectangle FUTURETONE_RECT_SEARCH_COMBO=new Rectangle(1023+XOFFSET,402-2,100+XOFFSET+1,22+8);
+	final static Rectangle FUTURETONE_RECT_SEARCH_COOL=new Rectangle(872+XOFFSET,223,100+XOFFSET+1,22+8);
+	final static Rectangle FUTURETONE_RECT_SEARCH_FINE=new Rectangle(872+XOFFSET,258,100+XOFFSET+1,22+8);
+	final static Rectangle FUTURETONE_RECT_SEARCH_SAFE=new Rectangle(872+XOFFSET,294,100+XOFFSET+1,22+8);
+	final static Rectangle FUTURETONE_RECT_SEARCH_SAD=new Rectangle(872+XOFFSET,330,100+XOFFSET+1,22+8);
+	final static Rectangle FUTURETONE_RECT_SEARCH_WORST=new Rectangle(872+XOFFSET,367,100+XOFFSET+1,22+8);
+	final static Rectangle FUTURETONE_RECT_SEARCH_PCT=new Rectangle(1174+XOFFSET,152,1125,8);
+	final static Rectangle FUTURETONE_RECT_SEARCH_PCT2=new Rectangle(1114+XOFFSET,152,1045,8);
+	final static Rectangle FUTURETONE_RECT_SEARCH_SCORE=new Rectangle(866+XOFFSET,543-4,250+XOFFSET+1,32+24);
+	final static Rectangle FUTURETONE_RECT_SEARCH_COMBO=new Rectangle(1023+XOFFSET,402,100+XOFFSET+1,22+8);
 
 	public Result getAllData(BufferedImage img, boolean debug) throws IOException,NumberFormatException,IndexOutOfBoundsException {
 		BufferedImage img2 = ImageUtils.toBufferedImage(img.getScaledInstance(1280 , 720, Image.SCALE_SMOOTH));
@@ -111,6 +111,7 @@ public class TypeFace2 {
 
 			finalNumbers[i]=extractNumbersFromImage(img2.getSubimage(
 					r.x,r.y,r.width,r.height),debug);
+			//System.out.println(finalNumbers[i]);
 			if (finalNumbers[i]==-1) {
 				return result;
 			}
@@ -217,12 +218,12 @@ public class TypeFace2 {
 	private Mode getMode(BufferedImage img2) {
 		Color ft_pixel1 = new Color(img2.getRGB(260, 38));
 		Color ft_pixel2 = new Color(img2.getRGB(86, 38));
-		if (ft_pixel1.getRed()<60&&ft_pixel1.getRed()>0&&
-				ft_pixel1.getGreen()<90&&ft_pixel1.getGreen()>30&&
-				ft_pixel1.getBlue()<90&&ft_pixel1.getBlue()>30
-			&&ft_pixel2.getRed()<60&&ft_pixel2.getRed()>0&&
-			ft_pixel2.getGreen()<90&&ft_pixel2.getGreen()>30&&
-			ft_pixel2.getBlue()<90&&ft_pixel2.getBlue()>30) {
+		if (ft_pixel1.getRed()<60&&ft_pixel1.getRed()>=0&&
+				ft_pixel1.getGreen()<90&&ft_pixel1.getGreen()>20&&
+				ft_pixel1.getBlue()<90&&ft_pixel1.getBlue()>20
+			&&ft_pixel2.getRed()<60&&ft_pixel2.getRed()>=0&&
+			ft_pixel2.getGreen()<90&&ft_pixel2.getGreen()>20&&
+			ft_pixel2.getBlue()<90&&ft_pixel2.getBlue()>20) {
 			return Mode.FUTURETONE;
 		}
 		return Mode.MEGAMIX;
@@ -874,7 +875,7 @@ public class TypeFace2 {
 		ypointer=0;
 		String total = "";
 		trialloop:
-		while (ypointer<12) {
+		while (ypointer<20) {
 			xpointer=FUTURETONE_RECT_SEARCH_SCORE.width-1;
 			while (xpointer>31) {
 				int distance = 0;

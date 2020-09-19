@@ -94,7 +94,8 @@ public class Calibrator{
 			if (!((col.getRed()>=5&&col.getRed()<=100&&
 					col.getGreen()>=170&&col.getGreen()<=210&&
 					col.getBlue()>=180&&col.getBlue()<=250)||
-					(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30)
+					(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30&&
+					col.getRed()>=2&&col.getGreen()>=2&&col.getBlue()>=2)
 				)) {
 				//This is the max X. Calibration on this side good.
 				MyRobot.STARTDRAG.x++;
@@ -122,7 +123,8 @@ public class Calibrator{
 			if (!((col.getRed()>=5&&col.getRed()<=100&&
 					col.getGreen()>=170&&col.getGreen()<=210&&
 					col.getBlue()>=180&&col.getBlue()<=250)||
-					(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30)
+					(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30&&
+					col.getRed()>=2&&col.getGreen()>=2&&col.getBlue()>=2)
 				)) {
 				//This is the max Y. Calibration on this side good.
 				MyRobot.STARTDRAG.y++;
@@ -149,7 +151,8 @@ public class Calibrator{
 			if (!((col.getRed()>=40&&col.getRed()<=90&&
 					col.getGreen()>=10&&col.getGreen()<=55&&
 					col.getBlue()>=40&&col.getBlue()<=90)||
-					(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30)
+					(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30&&
+					col.getRed()>=2&&col.getGreen()>=2&&col.getBlue()>=2)
 					)) {
 				//This is the max X. Calibration on this side good.
 				MyRobot.ENDDRAG.x--;
@@ -177,7 +180,8 @@ public class Calibrator{
 			if (!((col.getRed()>=40&&col.getRed()<=90&&
 					col.getGreen()>=10&&col.getGreen()<=55&&
 					col.getBlue()>=40&&col.getBlue()<=90)||
-					(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30)
+					(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30&&
+					col.getRed()>=2&&col.getGreen()>=2&&col.getBlue()>=2)
 					)) {
 				//This is the max Y. Calibration on this side good.
 				MyRobot.ENDDRAG.y--;
@@ -205,7 +209,8 @@ public class Calibrator{
 				if (((col.getRed()>=5&&col.getRed()<=100&&
 						col.getGreen()>=170&&col.getGreen()<=210&&
 						col.getBlue()>=180&&col.getBlue()<=250)||
-						(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30)
+						(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30&&
+						col.getRed()>=2&&col.getGreen()>=2&&col.getBlue()>=2)
 					)) {
 					//This is the max X. Calibration on this side good.
 					MyRobot.STARTDRAG.y=MyRobot.STARTDRAG.y+i;
@@ -234,7 +239,8 @@ public class Calibrator{
 				if (((col.getRed()>=5&&col.getRed()<=100&&
 						col.getGreen()>=170&&col.getGreen()<=210&&
 						col.getBlue()>=180&&col.getBlue()<=250)||
-						(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30)
+						(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30&&
+						col.getRed()>=2&&col.getGreen()>=2&&col.getBlue()>=2)
 					)) {
 					MyRobot.STARTDRAG.x=MyRobot.STARTDRAG.x+i;
 					//This is the max Y. Calibration on this side good.
@@ -263,7 +269,8 @@ public class Calibrator{
 				if (((col.getRed()>=40&&col.getRed()<=90&&
 						col.getGreen()>=10&&col.getGreen()<=55&&
 						col.getBlue()>=40&&col.getBlue()<=90)||
-						(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30)
+						(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30&&
+						col.getRed()>=2&&col.getGreen()>=2&&col.getBlue()>=2)
 						)) {
 					//This is the max X. Calibration on this side good.
 					MyRobot.ENDDRAG.y=MyRobot.ENDDRAG.y-i;
@@ -293,7 +300,8 @@ public class Calibrator{
 				if (((col.getRed()>=40&&col.getRed()<=90&&
 						col.getGreen()>=10&&col.getGreen()<=55&&
 						col.getBlue()>=40&&col.getBlue()<=90)||
-						(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30)
+						(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30&&
+						col.getRed()>=2&&col.getGreen()>=2&&col.getBlue()>=2)
 						)) {
 					MyRobot.ENDDRAG.x=MyRobot.ENDDRAG.x-i;
 					//This is the max Y. Calibration on this side good.

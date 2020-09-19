@@ -167,6 +167,7 @@ public class MyRobot{
     public static String AUTHTOKEN = "";
     
     public static long lastmainlooptime = 0;
+    public static Result lastData=null;
     
 	
 	public static void main(String[] args) throws JSONException, IOException, FontFormatException {
@@ -351,7 +352,6 @@ public class MyRobot{
 						MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
 						MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
 					}
-					Thread.sleep(200);
 					MYROBOT.refreshScoreScreen();
 					ImageIO.write(MYROBOT.createScoreScreenCapture(),"png",new File("scoreimage.png"));
 					File tmp = new File("tmp");
@@ -362,10 +362,23 @@ public class MyRobot{
 					}
 					try {
 						final Result data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
-						System.out.println(data);
 						//ImageIO.write(MYROBOT.,"png",new File("test.png"));
 						if (data.cool==-1 || data.fine==-1 || data.safe==-1 || data.sad==-1 || data.worst==-1 || data.percent<0f || data.percent>110f || data.combo==-1 || data.score==-1) {
-							System.out.println("Waiting for results to populate...");
+							if (lastData==null || (lastData.cool!=data.cool || data.fine!=lastData.fine || data.safe!=lastData.safe || data.sad!=lastData.sad || data.worst!=lastData.worst || data.percent!=lastData.percent || data.combo!=lastData.combo || data.score!=lastData.score)) {
+								System.out.println("Waiting for results to populate...");
+								System.out.println(data);
+							}
+							if (lastData==null) {
+								lastData=new Result("","",-1,-1,-1,-1,-1,-1f);
+							}
+							lastData.cool=data.cool;
+							lastData.fine=data.fine;
+							lastData.safe=data.safe;
+							lastData.sad=data.sad;
+							lastData.worst=data.worst;
+							lastData.percent=data.percent;
+							lastData.combo=data.combo;
+							lastData.score=data.score;
 						} else 
 						if ((data.combo!=lastcombo || data.fail!=lastfail || data.cool!=lastcool || lastfine!=data.fine || lastsafe!=data.safe || lastsad!=data.sad || lastworst!=data.worst)
 								&& data.score!=lastscore /*|| lastpercent!=percent*/){
@@ -524,14 +537,15 @@ public class MyRobot{
 			return c1.getRed()>=250 && c1.getGreen()>=250 && c1.getBlue()>=250 && c2.getRed()>=10 && c2.getRed()<=25 && c2.getGreen()>=200 && c2.getGreen()<=240 && c2.getBlue()>=180 && c2.getBlue()<=220 &&
 					c3.getRed()>=200 && c3.getRed()<=255 && c3.getGreen()>=200 && c3.getGreen()<=255 && c3.getBlue()>=140 && c3.getBlue()<=220;
 		} else {
-			Color ft_pixel1 = new Color(MYROBOT.createScreenCapture(new Rectangle(260, 38,1,1)).getRGB(0, 0));
-			Color ft_pixel2 = new Color(MYROBOT.createScreenCapture(new Rectangle(86, 38,1,1)).getRGB(0, 0));
-			return (ft_pixel1.getRed()<60&&ft_pixel1.getRed()>0&&
-					ft_pixel1.getGreen()<90&&ft_pixel1.getGreen()>30&&
-					ft_pixel1.getBlue()<90&&ft_pixel1.getBlue()>30
-				&&ft_pixel2.getRed()<60&&ft_pixel2.getRed()>0&&
-				ft_pixel2.getGreen()<90&&ft_pixel2.getGreen()>30&&
-				ft_pixel2.getBlue()<90&&ft_pixel2.getBlue()>30);
+			BufferedImage img2 = ImageUtils.toBufferedImage(MYROBOT.currentScreen.getScaledInstance(1280 , 720, Image.SCALE_SMOOTH));
+			Color ft_pixel1 = new Color(img2.getRGB(260, 38));
+			Color ft_pixel2 = new Color(img2.getRGB(86, 38));
+			return (ft_pixel1.getRed()<60&&ft_pixel1.getRed()>=0&&
+					ft_pixel1.getGreen()<90&&ft_pixel1.getGreen()>20&&
+					ft_pixel1.getBlue()<90&&ft_pixel1.getBlue()>20
+				&&ft_pixel2.getRed()<60&&ft_pixel2.getRed()>=0&&
+				ft_pixel2.getGreen()<90&&ft_pixel2.getGreen()>20&&
+				ft_pixel2.getBlue()<90&&ft_pixel2.getBlue()>20);
 		}
 		//System.out.println(c1+"/"+c2+"/"+c3);
 	}
@@ -859,6 +873,11 @@ public class MyRobot{
 		RunTest("scoreimage342.png",392,41,0,0,0,102.14f,"EXEX","HS",433,713988,false,Mode.FUTURETONE);
 		RunTest("test40.png",221,117,7,1,8,78.00f,"H","HS",111,253033,false,Mode.FUTURETONE);
 		RunTest("test41.png",329,108,3,0,17,80.10f,"EX","HS",113,419386,false,Mode.FUTURETONE);
+		RunTest("test42.png",473,132,11,6,36,59.76f,"EXEX","",352,581856,true,Mode.FUTURETONE);
+		RunTest("test43.png",7,4,3,2,60,3.14f,"EXEX","",4,15367,true,Mode.FUTURETONE);
+		RunTest("test44.png",450,45,1,0,6,99.41f,"EXEX","HS",364,586674,false,Mode.FUTURETONE);
+		RunTest("test45.png",394,37,0,0,0,103.84f,"EXEX","HS",431,546139,false,Mode.FUTURETONE);
+		RunTest("test46.png",452,25,0,0,1,103.16f,"EXEX","HS",260,750134,false,Mode.FUTURETONE);
 	}
 	
 	static void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail, Mode _mode) throws IOException {

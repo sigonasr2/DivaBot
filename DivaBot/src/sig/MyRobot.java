@@ -429,7 +429,7 @@ public class MyRobot{
 					if (results.size()>0) {
 						recordingResults=true;
 						for (final Result r  : results) {
-							r.songName=r.songName.equalsIgnoreCase("PIANOGIRL")?"PIANO*GIRL":(r.songName.equalsIgnoreCase("16 -out of the gravity-"))?"1/6 -out of the gravity-":r.songName;
+							r.songName=r.songName.equalsIgnoreCase("雨のちSweetDrops")?"雨のちSweet*Drops":r.songName.equalsIgnoreCase("Equation+")?"Equation+**":r.songName.equalsIgnoreCase("PIANOGIRL")?"PIANO*GIRL":r.songName.equalsIgnoreCase("PIANOGIRL")?"PIANO*GIRL":(r.songName.equalsIgnoreCase("16 -out of the gravity-"))?"1/6 -out of the gravity-":r.songName;
 							HttpClient httpclient = HttpClients.createDefault();
 							HttpPost httppost = new HttpPost("http://45.33.13.215:4501/submit");
 

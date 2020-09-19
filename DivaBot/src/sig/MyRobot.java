@@ -304,7 +304,7 @@ public class MyRobot{
 			MyRobot.calibrating=false;
 			Overlay.OVERLAY.setVisible(false);
 			Thread.sleep(1000);
-			Calibrator c = new Calibrator();
+			Calibrator2 c = new Calibrator2();
 		}
 	} else {
 		//ImageIO.write(MYROBOT.createScreenCapture(),"png",new File("testscreen.png"));
@@ -429,7 +429,7 @@ public class MyRobot{
 					if (results.size()>0) {
 						recordingResults=true;
 						for (final Result r  : results) {
-							r.songName=r.songName.equalsIgnoreCase("雨のちSweetDrops")?"雨のちSweet*Drops":r.songName.equalsIgnoreCase("Equation+")?"Equation+**":r.songName.equalsIgnoreCase("PIANOGIRL")?"PIANO*GIRL":r.songName.equalsIgnoreCase("PIANOGIRL")?"PIANO*GIRL":(r.songName.equalsIgnoreCase("16 -out of the gravity-"))?"1/6 -out of the gravity-":r.songName;
+							r.songName=r.songName.equalsIgnoreCase("恋ノート")?"恋ノート////":r.songName.equalsIgnoreCase("雨のちSweetDrops")?"雨のちSweet*Drops":r.songName.equalsIgnoreCase("Equation+")?"Equation+**":r.songName.equalsIgnoreCase("PIANOGIRL")?"PIANO*GIRL":(r.songName.equalsIgnoreCase("16 -out of the gravity-"))?"1/6 -out of the gravity-":r.songName;
 							HttpClient httpclient = HttpClients.createDefault();
 							HttpPost httppost = new HttpPost("http://45.33.13.215:4501/submit");
 
@@ -534,8 +534,9 @@ public class MyRobot{
 			Color c1 = new Color(MYROBOT.createScreenCapture(new Rectangle(31,230,40,40)).getRGB(0, 0));
 			Color c2 = new Color(MYROBOT.createScreenCapture(new Rectangle(31,196,40,40)).getRGB(0, 0));
 			Color c3 = new Color(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)).getRGB(0, 0));
-			return c1.getRed()>=250 && c1.getGreen()>=250 && c1.getBlue()>=250 && c2.getRed()>=10 && c2.getRed()<=25 && c2.getGreen()>=200 && c2.getGreen()<=240 && c2.getBlue()>=180 && c2.getBlue()<=220 &&
-					c3.getRed()>=200 && c3.getRed()<=255 && c3.getGreen()>=200 && c3.getGreen()<=255 && c3.getBlue()>=140 && c3.getBlue()<=220;
+			//System.out.println(c1+"/"+c2+"/"+c3);
+			return c1.getRed()>=250 && c1.getGreen()>=250 && c1.getBlue()>=250 && c2.getRed()>=7 && c2.getRed()<=30 && c2.getGreen()>=200 && c2.getGreen()<=240 && c2.getBlue()>=180 && c2.getBlue()<=220 &&
+					c3.getRed()>=160 && c3.getRed()<=255 && c3.getGreen()>=160 && c3.getGreen()<=255 && c3.getBlue()>=130 && c3.getBlue()<=220;
 		} else {
 			BufferedImage img2 = ImageUtils.toBufferedImage(MYROBOT.currentScreen.getScaledInstance(1280 , 720, Image.SCALE_SMOOTH));
 			Color ft_pixel1 = new Color(img2.getRGB(260, 38));
@@ -547,20 +548,6 @@ public class MyRobot{
 				ft_pixel2.getGreen()<90&&ft_pixel2.getGreen()>20&&
 				ft_pixel2.getBlue()<90&&ft_pixel2.getBlue()>20);
 		}
-		//System.out.println(c1+"/"+c2+"/"+c3);
-	}
-	
-	public static boolean IsResultsScreenshot(BufferedImage img) throws IOException {
-		//r.x-418, r.y-204
-		/*ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(31,230,40,40)),"png",new File("color1.png"));
-		ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(31,196,40,40)),"png",new File("color2.png"));
-		ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)),"png",new File("color3.png"));*/
-		Color c1 = new Color(img.getSubimage(31,230,40,40).getRGB(0, 0));
-		Color c2 = new Color(img.getSubimage(31,196,40,40).getRGB(0, 0));
-		Color c3 = new Color(img.getSubimage(483,256,40,40).getRGB(0, 0));
-		//System.out.println(c1+"/"+c2+"/"+c3);
-		return c1.getRed()>=250 && c1.getGreen()>=250 && c1.getBlue()>=250 && c2.getRed()>=10 && c2.getRed()<=100 && c2.getGreen()>=200 && c2.getGreen()<=255 && c2.getBlue()>=180 && c2.getBlue()<=230 &&
-				c3.getRed()>=150 && c3.getRed()<=255 && c3.getGreen()>=150 && c3.getGreen()<=255 && c3.getBlue()>=100 && c3.getBlue()<=240;
 	}
 
 	private void GetCurrentDifficulty() {
@@ -785,6 +772,13 @@ public class MyRobot{
 		selectedSong=new SongData("LIKE THE WIND",0,0,0);
 		difficulty="H";
 
+		RunTest("test55.png",421,50,1,0,3,98.37f,"EXEX","",406,689821,false,Mode.FUTURETONE);
+		RunTest("test54.png",448,129,20,6,35,74.89f,"EXEX","",247,678260,true,Mode.FUTURETONE);
+		RunTest("test53.png",456,163,31,7,47,75.89f,"EXEX","",105,736989,false,Mode.FUTURETONE);
+		RunTest("test52.png",430,75,7,2,16,85.70f,"EX","",181,499246,false,Mode.FUTURETONE);
+		RunTest("test51.png",406,45,1,0,2,102.30f,"EXEX","",444,592515,false,Mode.FUTURETONE);
+		RunTest("test50.png",241,74,12,3,23,46.73f,"EXEX","",87,289190,true,Mode.FUTURETONE);
+		RunTest("test49.png",516,37,0,0,8,97.08f,"EXEX","HS",258,839135,false,Mode.FUTURETONE);
 		RunTest("test48.png",481,132,18,6,35,71.92f,"EX","HS",89,467720,false,Mode.FUTURETONE);
 		RunTest("test47.png",298,34,0,0,0,103.39f,"EXEX","HS",332,463628,false,Mode.FUTURETONE);
 		RunTest("test1.jpg",393,127,28,10,48,72.28f,"EXEX","",85,577160,false,Mode.MEGAMIX);
@@ -971,10 +965,6 @@ public class MyRobot{
 		
 		//777,179 FUTURE TONE
 		return stillOnSongSelect>=5;
-	}
-	
-	public static boolean isOnSongSelect() {
-		return onSongSelect;
 	}
 	
 	void initialize() {

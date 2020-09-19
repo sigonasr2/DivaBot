@@ -201,10 +201,22 @@ public class Calibrator{
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture.png"));
 		while (!calibrated&&MAXTRIES>0) {
 			//Try moving left until the difference is too high or the colors are not right anymore.
+			BufferedImage miniImg = img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,1,1);
+			Color col = new Color(miniImg.getRGB(0, 0));
+			if (((col.getRed()>=5&&col.getRed()<=100&&
+					col.getGreen()>=170&&col.getGreen()<=210&&
+					col.getBlue()>=180&&col.getBlue()<=250)||
+					(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30&&
+					col.getRed()>=2&&col.getGreen()>=2&&col.getBlue()>=2)
+				)) {
+				//This is the max X. Calibration on this side good.
+				System.out.println("End at "+MyRobot.STARTDRAG.x);
+				return false;
+			}
 			MyRobot.STARTDRAG.x+=1;
 			for (int i=0;i<100;i++) {
-				BufferedImage miniImg = img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y+i,1,1);
-				Color col = new Color(miniImg.getRGB(0, 0));
+				miniImg = img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y+i,1,1);
+				col = new Color(miniImg.getRGB(0, 0));
 				System.out.println("Checking "+col);
 				if (((col.getRed()>=5&&col.getRed()<=100&&
 						col.getGreen()>=170&&col.getGreen()<=210&&
@@ -231,10 +243,22 @@ public class Calibrator{
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture_2.png"));
 		while (!calibrated&&MAXTRIES>0) {
 			//Try moving left until the difference is too high or the colors are not right anymore.
+			BufferedImage miniImg = img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,1,1);
+			Color col = new Color(miniImg.getRGB(0, 0));
+			if (((col.getRed()>=5&&col.getRed()<=100&&
+					col.getGreen()>=170&&col.getGreen()<=210&&
+					col.getBlue()>=180&&col.getBlue()<=250)||
+					(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30&&
+					col.getRed()>=2&&col.getGreen()>=2&&col.getBlue()>=2)
+				)) {
+				//This is the max Y. Calibration on this side good.
+				System.out.println("End at "+MyRobot.STARTDRAG.y);
+				return false;
+			}
 			MyRobot.STARTDRAG.y+=1;
 			for (int i=0;i<100;i++) {
-				BufferedImage miniImg = img.getSubimage(MyRobot.STARTDRAG.x+i,MyRobot.STARTDRAG.y,1,1);
-				Color col = new Color(miniImg.getRGB(0, 0));
+				miniImg = img.getSubimage(MyRobot.STARTDRAG.x+i,MyRobot.STARTDRAG.y,1,1);
+				col = new Color(miniImg.getRGB(0, 0));
 				System.out.println("Checking "+col);
 				if (((col.getRed()>=5&&col.getRed()<=100&&
 						col.getGreen()>=170&&col.getGreen()<=210&&
@@ -261,10 +285,24 @@ public class Calibrator{
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture_3.png"));
 		while (!calibrated&&MAXTRIES>0) {
 			//Try moving left until the difference is too high or the colors are not right anymore.
+			BufferedImage miniImg = img.getSubimage(MyRobot.ENDDRAG.x,MyRobot.ENDDRAG.y,1,1);
+			Color col = new Color(miniImg.getRGB(0, 0));
+			if (((col.getRed()>=40&&col.getRed()<=90&&
+					col.getGreen()>=10&&col.getGreen()<=55&&
+					col.getBlue()>=40&&col.getBlue()<=90)||
+					(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30&&
+					col.getRed()>=2&&col.getGreen()>=2&&col.getBlue()>=2)
+					)) {
+				//This is the max X. Calibration on this side good.
+				MyRobot.ENDDRAG.y=MyRobot.ENDDRAG.y;
+				MyRobot.ENDDRAG.x++;
+				System.out.println("End at "+MyRobot.STARTDRAG.x);
+				return false;
+			}
 			MyRobot.ENDDRAG.x-=1;
 			for (int i=0;i<100;i++) {
-				BufferedImage miniImg = img.getSubimage(MyRobot.ENDDRAG.x,MyRobot.ENDDRAG.y-i,1,1);
-				Color col = new Color(miniImg.getRGB(0, 0));
+				miniImg = img.getSubimage(MyRobot.ENDDRAG.x,MyRobot.ENDDRAG.y-i,1,1);
+				col = new Color(miniImg.getRGB(0, 0));
 				System.out.println("Checking "+col);
 				if (((col.getRed()>=40&&col.getRed()<=90&&
 						col.getGreen()>=10&&col.getGreen()<=55&&
@@ -292,10 +330,22 @@ public class Calibrator{
 		ImageIO.write(img.getSubimage(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y),"png",new File("capture_4.png"));
 		while (!calibrated&&MAXTRIES>0) {
 			//Try moving left until the difference is too high or the colors are not right anymore.
+			BufferedImage miniImg = img.getSubimage(MyRobot.ENDDRAG.x,MyRobot.ENDDRAG.y,1,1);
+			Color col = new Color(miniImg.getRGB(0, 0));
+			if (((col.getRed()>=40&&col.getRed()<=90&&
+					col.getGreen()>=10&&col.getGreen()<=55&&
+					col.getBlue()>=40&&col.getBlue()<=90)||
+					(col.getRed()<=30&&col.getGreen()<=30&&col.getBlue()<=30&&
+					col.getRed()>=2&&col.getGreen()>=2&&col.getBlue()>=2)
+					)) {
+				//This is the max Y. Calibration on this side good.
+				System.out.println("End at "+MyRobot.ENDDRAG.y);
+				return false;
+			}
 			MyRobot.ENDDRAG.y-=1;
 			for (int i=0;i<100;i++) {
-				BufferedImage miniImg = img.getSubimage(MyRobot.ENDDRAG.x-i,MyRobot.ENDDRAG.y,1,1);
-				Color col = new Color(miniImg.getRGB(0, 0));
+				miniImg = img.getSubimage(MyRobot.ENDDRAG.x-i,MyRobot.ENDDRAG.y,1,1);
+				col = new Color(miniImg.getRGB(0, 0));
 				System.out.println("Checking "+col);
 				if (((col.getRed()>=40&&col.getRed()<=90&&
 						col.getGreen()>=10&&col.getGreen()<=55&&

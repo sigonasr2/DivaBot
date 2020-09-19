@@ -49,7 +49,7 @@ public class SongData {
 	
 	public static void saveSongToFile(String title, long r, long g, long b) throws IOException {
 		boolean found=false;
-		StringBuilder sb = new StringBuilder(title.replaceAll(":", "-COLON-"));
+		StringBuilder sb = new StringBuilder(title.replaceAll(":", "-COLON-").replaceAll("\\*","").replaceAll("/",""));
 		sb.append(":");
 		
 		sb.append(r).append(",")
@@ -65,7 +65,7 @@ public class SongData {
 			String[] split = fileData[i].split(":");
 			if (split.length>0) {
 				//System.out.println(split[0]+"/"+title);
-				if (split[0].replaceAll("-COLON-", ":").equalsIgnoreCase(title)) {
+				if (split[0].replaceAll("-COLON-", ":").equalsIgnoreCase(title.replaceAll("\\*","").replaceAll("/",""))) {
 					//System.out.println("Updated color data with new data for "+title+"!");
 					fileData[i]=sb.toString();
 					found=true;

@@ -56,14 +56,6 @@ public class Overlay extends JPanel implements MouseMotionListener,MouseListener
 			g.setColor(new Color(0,0,0,1));
 			g.fillRect(0, 0, MyRobot.screenSize.width, MyRobot.screenSize.height);
 			g.setFont(drawFont);
-			g.setColor(Color.WHITE);
-			g.drawString("Make sure you are on the main menu screen with 'Rhythm Game' selected",4,26);
-			g.setColor(Color.BLACK);
-			g.drawString("Make sure you are on the main menu screen with 'Rhythm Game' selected.",5,28);
-			g.setColor(Color.WHITE);
-			g.drawString("Drag your cursor over the region your game will be displayed on your monitor.",4,58);
-			g.setColor(Color.BLACK);
-			g.drawString("Drag your cursor over the region your game will be displayed on your monitor.",5,60);
 			g.setColor(new Color(0,255,255,96));
 			if (MyRobot.STARTDRAG!=null&&MyRobot.ENDDRAG!=null) {
 				g.fillRect(0,0,Math.min(MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.x),MyRobot.screenSize.height);
@@ -71,6 +63,14 @@ public class Overlay extends JPanel implements MouseMotionListener,MouseListener
 				g.fillRect(Math.min(MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.x), Math.max(MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.y), Math.max(MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.x)-Math.min(MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.x), MyRobot.screenSize.height-Math.max(MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.y));
 				g.fillRect(Math.max(MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.x), Math.min(MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.y), MyRobot.screenSize.width-Math.max(MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.x), MyRobot.screenSize.height-Math.min(MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.y));
 			}
+			g.setColor(Color.WHITE);
+			g.drawString("Make sure your game is surrounded by a completely black background (Turn off overlays temporarily).",4,26);
+			g.setColor(Color.BLACK);
+			g.drawString("Make sure your game is surrounded by a completely black background (Turn off overlays temporarily).",5,28);
+			g.setColor(Color.WHITE);
+			g.drawString("Drag your cursor over the ENTIRE game region, include a bit of black space around it.",4,58);
+			g.setColor(Color.BLACK);
+			g.drawString("Drag your cursor over the ENTIRE game region, include a bit of black space around it.",5,60);
 		} else 
 		if (MyRobot.CALIBRATIONSTATUS.length()>0) {
 			g.setColor(new Color(0,0,0,1));

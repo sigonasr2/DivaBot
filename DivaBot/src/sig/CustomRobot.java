@@ -39,7 +39,13 @@ public class CustomRobot extends Robot{
 			ReloadCalibrationData();
 		}
 		if (calibration_data.length>0) {
-			currentScreen = super.createScreenCapture(new Rectangle(calibration_data[0],calibration_data[1],calibration_data[2]-calibration_data[0],calibration_data[3]-calibration_data[1]));
+			try {
+				currentScreen = super.createScreenCapture(new Rectangle(calibration_data[0],calibration_data[1],calibration_data[2]-calibration_data[0],calibration_data[3]-calibration_data[1]));
+			} catch (IllegalArgumentException e) {
+				calibration_data=new int[4];
+				File f = new File("calibration_data.txt");
+				f.delete();
+			}
 		} else {
 			currentScreen = super.createScreenCapture(new Rectangle(418+18,204+83,912-18,586-83));
 		}

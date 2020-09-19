@@ -770,7 +770,7 @@ public class TypeFace2 {
 	}
 	private boolean futureToneDarkColorCheck(Color pixel) {
 		return pixel.getRed()<176
-				 && pixel.getGreen()<176 && pixel.getBlue()>100;
+				 && pixel.getGreen()<178 && pixel.getBlue()>100;
 	}
 
 	public int extractNumbersFromImage(BufferedImage img) throws IOException {

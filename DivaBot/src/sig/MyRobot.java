@@ -147,6 +147,7 @@ public class MyRobot{
     
     boolean overlayHidden=false;
     static boolean onSongSelect=false;
+    static int stillOnSongSelect=0;
     static BufferedImage finishbutton = null; 
     static Dimension screenSize = new Dimension(0,0);
     static boolean dragging = false;
@@ -161,6 +162,7 @@ public class MyRobot{
     public static DisplayManager DM;
     public static ReloadSong AO;
     public static boolean FUTURETONE = false;
+    public static boolean LASTMODE_FUTURETONE = false;
     public static String USERNAME = "";
     public static String AUTHTOKEN = "";
     
@@ -174,6 +176,7 @@ public class MyRobot{
 			}
 			if (args[0].equalsIgnoreCase("debug")) {
 				DEBUG_MODE=true;
+				AuthenticateUser();
 			}
 		} else {
 			AuthenticateUser();
@@ -320,12 +323,14 @@ public class MyRobot{
 					prevSongTitle=selectedSong.title;
 					prevDifficulty=difficulty;
 					MyRobot.p.repaint();
-					MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-					MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-					MYROBOT.keyPress(KeyEvent.VK_F11);
-					MYROBOT.keyRelease(KeyEvent.VK_F11);
-					MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-					MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+					if (NEWSONGS.length==0) {
+						MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+						MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+						MYROBOT.keyPress(KeyEvent.VK_F11);
+						MYROBOT.keyRelease(KeyEvent.VK_F11);
+						MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+						MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+					}
 				}
 			}
 			lastSongSelectTime = System.currentTimeMillis();
@@ -338,12 +343,14 @@ public class MyRobot{
 				if (OnResultsScreen() && !recordedResults && !recordingResults && results.size()==0) {
 					lastSongSelectTime=System.currentTimeMillis();
 					MYROBOT.setAutoDelay(0);
-					MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-					MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-					MYROBOT.keyPress(KeyEvent.VK_F12);
-					MYROBOT.keyRelease(KeyEvent.VK_F12);
-					MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-					MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+					if (NEWSONGS.length==0) {
+						MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+						MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+						MYROBOT.keyPress(KeyEvent.VK_F12);
+						MYROBOT.keyRelease(KeyEvent.VK_F12);
+						MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+						MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+					}
 					Thread.sleep(200);
 					MYROBOT.refreshScoreScreen();
 					ImageIO.write(MYROBOT.createScoreScreenCapture(),"png",new File("scoreimage.png"));
@@ -364,14 +371,14 @@ public class MyRobot{
 								&& data.score!=lastscore /*|| lastpercent!=percent*/){
 							//System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+data.cool+"/"+data.fine+"/"+data.safe+"/"+data.sad+"/"+data.worst+" "+data.percent+"%");
 							
-							System.out.println("Results for "+selectedSong.title+" "+difficulty+": "+data.display());
-							File songFolder = new File(selectedSong.title+"/"+difficulty);
+							System.out.println("Results for "+selectedSong.title+" "+data.difficulty+": "+data.display());
+							File songFolder = new File(selectedSong.title+"/"+data.difficulty);
 							if (!songFolder.exists()) {
 								songFolder.mkdirs();
 							}
 							File[] songFolderFiles = songFolder.listFiles();
 							int playId = songFolderFiles.length;
-							final File playFolder = new File(selectedSong.title+"/"+difficulty+"/"+playId);
+							final File playFolder = new File(selectedSong.title+"/"+data.difficulty+"/"+playId);
 							playFolder.mkdir();
 							recordedResults=true;
 							lastcool=data.cool;
@@ -383,21 +390,23 @@ public class MyRobot{
 							lastcombo=data.combo;
 							lastscore=data.score;
 							lastfail=data.fail;
-							File resultImage=new File(playFolder,selectedSong.title+"_"+difficulty+"play_"+data.cool+"_"+data.fine+"_"+data.safe+"_"+data.sad+"_"+data.worst+"_"+data.percent+""
+							File resultImage=new File(playFolder,selectedSong.title+"_"+data.difficulty+"play_"+data.cool+"_"+data.fine+"_"+data.safe+"_"+data.sad+"_"+data.worst+"_"+data.percent+""
 									+ "_"+data.combo+"_"+data.score+".png");
 							new File("scoreimage.png").renameTo(resultImage);
-							results.add(new Result(selectedSong.title,difficulty,data.cool,data.fine,data.safe,data.sad,data.worst,data.percent,data.mod,data.combo,data.score,data.fail,resultImage));
+							results.add(new Result(selectedSong.title,data.difficulty,data.cool,data.fine,data.safe,data.sad,data.worst,data.percent,data.mod,data.combo,data.score,data.fail,resultImage));
 							SoundUtils.playSound("collect_item.wav");
 							
 							//gotoxy(800,64);
 							//click();
 							MYROBOT.setAutoDelay(0);
-							MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-							MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-							MYROBOT.keyPress(KeyEvent.VK_F11);
-							MYROBOT.keyRelease(KeyEvent.VK_F11);
-							MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-							MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+							if (NEWSONGS.length==0) {
+								MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+								MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+								MYROBOT.keyPress(KeyEvent.VK_F11);
+								MYROBOT.keyRelease(KeyEvent.VK_F11);
+								MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+								MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+							}
 						}
 					} catch (IOException|NumberFormatException|IndexOutOfBoundsException e) {
 						e.printStackTrace();
@@ -508,12 +517,23 @@ public class MyRobot{
 		/*ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(31,230,40,40)),"png",new File("color1.png"));
 		ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(31,196,40,40)),"png",new File("color2.png"));
 		ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)),"png",new File("color3.png"));*/
-		Color c1 = new Color(MYROBOT.createScreenCapture(new Rectangle(31,230,40,40)).getRGB(0, 0));
-		Color c2 = new Color(MYROBOT.createScreenCapture(new Rectangle(31,196,40,40)).getRGB(0, 0));
-		Color c3 = new Color(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)).getRGB(0, 0));
+		if (!FUTURETONE) {
+			Color c1 = new Color(MYROBOT.createScreenCapture(new Rectangle(31,230,40,40)).getRGB(0, 0));
+			Color c2 = new Color(MYROBOT.createScreenCapture(new Rectangle(31,196,40,40)).getRGB(0, 0));
+			Color c3 = new Color(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)).getRGB(0, 0));
+			return c1.getRed()>=250 && c1.getGreen()>=250 && c1.getBlue()>=250 && c2.getRed()>=10 && c2.getRed()<=25 && c2.getGreen()>=200 && c2.getGreen()<=240 && c2.getBlue()>=180 && c2.getBlue()<=220 &&
+					c3.getRed()>=200 && c3.getRed()<=255 && c3.getGreen()>=200 && c3.getGreen()<=255 && c3.getBlue()>=140 && c3.getBlue()<=220;
+		} else {
+			Color ft_pixel1 = new Color(MYROBOT.createScreenCapture(new Rectangle(260, 38,1,1)).getRGB(0, 0));
+			Color ft_pixel2 = new Color(MYROBOT.createScreenCapture(new Rectangle(86, 38,1,1)).getRGB(0, 0));
+			return (ft_pixel1.getRed()<60&&ft_pixel1.getRed()>0&&
+					ft_pixel1.getGreen()<90&&ft_pixel1.getGreen()>30&&
+					ft_pixel1.getBlue()<90&&ft_pixel1.getBlue()>30
+				&&ft_pixel2.getRed()<60&&ft_pixel2.getRed()>0&&
+				ft_pixel2.getGreen()<90&&ft_pixel2.getGreen()>30&&
+				ft_pixel2.getBlue()<90&&ft_pixel2.getBlue()>30);
+		}
 		//System.out.println(c1+"/"+c2+"/"+c3);
-		return c1.getRed()>=250 && c1.getGreen()>=250 && c1.getBlue()>=250 && c2.getRed()>=10 && c2.getRed()<=25 && c2.getGreen()>=200 && c2.getGreen()<=240 && c2.getBlue()>=180 && c2.getBlue()<=220 &&
-				c3.getRed()>=200 && c3.getRed()<=255 && c3.getGreen()>=200 && c3.getGreen()<=255 && c3.getBlue()>=140 && c3.getBlue()<=220;
 	}
 	
 	public static boolean IsResultsScreenshot(BufferedImage img) throws IOException {
@@ -530,33 +550,65 @@ public class MyRobot{
 	}
 
 	private void GetCurrentDifficulty() {
-		Color c = new Color(MYROBOT.createScreenCapture(new Rectangle(320,274,10,10)).getRGB(0, 0));
-		//return c.getRed()==43 && c.getGreen()==88 && c.getBlue()==213;
-		if (c.getRed()>100 && c.getRed()<200 && c.getBlue()>200 && c.getBlue()<255 && c.getGreen()<50) {
-			difficulty="EXEX";
-		} else 
-		if (c.getRed()>150 && c.getRed()<255 && c.getBlue()<50 && c.getGreen()<50) {
-			difficulty="EX";
-		} else 
-		if (c.getRed()>175 && c.getRed()<225 && c.getBlue()<50 && c.getGreen()<175 && c.getGreen()>135) {
-			difficulty="H";
-		} else 
-		if (c.getRed()>0 && c.getRed()<50 && c.getBlue()<50 && c.getGreen()<255 && c.getGreen()>190) {
-			difficulty="N";
-		} else 
-		if (c.getRed()>0 && c.getRed()<50 && c.getBlue()>170 && c.getBlue()<230 && c.getGreen()<190 && c.getGreen()>150) {
-			difficulty="E";
+		if (FUTURETONE) {
+			Color c = new Color(MYROBOT.createScreenCapture(new Rectangle(334,267,10,10)).getRGB(0, 0));
+			//return c.getRed()==43 && c.getGreen()==88 && c.getBlue()==213;
+			if (c.getRed()>30 && c.getRed()<140 && c.getBlue()>80 && c.getBlue()<160 && c.getGreen()<40) {
+				difficulty="EXEX";
+			} else 
+			if (c.getRed()>50 && c.getRed()<160 && c.getBlue()<40 && c.getGreen()<40) {
+				difficulty="EX";
+			} else 
+			if (c.getRed()>90 && c.getRed()<160 && c.getBlue()<40 && c.getGreen()>30 && c.getGreen()<120) {
+				difficulty="H";
+			} else 
+			if (c.getRed()<40 && c.getBlue()<70 && c.getGreen()<140 && c.getGreen()>60) {
+				difficulty="N";
+			} else 
+			if (c.getRed()<40 && c.getBlue()>70 && c.getBlue()<140 && c.getGreen()<100 && c.getGreen()>20) {
+				difficulty="E";
+			}
+		} else {
+			Color c = new Color(MYROBOT.createScreenCapture(new Rectangle(320,274,10,10)).getRGB(0, 0));
+			//return c.getRed()==43 && c.getGreen()==88 && c.getBlue()==213;
+			if (c.getRed()>100 && c.getRed()<200 && c.getBlue()>200 && c.getBlue()<255 && c.getGreen()<50) {
+				difficulty="EXEX";
+			} else 
+			if (c.getRed()>150 && c.getRed()<255 && c.getBlue()<50 && c.getGreen()<50) {
+				difficulty="EX";
+			} else 
+			if (c.getRed()>175 && c.getRed()<225 && c.getBlue()<50 && c.getGreen()<175 && c.getGreen()>135) {
+				difficulty="H";
+			} else 
+			if (c.getRed()>0 && c.getRed()<50 && c.getBlue()<50 && c.getGreen()<255 && c.getGreen()>190) {
+				difficulty="N";
+			} else 
+			if (c.getRed()>0 && c.getRed()<50 && c.getBlue()>170 && c.getBlue()<230 && c.getGreen()<190 && c.getGreen()>150) {
+				difficulty="E";
+			}
 		}
 	}
 	private void GetCurrentSong() throws IOException {
-		BufferedImage img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(630,80,580,380)));
+		
+		BufferedImage img=null;
 		long r=0,g=0,b=0;
-		int count=0;
-		for (int i=0;i<580;i++) {
-			for (int j=0;j<380;j++) {
-				r+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
-				g+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
-				b+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
+		if (!FUTURETONE) {
+			img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(630,80,580,380)));
+			for (int i=0;i<580;i++) {
+				for (int j=0;j<380;j++) {
+					r+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
+					g+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
+					b+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
+				}
+			}
+		} else {
+			img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(610,214,600,246)));
+			for (int i=0;i<600;i++) {
+				for (int j=0;j<246;j++) {
+					r+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
+					g+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
+					b+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
+				}
 			}
 		}
 		selectedSong = SongData.compareData(r,g,b);
@@ -610,21 +662,32 @@ public class MyRobot{
 						e2.printStackTrace();
 					}
 	            	BufferedImage img = null;
-	            	try {
-						ImageIO.write(img=MYROBOT.createScreenCapture(new Rectangle(630,80,580,380)),"png",new File("test.png"));
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
 	    			long totalr=0;
 	    			long totalg=0;
 	    			long totalb=0;
-	    			for (int i=0;i<580;i++) {
-	    				for (int j=0;j<380;j++) {
-	    					totalr+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
-	    					totalg+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
-	    					totalb+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
-	    				}
-	    			}
+	            	try {
+	            		if (FUTURETONE) {
+	            			ImageIO.write(img=MYROBOT.createScreenCapture(new Rectangle(610,214,600,246)),"png",new File("test.png"));
+	    	    			for (int i=0;i<600;i++) {
+	    	    				for (int j=0;j<246;j++) {
+	    	    					totalr+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
+	    	    					totalg+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
+	    	    					totalb+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
+	    	    				}
+	    	    			}
+	            		} else {
+	            			ImageIO.write(img=MYROBOT.createScreenCapture(new Rectangle(630,80,580,380)),"png",new File("test.png"));
+	    	    			for (int i=0;i<580;i++) {
+	    	    				for (int j=0;j<380;j++) {
+	    	    					totalr+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
+	    	    					totalg+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
+	    	    					totalb+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
+	    	    				}
+	    	    			}
+	            		}
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 	    			try {
 						SongData.saveSongToFile(NEWSONGS[currentSong],totalr,totalg,totalb);
 					} catch (IOException e2) {
@@ -794,6 +857,8 @@ public class MyRobot{
 		RunTest("scoreimage325.png",201,34,8,9,17,38.86f,"EXEX","HS",69,293062,true,Mode.FUTURETONE);
 		RunTest("scoreimage340.png",449,35,0,0,2,100.94f,"EX","HS",202,648571,false,Mode.FUTURETONE);
 		RunTest("scoreimage342.png",392,41,0,0,0,102.14f,"EXEX","HS",433,713988,false,Mode.FUTURETONE);
+		RunTest("test40.png",221,117,7,1,8,78.00f,"H","HS",111,253033,false,Mode.FUTURETONE);
+		RunTest("test41.png",329,108,3,0,17,80.10f,"EX","HS",113,419386,false,Mode.FUTURETONE);
 	}
 	
 	static void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail, Mode _mode) throws IOException {
@@ -859,20 +924,32 @@ public class MyRobot{
 		onSongSelect = (c.getRed()>=15 && c.getRed()<=45 && c.getGreen()>=75 && c.getGreen()<=90 && c.getBlue()>=200 && c.getBlue()<=230);
 		
 		if (onSongSelect) {
-			FUTURETONE=false;
+			stillOnSongSelect++;
+			FUTURETONE=false;			
+			if (LASTMODE_FUTURETONE) {
+				System.out.println("Switching to Megamix");
+				SongData.loadSongsFromFile();
+				LASTMODE_FUTURETONE=false;
+			}
 		} else
 		{
-			//TODO FUTURE TONE SUPPORT DISABLED FOR NOW.
-//			c = new Color(MYROBOT.createScreenCapture(new Rectangle(743,173,1,1)).getRGB(0, 0));
-//			if (!onSongSelect&&(c.getRed()>=160&&c.getRed()<=185&&c.getGreen()<=15&&c.getBlue()>=170&&c.getBlue()<=200)) {
-//				FUTURETONE=true;
-//				onSongSelect=true;
-//			}
-			
+			c = new Color(MYROBOT.createScreenCapture(new Rectangle(743,173,1,1)).getRGB(0, 0));
+			if (!onSongSelect&&(c.getRed()>=160&&c.getRed()<=200&&c.getGreen()<=15&&c.getBlue()>=170&&c.getBlue()<=200)) {
+				stillOnSongSelect++;
+				FUTURETONE=true;
+				onSongSelect=true;
+				if (!LASTMODE_FUTURETONE) {
+					System.out.println("Switching to Future Tone");
+					SongData.loadSongsFromFile();
+					LASTMODE_FUTURETONE=true;
+				}
+			} else {
+				stillOnSongSelect=0;
+			}
 		}
 		
 		//777,179 FUTURE TONE
-		return onSongSelect;
+		return stillOnSongSelect>=5;
 	}
 	
 	public static boolean isOnSongSelect() {

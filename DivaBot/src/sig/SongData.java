@@ -55,7 +55,12 @@ public class SongData {
 		sb.append(r).append(",")
 		.append(g).append(",")
 		.append(b);
-		String[] fileData = FileUtils.readFromFile("colorData");
+		String[] fileData=null;
+		if (MyRobot.FUTURETONE) {
+		 fileData=FileUtils.readFromFile("FTcolorData");
+		} else {
+		 fileData=FileUtils.readFromFile("colorData");	
+		}
 		for (int i=0;i<fileData.length;i++) {
 			String[] split = fileData[i].split(":");
 			if (split.length>0) {
@@ -69,15 +74,28 @@ public class SongData {
 			}
 		}
 		if (!found) {
-			FileUtils.logToFile(sb.toString(),"colorData");
+			if (MyRobot.FUTURETONE) {
+				FileUtils.logToFile(sb.toString(),"FTcolorData");
+			} else {
+				FileUtils.logToFile(sb.toString(),"colorData");
+			}
 			System.out.println("Appended color data with new data for "+title+"!");
 		} else {
-			FileUtils.writetoFile(fileData, "colorData",false);
+			if (MyRobot.FUTURETONE) {
+				FileUtils.writetoFile(fileData, "FTcolorData",false);
+			} else {
+				FileUtils.writetoFile(fileData, "colorData",false);
+			}
 			System.out.println("Updated color data with new data for "+title+"!");
 		}
 	}
 	public static void loadSongsFromFile() throws IOException {
-		String[] data = FileUtils.readFromFile("colorData");
+		String[] data = null;
+		if (MyRobot.FUTURETONE) {
+			data=FileUtils.readFromFile("FTcolorData");
+		} else {
+			data=FileUtils.readFromFile("colorData");
+		}
 		MyRobot.SONGS = new SongData[data.length];
 		for (int i=0;i<data.length;i++) {
 			SongData sd = ParseSong(data[i]);

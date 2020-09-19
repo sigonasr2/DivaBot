@@ -153,11 +153,17 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 								bestPlay = null;
 							}
 							obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/playcount/"+MyRobot.USERNAME+"/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
-							plays = obj.getInt("playcount");
+							if (obj.has("playcount")) {
+								plays = obj.getInt("playcount");
+							}							
 							obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/songpasscount/"+MyRobot.USERNAME+"/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
-							passes = obj.getInt("passcount");
+							if (obj.has("passcount")) {
+								passes = obj.getInt("passcount");
+							}
 							obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/songfccount/"+MyRobot.USERNAME+"/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")+"/"+difficulty);
-							fcCount = obj.getInt("fccount");
+							if (obj.has("fccount")) {
+								fcCount = obj.getInt("fccount");
+							}
 							/*obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/"+MyRobot.USERNAME);
 							lastRating = overallrating;
 							overallrating = (int)obj.getDouble("rating");

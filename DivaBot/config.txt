@@ -1,4 +1,4 @@
-DISPLAYDATA	-16776961*-13369549*94*Microsoft YaHei UI Bold*600*150*5000*Song Title (Japanese+Romanized)*176*80**~-16776961*-13369549*24*Gulim*400*40*1000*Overall Rating|Song Title (Romanized)|FC Count*176*240**~-16776961*-13369549*24*Dialog.italic*400*40*300*Song Title (Japanese+Romanized+ENG)*0*0*Header: *
+DISPLAYDATA	-16776961*-13369549*94*Microsoft YaHei UI Bold*600*150*5000*Song Title (Japanese+Romanized)*176*64**~-16776961*-13369549*24*Gulim*400*40*1000*Overall Rating|Song Title (Romanized)|FC Count*176*240**~-16776961*-13369549*24*Dialog.italic*400*40*300*Song Difficulty*0*0*Header: *
 LAST_HEIGHT	40
 WIDTH	1127
 HEIGHT	732

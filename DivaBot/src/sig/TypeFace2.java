@@ -60,7 +60,7 @@ public class TypeFace2 {
 	final static Rectangle FUTURETONE_RECT_SEARCH_SAFE=new Rectangle(872+XOFFSET,292,100+XOFFSET+1,22+8);
 	final static Rectangle FUTURETONE_RECT_SEARCH_SAD=new Rectangle(872+XOFFSET,328,100+XOFFSET+1,22+8);
 	final static Rectangle FUTURETONE_RECT_SEARCH_WORST=new Rectangle(872+XOFFSET,365,100+XOFFSET+1,22+8);
-	final static Rectangle FUTURETONE_RECT_SEARCH_PCT=new Rectangle(1174+XOFFSET,150,1115,8);
+	final static Rectangle FUTURETONE_RECT_SEARCH_PCT=new Rectangle(1174+XOFFSET,150,1125,8);
 	final static Rectangle FUTURETONE_RECT_SEARCH_PCT2=new Rectangle(1114+XOFFSET,150,1045,8);
 	final static Rectangle FUTURETONE_RECT_SEARCH_SCORE=new Rectangle(866+XOFFSET,543-4,250+XOFFSET+1,32+14);
 	final static Rectangle FUTURETONE_RECT_SEARCH_COMBO=new Rectangle(1023+XOFFSET,402-2,100+XOFFSET+1,22+8);
@@ -215,8 +215,8 @@ public class TypeFace2 {
 	}
 	
 	private Mode getMode(BufferedImage img2) {
-		Color ft_pixel1 = new Color(img2.getRGB(260, 39));
-		Color ft_pixel2 = new Color(img2.getRGB(86, 39));
+		Color ft_pixel1 = new Color(img2.getRGB(260, 38));
+		Color ft_pixel2 = new Color(img2.getRGB(86, 38));
 		if (ft_pixel1.getRed()<60&&ft_pixel1.getRed()>0&&
 				ft_pixel1.getGreen()<90&&ft_pixel1.getGreen()>30&&
 				ft_pixel1.getBlue()<90&&ft_pixel1.getBlue()>30

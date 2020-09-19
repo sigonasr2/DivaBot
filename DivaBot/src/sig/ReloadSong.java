@@ -145,20 +145,31 @@ public class ReloadSong extends JPanel implements ItemListener,MouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) {
 		BufferedImage img = null;
-    	try {
-			ImageIO.write(img=MyRobot.MYROBOT.createScreenCapture(new Rectangle(630,80,580,380)),"png",new File("test.png"));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
 		long totalr=0;
 		long totalg=0;
 		long totalb=0;
-		for (int i=0;i<580;i++) {
-			for (int j=0;j<380;j++) {
-				totalr+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
-				totalg+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
-				totalb+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
-			}
+    	try {
+    		if (MyRobot.FUTURETONE) {
+    			ImageIO.write(img=MyRobot.MYROBOT.createScreenCapture(new Rectangle(610,214,600,246)),"png",new File("test.png"));
+    			for (int i=0;i<600;i++) {
+    				for (int j=0;j<246;j++) {
+    					totalr+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
+    					totalg+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
+    					totalb+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
+    				}
+    			}
+    		} else {
+    			ImageIO.write(img=MyRobot.MYROBOT.createScreenCapture(new Rectangle(630,80,580,380)),"png",new File("test.png"));
+    			for (int i=0;i<580;i++) {
+    				for (int j=0;j<380;j++) {
+    					totalr+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
+    					totalg+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
+    					totalb+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
+    				}
+    			}
+    		}
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 		try {
 			SongData.saveSongToFile(((SongInfo)songs.getSelectedItem()).name,totalr,totalg,totalb);

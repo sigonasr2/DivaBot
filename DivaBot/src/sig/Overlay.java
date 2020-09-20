@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,11 +24,13 @@ public class Overlay extends JPanel implements MouseMotionListener,MouseListener
 	public static boolean started=false;
 	BufferedImage setupWindowButton;
 	BufferedImage finishButton;
+	BufferedImage changeMonitorButton;
 	Font drawFont = new Font("Verdana",Font.PLAIN,32);
 	
 	Overlay() throws IOException {
 		setupWindowButton = ImageIO.read(new File("setupwindow.png"));
 		finishButton = ImageIO.read(new File("finish.png"));
+		changeMonitorButton = ImageIO.read(new File("changemonitor.png"));
 		Thread t = new Thread() {
 			public void run() {
 				while (true) {
@@ -95,6 +98,7 @@ public class Overlay extends JPanel implements MouseMotionListener,MouseListener
 		} else
 		{
 			g.drawImage(setupWindowButton,MyRobot.screenSize.width-setupWindowButton.getWidth()+1,0,this);
+			//g.drawImage(changeMonitorButton,MyRobot.screenSize.width-changeMonitorButton.getWidth()+1,setupWindowButton.getHeight(),this);
 		}
 	}
 

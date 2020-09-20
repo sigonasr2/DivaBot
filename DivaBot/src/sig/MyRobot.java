@@ -168,11 +168,21 @@ public class MyRobot{
     
     public static long lastmainlooptime = 0;
     public static Result lastData=null;
+    public static int screen=0;
     
 	
 	public static void main(String[] args) throws JSONException, IOException, FontFormatException {
 		if (args.length>0) {
 			if (args[0].equalsIgnoreCase("calibrate")) {
+				File f = new File("screenConfig.txt");
+				if (f.exists()) {
+					String[] data= FileUtils.readFromFile("screenConfig.txt");
+					try {
+						screen=Integer.parseInt(data[0]);
+					} catch (Exception e) {
+						System.err.println("Could not read from screenConfig.txt. It's invalid data, consider deleting the file and run the program again.");
+					}
+				}
 				CALIBRATION_MODE=true;
 			}
 			if (args[0].equalsIgnoreCase("debug")) {
@@ -535,8 +545,8 @@ public class MyRobot{
 			Color c2 = new Color(MYROBOT.createScreenCapture(new Rectangle(31,196,40,40)).getRGB(0, 0));
 			Color c3 = new Color(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)).getRGB(0, 0));
 			//System.out.println(c1+"/"+c2+"/"+c3);
-			return c1.getRed()>=250 && c1.getGreen()>=250 && c1.getBlue()>=250 && c2.getRed()>=7 && c2.getRed()<=30 && c2.getGreen()>=200 && c2.getGreen()<=240 && c2.getBlue()>=180 && c2.getBlue()<=220 &&
-					c3.getRed()>=160 && c3.getRed()<=255 && c3.getGreen()>=160 && c3.getGreen()<=255 && c3.getBlue()>=130 && c3.getBlue()<=220;
+			return c1.getRed()>=240 && c1.getGreen()>=240 && c1.getBlue()>=240 && c2.getRed()>=7 && c2.getRed()<=60 && c2.getGreen()>=180 && c2.getGreen()<=250 && c2.getBlue()>=150 && c2.getBlue()<=240 &&
+					c3.getRed()>=140 && c3.getRed()<=255 && c3.getGreen()>=140 && c3.getGreen()<=255 && c3.getBlue()>=110 && c3.getBlue()<=240;
 		} else {
 			BufferedImage img2 = ImageUtils.toBufferedImage(MYROBOT.currentScreen.getScaledInstance(1280 , 720, Image.SCALE_SMOOTH));
 			Color ft_pixel1 = new Color(img2.getRGB(260, 38));
@@ -772,6 +782,7 @@ public class MyRobot{
 		selectedSong=new SongData("LIKE THE WIND",0,0,0);
 		difficulty="H";
 
+		RunTest("test56.png",405,105,17,8,41,63.72f,"EX","",109,453145,false,Mode.FUTURETONE);
 		RunTest("test55.png",421,50,1,0,3,98.37f,"EXEX","",406,689821,false,Mode.FUTURETONE);
 		RunTest("test54.png",448,129,20,6,35,74.89f,"EXEX","",247,678260,true,Mode.FUTURETONE);
 		RunTest("test53.png",456,163,31,7,47,75.89f,"EXEX","",105,736989,false,Mode.FUTURETONE);
@@ -935,8 +946,8 @@ public class MyRobot{
 	}
 	
 	public static boolean checkSongSelect() throws IOException {
-		Color c = new Color(MYROBOT.createScreenCapture(new Rectangle(845,638,1,1)).getRGB(0, 0));
-		onSongSelect = (c.getRed()>=15 && c.getRed()<=45 && c.getGreen()>=75 && c.getGreen()<=90 && c.getBlue()>=200 && c.getBlue()<=230);
+		ColorRegion cr = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(842,635,5,5));
+		onSongSelect = cr.getAllRange(15,45,75,90,200,230);
 		
 		if (onSongSelect) {
 			stillOnSongSelect++;
@@ -948,8 +959,8 @@ public class MyRobot{
 			}
 		} else
 		{
-			c = new Color(MYROBOT.createScreenCapture(new Rectangle(743,173,1,1)).getRGB(0, 0));
-			if (!onSongSelect&&(c.getRed()>=160&&c.getRed()<=200&&c.getGreen()<=15&&c.getBlue()>=170&&c.getBlue()<=200)) {
+			cr = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(741,171,5,5));
+			if (!onSongSelect&&cr.getAllRange(160,200,0,15,170,200)) {
 				stillOnSongSelect++;
 				FUTURETONE=true;
 				onSongSelect=true;

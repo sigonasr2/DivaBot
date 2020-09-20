@@ -319,6 +319,7 @@ public class MyRobot{
 	} else {
 		//ImageIO.write(MYROBOT.createScreenCapture(),"png",new File("testscreen.png"));
 		if (checkSongSelect()) {
+			//System.out.println("On song select");
 			if (!overlayHidden) {
 				overlayHidden=true;
 				MyRobot.p.repaint();
@@ -346,6 +347,8 @@ public class MyRobot{
 			}
 			lastSongSelectTime = System.currentTimeMillis();
 		} else {
+			MYROBOT.refreshScoreScreen();
+			ImageIO.write(MYROBOT.createScoreScreenCapture(),"png",new File("scoreimage.png"));
 			if (overlayHidden) {
 				overlayHidden=false;
 				MyRobot.p.repaint();
@@ -542,7 +545,7 @@ public class MyRobot{
 			ColorRegion cr2 = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(38,196,5,5));
 			ColorRegion cr3 = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(498,248,18,22));
 			//System.out.println(cr1+"/"+cr2+"/"+cr3);
-			return cr1.getAllRange(240, 255, 240, 255, 240, 255)&&cr2.getAllRange(7, 60, 180, 250, 150, 240)&&cr3.getAllRange(140, 255, 140, 255, 110, 240);
+			return cr1.getAllRange(240, 255, 240, 255, 240, 255)&&cr2.getAllRange(7, 60, 180, 250, 150, 240)&&cr3.getAllRange(140, 255, 140, 255, 0, 200);
 		} else {
 			BufferedImage img2 = ImageUtils.toBufferedImage(MYROBOT.currentScreen.getScaledInstance(1280 , 720, Image.SCALE_SMOOTH));
 			ColorRegion ft_results = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(70,30,70,30));
@@ -764,7 +767,10 @@ public class MyRobot{
 	    
 	    
 	    //SongData s = SongData.getByTitle(SONGNAMES[currentSong].name);
-	   
+
+		//selectedSong=new SongData("キップル・インダストリー",0,0,0);
+		//difficulty="H";
+		
 	    BotMain();
 	}
 	
@@ -773,6 +779,9 @@ public class MyRobot{
 		selectedSong=new SongData("LIKE THE WIND",0,0,0);
 		difficulty="H";
 
+		RunTest("test59.png",535,114,13,12,28,79.04f,"EXEX","HS",148,540700,false,Mode.MEGAMIX);
+		RunTest("test58.png",314,49,4,1,12,94.94f,"EXEX","HS",185,561682,false,Mode.FUTURETONE);
+		RunTest("test57.png",449,50,2,0,1,101.28f,"EXEX","HS",366,595859,false,Mode.FUTURETONE);
 		RunTest("test56.png",405,105,17,8,41,63.72f,"EX","",109,453145,true,Mode.FUTURETONE);
 		RunTest("test55.png",421,50,1,0,3,98.37f,"EXEX","",406,689821,false,Mode.FUTURETONE);
 		RunTest("test54.png",448,129,20,6,35,74.89f,"EXEX","",247,678260,true,Mode.FUTURETONE);

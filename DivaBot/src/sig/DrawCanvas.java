@@ -66,6 +66,7 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 	Result bestPlay=null;
 	int overallrating = 0;
 	BufferedImage addConfigButton,backgroundColorButton,reloadSongButton;
+	static BufferedImage mikuFC;
     long ratingTime = System.currentTimeMillis()-10000;
     long bestPlayTime = System.currentTimeMillis()-10000;
     int lastRating = -1;
@@ -89,6 +90,7 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 		addConfigButton = ImageIO.read(new File("addDisplay.png"));
 		backgroundColorButton = ImageIO.read(new File("backgroundCol.png"));
 		reloadSongButton = ImageIO.read(new File("reloadSong.png"));
+		mikuFC = ImageIO.read(new File("mikufc.png"));
 		Thread t = new Thread() {
 			public void run() {
 				while (true) {
@@ -129,10 +131,6 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 		t = new Thread() {
 			public void run() {
 				try {
-					/*JSONObject obj = FileUtils.readJsonArrayFromUrl("http://45.33.13.215:4501/song/"+URLEncoder.encode(MyRobot.p.songname, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20")).getJSONObject(0);
-					romanizedname = obj.getString("romanized_name");
-					englishname = obj.getString("english_name");
-					artist = obj.getString("artist");*/
 					if (MyRobot.p.songname!=null) {
 						SongInfo currentSong = SongInfo.getByTitle(MyRobot.p.songname);
 						//FileUtils.writetoFile(new String[] {MyRobot.p.songname}, "testencode.txt");
@@ -164,19 +162,6 @@ public class DrawCanvas extends JPanel implements KeyListener,ComponentListener,
 							if (obj.has("fccount")) {
 								fcCount = obj.getInt("fccount");
 							}
-							/*obj = FileUtils.readJsonFromUrl("http://45.33.13.215:4501/rating/"+MyRobot.USERNAME);
-							lastRating = overallrating;
-							overallrating = (int)obj.getDouble("rating");
-							if (lastRating<overallrating) {ratingTime=System.currentTimeMillis();}
-							*/
-							//String text = songname+" / "+((romanizedname.length()>0)?romanizedname:englishname)+" "+(artist.length()>0?"by "+artist:"")+"    "+((plays>0)?("Plays - "+(passes)+"/"+(plays)):"")+" "+((plays!=0)?"("+((int)(Math.floor(((float)passes)/plays*100)))+"% pass rate"+((fcCount>0)?"  -  "+fcCount+" FC"+(fcCount==1?"":"s")+"    "+((int)(Math.floor(((float)fcCount)/plays*100)))+"% FC rate":"")+")":"No plays")+"      "+((bestPlay!=null)?"Best Play - "+bestPlay.display():"")+"     Overall Rating: "+overallrating;
-							/*Rectangle2D bounds = TextUtils.calculateStringBoundsFont(text, programFont);
-							if (bounds.getWidth()>1345) {
-								scrolling=true;
-							} else {
-								scrolling=false;
-							}
-							scrollX = 0;*/
 							MyRobot.p.repaint();
 							MyRobot.p.refreshAllLabels();
 							}

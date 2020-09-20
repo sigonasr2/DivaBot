@@ -3,10 +3,13 @@ package sig;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
+import sig.utils.ImageUtils;
 import sig.utils.TextUtils;
 
 public class Display {
@@ -17,6 +20,7 @@ public class Display {
 	Font modifiedfont=font;
 	int x;
 	int y;
+	int modDisplayX=0;
 	int width=200;
 	int height=48;
 	int fontHeight=0;
@@ -147,7 +151,13 @@ public class Display {
 		modifiedfont = font;
 		Rectangle2D bounds = TextUtils.calculateStringBoundsFont(currentText, font);
 		fontHeight = (int)bounds.getHeight();
-		while (currentSize>1&&bounds.getWidth()>width) {
+		if (labels[cycle].equalsIgnoreCase("Best Play")) {
+			BufferedImage scaledMiku=ImageUtils.toBufferedImage(DrawCanvas.mikuFC.getScaledInstance(-1, height, BufferedImage.SCALE_SMOOTH));
+			modDisplayX = width-scaledMiku.getWidth();
+		} else {
+			modDisplayX = width;
+		}
+		while (currentSize>1&&bounds.getWidth()>modDisplayX) {
 			currentSize-=2;
 			if (currentSize<=1) {break;}
 			modifiedfont = new Font(font.getFontName(),Font.PLAIN,currentSize);
@@ -162,7 +172,24 @@ public class Display {
 		g.fillRect(x, y, width, height);
 		g.setColor(textCol);
 		g.setFont(modifiedfont);
-		g.drawString(currentText,x,y+height/2+fontHeight/4);
+		DrawCanvas data = MyRobot.p;
+		if (labels[cycle].equalsIgnoreCase("Best Play")) {
+			if (data.bestPlay!=null) {
+				if (data.bestPlay.safe+data.bestPlay.sad+data.bestPlay.worst==0) {
+					if (height>1) {
+						BufferedImage scaledMiku=ImageUtils.toBufferedImage(DrawCanvas.mikuFC.getScaledInstance(-1, height, BufferedImage.SCALE_SMOOTH));
+						g.drawImage(scaledMiku,x,y+height-scaledMiku.getHeight(),MyRobot.p);
+					}
+					g.drawString(currentText,x+width-modDisplayX,y+height/2+fontHeight/4);
+				} else {
+					g.drawString(currentText,x,y+height/2+fontHeight/4);
+				}
+			} else {
+				g.drawString(currentText,x,y+height/2+fontHeight/4);
+			}
+		} else {
+			g.drawString(currentText,x,y+height/2+fontHeight/4);
+		}
 	}
 	
 	public String getSaveString() {
@@ -197,10 +224,18 @@ public class Display {
 		try {
 			switch (string) {
 				case "Best Play":{
-					if (data.bestPlayTime>System.currentTimeMillis()-10000) {
+					if (data.bestPlayTime>System.currentTimeMillis()-5000) {
 						return "New Record!";
 					} else {
-						return header+((data.bestPlay!=null)?data.bestPlay.display():"No plays");
+						if (data.bestPlay!=null) {
+							if (data.bestPlay.safe+data.bestPlay.sad+data.bestPlay.worst==0) {
+								return header+data.bestPlay.display();
+							} else {
+								return header+((data.bestPlay!=null)?data.bestPlay.display():"No plays");
+							}
+						} else {
+							return header+"No plays";
+						}
 					}
 				}
 				case "Overall Rating":{

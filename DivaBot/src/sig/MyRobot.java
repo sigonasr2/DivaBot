@@ -172,17 +172,22 @@ public class MyRobot{
     
 	
 	public static void main(String[] args) throws JSONException, IOException, FontFormatException {
+		File f = new File("screenConfig.txt");
+		if (f.exists()) {
+			String[] data= FileUtils.readFromFile("screenConfig.txt");
+			try {
+				screen=Integer.parseInt(data[0]);
+				GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			    GraphicsDevice[] gs = ge.getScreenDevices();
+			    if (gs.length<=screen) {
+			    	screen=0;
+			    }
+			} catch (Exception e) {
+				System.err.println("Could not read from screenConfig.txt. It's invalid data, consider deleting the file and run the program again.");
+			}
+		}
 		if (args.length>0) {
 			if (args[0].equalsIgnoreCase("calibrate")) {
-				File f = new File("screenConfig.txt");
-				if (f.exists()) {
-					String[] data= FileUtils.readFromFile("screenConfig.txt");
-					try {
-						screen=Integer.parseInt(data[0]);
-					} catch (Exception e) {
-						System.err.println("Could not read from screenConfig.txt. It's invalid data, consider deleting the file and run the program again.");
-					}
-				}
 				CALIBRATION_MODE=true;
 			}
 			if (args[0].equalsIgnoreCase("debug")) {
@@ -625,7 +630,9 @@ public class MyRobot{
 	    SongData.loadSongsFromFile();
 	    
 		 System.setProperty("awt.useSystemAAFontSettings","on");
-	    FRAME = new JFrame();
+		 GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		 GraphicsDevice[] gs = ge.getScreenDevices();
+	    FRAME = new JFrame(gs[screen].getDefaultConfiguration());
         FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         p.difficulty="EXEX";
         p.songname = "Dear";
@@ -979,11 +986,12 @@ public class MyRobot{
 	void initialize() {
 		System.setProperty("sun.java2d.opengl", "True");
 	    grEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
-	    grDevice = grEnv.getDefaultScreenDevice();
+	    GraphicsDevice[] gs = grEnv.getScreenDevices();
+	    grDevice = gs[screen];
 	    updateScreenInfo();
 	    setKeyMap();
 	    try {
-	        MYROBOT = new CustomRobot();
+	        MYROBOT = new CustomRobot(gs[screen]);
 	        MYROBOT.refreshScreen();
 	    } catch (Exception e) {
 	    	e.printStackTrace();
@@ -992,7 +1000,7 @@ public class MyRobot{
 	    }
 	    X = SCREEN_X / 2;
 	    Y = SCREEN_Y / 2;
-	    //MYROBOT.mouseMove(X, Y);
+	    //MYROBOT.mouseMove(X+grDevice.getDefaultConfiguration().getBounds().x, Y+grDevice.getDefaultConfiguration().getBounds().y);
 	    PIX_CLOSE_ACTIVE_OFF_MOUSE = new Color(184, 67, 44);
 	    PIX_CLOSE_ACTIVE_ON_MOUSE = new Color(210, 35, 2);
 	}
@@ -1002,6 +1010,7 @@ public class MyRobot{
 	    SCREEN_Y = grDevice.getDisplayMode().getHeight();
 	    WINDOW_X = grEnv.getMaximumWindowBounds().width;
 	    WINDOW_Y = grEnv.getMaximumWindowBounds().height;
+	    //System.out.println(SCREEN_X+"/"+SCREEN_Y+","+WINDOW_X+"/"+WINDOW_Y);
 	}
 	
 	void setKeyMap() {

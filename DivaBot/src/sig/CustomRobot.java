@@ -2,6 +2,7 @@ package sig;
 
 import java.awt.AWTException;
 import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
@@ -20,13 +21,23 @@ public class CustomRobot extends Robot{
 	BufferedImage scoreCurrentScreen;
 	int[] calibration_data = new int[]{0,0,1,1};
 	long lastCalibrationTime = 0;
+	GraphicsEnvironment ge;
+	GraphicsDevice[] gs;
 	
 	public CustomRobot() throws AWTException {
 		super();
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	    GraphicsDevice[] gs = ge.getScreenDevices();
+		this.ge=ge;
+		this.gs=gs;
 	}
 
 	public CustomRobot(GraphicsDevice screen) throws AWTException {
 		super(screen);
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	    GraphicsDevice[] gs = ge.getScreenDevices();
+		this.ge=ge;
+		this.gs=gs;
 	}
 	
 	public synchronized BufferedImage getSizedCapture(Rectangle r) {
@@ -40,14 +51,14 @@ public class CustomRobot extends Robot{
 		}
 		if (calibration_data.length>0) {
 			try {
-				currentScreen = super.createScreenCapture(new Rectangle(calibration_data[0],calibration_data[1],calibration_data[2]-calibration_data[0],calibration_data[3]-calibration_data[1]));
+				currentScreen = super.createScreenCapture(new Rectangle(calibration_data[0]+gs[MyRobot.screen].getDefaultConfiguration().getBounds().x,calibration_data[1]+gs[MyRobot.screen].getDefaultConfiguration().getBounds().y,calibration_data[2]-calibration_data[0],calibration_data[3]-calibration_data[1]));
 			} catch (IllegalArgumentException e) {
 				calibration_data=new int[4];
 				File f = new File("calibration_data.txt");
 				f.delete();
 			}
 		} else {
-			currentScreen = super.createScreenCapture(new Rectangle(418+18,204+83,912-18,586-83));
+			currentScreen = super.createScreenCapture(new Rectangle(418+18+gs[MyRobot.screen].getDefaultConfiguration().getBounds().x,204+83+gs[MyRobot.screen].getDefaultConfiguration().getBounds().y,912-18,586-83));
 		}
 	}
 	private void ReloadCalibrationData() throws IOException {
@@ -69,9 +80,9 @@ public class CustomRobot extends Robot{
 			ReloadCalibrationData();
 		}
 		if (calibration_data.length>0) {
-			scoreCurrentScreen = super.createScreenCapture(new Rectangle(calibration_data[0],calibration_data[1],calibration_data[2]-calibration_data[0],calibration_data[3]-calibration_data[1]));
+			scoreCurrentScreen = super.createScreenCapture(new Rectangle(calibration_data[0]+gs[MyRobot.screen].getDefaultConfiguration().getBounds().x,calibration_data[1]+gs[MyRobot.screen].getDefaultConfiguration().getBounds().y,calibration_data[2]-calibration_data[0],calibration_data[3]-calibration_data[1]));
 		} else {
-			scoreCurrentScreen = super.createScreenCapture(new Rectangle(418+23,204+85,912-18,586-83));
+			scoreCurrentScreen = super.createScreenCapture(new Rectangle(418+23+gs[MyRobot.screen].getDefaultConfiguration().getBounds().x,204+85+gs[MyRobot.screen].getDefaultConfiguration().getBounds().y,912-18,586-83));
 		}
 	}
 	

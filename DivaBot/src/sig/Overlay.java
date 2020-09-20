@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import sig.utils.FileUtils;
 import sig.utils.MouseUtils;
 
 public class Overlay extends JPanel implements MouseMotionListener,MouseListener{
@@ -98,7 +101,7 @@ public class Overlay extends JPanel implements MouseMotionListener,MouseListener
 		} else
 		{
 			g.drawImage(setupWindowButton,MyRobot.screenSize.width-setupWindowButton.getWidth()+1,0,this);
-			//g.drawImage(changeMonitorButton,MyRobot.screenSize.width-changeMonitorButton.getWidth()+1,setupWindowButton.getHeight(),this);
+			g.drawImage(changeMonitorButton,MyRobot.screenSize.width-changeMonitorButton.getWidth()+1,setupWindowButton.getHeight(),this);
 		}
 	}
 
@@ -110,7 +113,7 @@ public class Overlay extends JPanel implements MouseMotionListener,MouseListener
 	public void mousePressed(MouseEvent e) {
 		Point cursor = MouseUtils.GetCursorPosition(MyRobot.FRAME, e);
 		if (started) {
-			MyRobot.STARTDRAG=e.getLocationOnScreen();
+			MyRobot.STARTDRAG=e.getPoint();
 		} else
 		if (MyRobot.CALIBRATIONSTATUS.length()>0) {
 			if (cursor.x>=MyRobot.screenSize.width-finishButton.getWidth()+1&&
@@ -126,6 +129,21 @@ public class Overlay extends JPanel implements MouseMotionListener,MouseListener
 					cursor.y>=0&&
 					cursor.y<=setupWindowButton.getHeight()) {
 				started=true;
+			} else
+			if (cursor.x>=MyRobot.screenSize.width-setupWindowButton.getWidth()+1&&
+					cursor.x<=MyRobot.screenSize.width&&
+					cursor.y>setupWindowButton.getHeight()&&
+					cursor.y<=setupWindowButton.getHeight()*2) {
+				GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			    GraphicsDevice[] gs = ge.getScreenDevices();
+			    MyRobot.screen=(MyRobot.screen+1)%gs.length;
+			    FileUtils.writetoFile(new String[] {Integer.toString(MyRobot.screen)}, "screenConfig.txt", false);
+			    try {
+					Runtime.getRuntime().exec("java -ea -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -jar DivaBot.jar calibrate");
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			    System.exit(0);
 			}
 		}
 	}
@@ -134,7 +152,7 @@ public class Overlay extends JPanel implements MouseMotionListener,MouseListener
 	public void mouseReleased(MouseEvent e) {
 		if (started) {
 			if (MyRobot.STARTDRAG!=null) {
-			MyRobot.ENDDRAG=e.getLocationOnScreen();
+			MyRobot.ENDDRAG=e.getPoint();
 				if (MyRobot.STARTDRAG.x>MyRobot.ENDDRAG.x) { 
 					int xTemp = MyRobot.STARTDRAG.x;
 					MyRobot.STARTDRAG.x=MyRobot.ENDDRAG.x;

@@ -2,6 +2,8 @@ package sig;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -34,8 +36,9 @@ public class Calibrator2 {
 		int yoffset1=0;
 		int xoffset2=0;
 		int yoffset2=0;
-		
-		img = MyRobot.MYROBOT.getSizedCapture(new Rectangle(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y));
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	    GraphicsDevice[] gs = ge.getScreenDevices();
+		img = MyRobot.MYROBOT.getSizedCapture(new Rectangle(MyRobot.STARTDRAG.x+gs[MyRobot.screen].getDefaultConfiguration().getBounds().x,MyRobot.STARTDRAG.y+gs[MyRobot.screen].getDefaultConfiguration().getBounds().y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y));
 		ImageIO.write(img,"png",new File("capture_1.png"));
 		boolean found=false;
 		for (int x=0;x<img.getWidth();x++) {
@@ -55,7 +58,7 @@ public class Calibrator2 {
 			if (found) {break;}
 		}
 		
-		img = MyRobot.MYROBOT.getSizedCapture(new Rectangle(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y));
+		img = MyRobot.MYROBOT.getSizedCapture(new Rectangle(MyRobot.STARTDRAG.x+gs[MyRobot.screen].getDefaultConfiguration().getBounds().x,MyRobot.STARTDRAG.y+gs[MyRobot.screen].getDefaultConfiguration().getBounds().y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y));
 		ImageIO.write(img,"png",new File("capture_2.png"));
 		
 		found=false;
@@ -76,7 +79,7 @@ public class Calibrator2 {
 			if (found) {break;}
 		}
 		for (int y=yoffset1;y>=0;y--) {
-			BufferedImage newimg = MyRobot.MYROBOT.getSizedCapture(new Rectangle(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y));
+			BufferedImage newimg = MyRobot.MYROBOT.getSizedCapture(new Rectangle(MyRobot.STARTDRAG.x+gs[MyRobot.screen].getDefaultConfiguration().getBounds().x,MyRobot.STARTDRAG.y+gs[MyRobot.screen].getDefaultConfiguration().getBounds().y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y));
 			Color col = new Color(newimg.getRGB(0, 0));
 			if (col.getRed()+col.getGreen()+col.getBlue()<5) {
 				break;
@@ -84,7 +87,7 @@ public class Calibrator2 {
 			MyRobot.STARTDRAG.y-=1;
 		}
 		for (int y=yoffset2;y<img.getHeight();y++) {
-			BufferedImage newimg = MyRobot.MYROBOT.getSizedCapture(new Rectangle(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y));
+			BufferedImage newimg = MyRobot.MYROBOT.getSizedCapture(new Rectangle(MyRobot.STARTDRAG.x+gs[MyRobot.screen].getDefaultConfiguration().getBounds().x,MyRobot.STARTDRAG.y+gs[MyRobot.screen].getDefaultConfiguration().getBounds().y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y));
 			Color col = new Color(newimg.getRGB(newimg.getWidth()-1, newimg.getHeight()-1));
 			if (col.getRed()+col.getGreen()+col.getBlue()<5) {
 				break;
@@ -92,7 +95,7 @@ public class Calibrator2 {
 			MyRobot.ENDDRAG.y+=1;
 		}
 		
-		img = MyRobot.MYROBOT.getSizedCapture(new Rectangle(MyRobot.STARTDRAG.x,MyRobot.STARTDRAG.y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y));
+		img = MyRobot.MYROBOT.getSizedCapture(new Rectangle(MyRobot.STARTDRAG.x+gs[MyRobot.screen].getDefaultConfiguration().getBounds().x,MyRobot.STARTDRAG.y+gs[MyRobot.screen].getDefaultConfiguration().getBounds().y,MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x,MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y));
 		ImageIO.write(img,"png",new File("capture_3.png"));
 		
 		System.out.println(MyRobot.STARTDRAG+","+MyRobot.ENDDRAG);
@@ -120,7 +123,7 @@ public class Calibrator2 {
 		}
 		MyRobot.FRAME.setAlwaysOnTop(true);
 		
-		img = MyRobot.MYROBOT.getSizedCapture(new Rectangle(0,0,MyRobot.screenSize.width,MyRobot.screenSize.height));
+		//img = MyRobot.MYROBOT.getSizedCapture(new Rectangle(gs[MyRobot.screen].getDefaultConfiguration().getBounds().x,gs[MyRobot.screen].getDefaultConfiguration().getBounds().y,MyRobot.screenSize.width,MyRobot.screenSize.height));
 		FileUtils.deleteFile("calibration_data.txt");
 		FileUtils.logToFile(Integer.toString(MyRobot.STARTDRAG.x), "calibration_data.txt");
 		FileUtils.logToFile(Integer.toString(MyRobot.STARTDRAG.y), "calibration_data.txt");

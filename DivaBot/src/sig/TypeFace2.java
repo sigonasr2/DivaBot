@@ -40,7 +40,7 @@ public class TypeFace2 {
 		debugdir.mkdirs();
 	}
 	
-	public Result getAllData(BufferedImage img) throws IOException {
+	public Result getAllData(BufferedImage img) throws Exception {
 		return getAllData(img,false);
 	}
 	
@@ -65,7 +65,7 @@ public class TypeFace2 {
 	final static Rectangle FUTURETONE_RECT_SEARCH_SCORE=new Rectangle(866+XOFFSET,543-4,250+XOFFSET+1,32+24);
 	final static Rectangle FUTURETONE_RECT_SEARCH_COMBO=new Rectangle(1023+XOFFSET,402,100+XOFFSET+1,22+8);
 
-	public Result getAllData(BufferedImage img, boolean debug) throws IOException,NumberFormatException,IndexOutOfBoundsException {
+	public Result getAllData(BufferedImage img, boolean debug) throws IOException {
 		BufferedImage img2 = ImageUtils.toBufferedImage(img.getScaledInstance(1280 , 720, Image.SCALE_SMOOTH));
 		Result result = new Result("","",-1,-1,-1,-1,-1,-1f);
 		int[] finalNumbers = new int[5];
@@ -138,23 +138,18 @@ public class TypeFace2 {
 		
 		
 		//489,197
-		Color failPixel = null;
 		result.fail = false;
 		switch (result.mode) {
 			case MEGAMIX:{
-				for (int i=0;i<11;i++) {
-					failPixel=new Color(img2.getRGB(489, 187+i));
-					if (failPixel.getRed()<100&&failPixel.getGreen()<100&&failPixel.getBlue()<100) {
-						result.fail = true;
-						break;
-					}
+				ColorRegion failRegion = new ColorRegion(img2,new Rectangle(484,191,5,5));
+				if (failRegion.getAllRange(0, 130, 0, 130, 0, 130)) {
+					result.fail = true;
+					break;
 				}
 			}break;
 			case FUTURETONE:{
-				failPixel=new Color(img2.getRGB(587, 148));
-				if (failPixel.getRed()<240&&failPixel.getRed()>180&&
-						failPixel.getGreen()<200&&failPixel.getGreen()>100&&
-						failPixel.getBlue()>190&&failPixel.getBlue()<240) {
+				ColorRegion failRegion = new ColorRegion(img2,new Rectangle(585,146,5,5));
+				if (failRegion.getAllRange(180, 240, 100, 200, 190, 240)) {
 					result.fail = true;
 				}
 			}break;
@@ -162,12 +157,18 @@ public class TypeFace2 {
 
 		switch (result.mode) {
 			case MEGAMIX:{
-				Color difficultyPixel = new Color(img2.getRGB(622, 110));
-				result.difficulty = getDifficulty(difficultyPixel);
+				ColorRegion difficultyRegion = new ColorRegion(img2,new Rectangle(620,100,5,5));
+				result.difficulty = getDifficulty(difficultyRegion);
+				if (debug) {
+					System.out.println("Diff:"+result.difficulty+"/"+difficultyRegion);
+				}
 			}break;
 			case FUTURETONE:{
-				Color difficultyPixel = new Color(img2.getRGB(585, 70));
-				result.difficulty = getFutureToneDifficulty(difficultyPixel);
+				ColorRegion difficultyRegion = new ColorRegion(img2,new Rectangle(583,68,5,5));
+				result.difficulty = getFutureToneDifficulty(difficultyRegion);
+				if (debug) {
+					System.out.println("Diff:"+result.difficulty+"/"+difficultyRegion);
+				}
 			}break;
 		}
 		
@@ -216,14 +217,9 @@ public class TypeFace2 {
 	}
 	
 	private Mode getMode(BufferedImage img2) {
-		Color ft_pixel1 = new Color(img2.getRGB(260, 38));
-		Color ft_pixel2 = new Color(img2.getRGB(86, 38));
-		if (ft_pixel1.getRed()<60&&ft_pixel1.getRed()>=0&&
-				ft_pixel1.getGreen()<90&&ft_pixel1.getGreen()>20&&
-				ft_pixel1.getBlue()<90&&ft_pixel1.getBlue()>20
-			&&ft_pixel2.getRed()<60&&ft_pixel2.getRed()>=0&&
-			ft_pixel2.getGreen()<90&&ft_pixel2.getGreen()>20&&
-			ft_pixel2.getBlue()<90&&ft_pixel2.getBlue()>20) {
+		ColorRegion ft_results = new ColorRegion(img2,new Rectangle(81,35,80,37));
+		//System.out.println("Mode Check:"+ft_results);
+		if (ft_results.getAllRange(30,150,60,180,60,180)) {
 			return Mode.FUTURETONE;
 		}
 		return Mode.MEGAMIX;
@@ -258,13 +254,14 @@ public class TypeFace2 {
 		return "";
 	}
 
-	private String getFutureToneDifficulty(Color difficultyPixel) {
+	private String getFutureToneDifficulty(ColorRegion difficultyRegion) {
 		String[] diffs = new String[] {"E","N","H","EX","EXEX"};
 		Color[] cols = new Color[] {new Color(15,63,160),new Color(31,175,13),new Color(157,123,17),new Color(152,13,16),new Color(98,0,165),};
 		int lowestDistance = Integer.MAX_VALUE;
 		int lowestIndex = -1;
+		Color avg = new Color(difficultyRegion.getRed(),difficultyRegion.getGreen(),difficultyRegion.getBlue());
 		for (int i=0;i<cols.length;i++) {
-			int distance = (int)ImageUtils.distanceToColor(difficultyPixel, cols[i]);
+			int distance = (int)ImageUtils.distanceToColor(avg, cols[i]);
 			if (distance<lowestDistance) {
 				lowestDistance = distance;
 				lowestIndex=i;
@@ -273,13 +270,14 @@ public class TypeFace2 {
 		return diffs[lowestIndex];
 	}
 
-	private String getDifficulty(Color difficultyPixel) {
+	private String getDifficulty(ColorRegion difficultyRegion) {
 		String[] diffs = new String[] {"E","N","H","EX","EXEX"};
 		Color[] cols = new Color[] {new Color(95,243,255),new Color(20,234,0),new Color(251,191,0),new Color(253,14,81),new Color(157,0,227),};
 		int lowestDistance = Integer.MAX_VALUE;
 		int lowestIndex = -1;
+		Color avg = new Color(difficultyRegion.getRed(),difficultyRegion.getGreen(),difficultyRegion.getBlue());
 		for (int i=0;i<cols.length;i++) {
-			int distance = (int)ImageUtils.distanceToColor(difficultyPixel, cols[i]);
+			int distance = (int)ImageUtils.distanceToColor(avg, cols[i]);
 			if (distance<lowestDistance) {
 				lowestDistance = distance;
 				lowestIndex=i;

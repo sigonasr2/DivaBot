@@ -3,12 +3,13 @@ package sig;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 public class ColorRegion {
 	Rectangle region;
 	BufferedImage img;
 	
-	ColorRegion(BufferedImage img, Rectangle region) {
+	ColorRegion(BufferedImage img, Rectangle region){
 		this.region=region;
 		this.img=img;
 	}
@@ -37,6 +38,9 @@ public class ColorRegion {
 		int total = 0;
 		for (int x=0;x<region.width;x++) {
 			for (int y=0;y<region.height;y++) {
+				if (region.x+x<0||region.x+x>=region.x+region.width||region.y+y<0||region.y+y>=region.y+region.height) {
+					continue;
+				}
 				total+=new Color(img.getRGB(region.x+x, region.y+y)).getRed();
 			}
 		}
@@ -46,6 +50,9 @@ public class ColorRegion {
 		int total = 0;
 		for (int x=0;x<region.width;x++) {
 			for (int y=0;y<region.height;y++) {
+				if (region.x+x<0||region.x+x>=region.x+region.width||region.y+y<0||region.y+y>=region.y+region.height) {
+					continue;
+				}
 				total+=new Color(img.getRGB(region.x+x, region.y+y)).getGreen();
 			}
 		}
@@ -55,6 +62,9 @@ public class ColorRegion {
 		int total = 0;
 		for (int x=0;x<region.width;x++) {
 			for (int y=0;y<region.height;y++) {
+				if (region.x+x<0||region.x+x>=region.x+region.width||region.y+y<0||region.y+y>=region.y+region.height) {
+					continue;
+				}
 				total+=new Color(img.getRGB(region.x+x, region.y+y)).getBlue();
 			}
 		}

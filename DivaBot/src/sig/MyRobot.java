@@ -537,26 +537,17 @@ public class MyRobot{
 	
 	private boolean OnResultsScreen() throws IOException {
 		//r.x-418, r.y-204
-		/*ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(31,230,40,40)),"png",new File("color1.png"));
-		ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(31,196,40,40)),"png",new File("color2.png"));
-		ImageIO.write(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)),"png",new File("color3.png"));*/
 		if (!FUTURETONE) {
-			Color c1 = new Color(MYROBOT.createScreenCapture(new Rectangle(31,230,40,40)).getRGB(0, 0));
-			Color c2 = new Color(MYROBOT.createScreenCapture(new Rectangle(31,196,40,40)).getRGB(0, 0));
-			Color c3 = new Color(MYROBOT.createScreenCapture(new Rectangle(483,256,40,40)).getRGB(0, 0));
-			//System.out.println(c1+"/"+c2+"/"+c3);
-			return c1.getRed()>=240 && c1.getGreen()>=240 && c1.getBlue()>=240 && c2.getRed()>=7 && c2.getRed()<=60 && c2.getGreen()>=180 && c2.getGreen()<=250 && c2.getBlue()>=150 && c2.getBlue()<=240 &&
-					c3.getRed()>=140 && c3.getRed()<=255 && c3.getGreen()>=140 && c3.getGreen()<=255 && c3.getBlue()>=110 && c3.getBlue()<=240;
+			ColorRegion cr1 = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(18,219,5,5));
+			ColorRegion cr2 = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(38,196,5,5));
+			ColorRegion cr3 = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(498,248,18,22));
+			//System.out.println(cr1+"/"+cr2+"/"+cr3);
+			return cr1.getAllRange(240, 255, 240, 255, 240, 255)&&cr2.getAllRange(7, 60, 180, 250, 150, 240)&&cr3.getAllRange(140, 255, 140, 255, 110, 240);
 		} else {
 			BufferedImage img2 = ImageUtils.toBufferedImage(MYROBOT.currentScreen.getScaledInstance(1280 , 720, Image.SCALE_SMOOTH));
-			Color ft_pixel1 = new Color(img2.getRGB(260, 38));
-			Color ft_pixel2 = new Color(img2.getRGB(86, 38));
-			return (ft_pixel1.getRed()<60&&ft_pixel1.getRed()>=0&&
-					ft_pixel1.getGreen()<90&&ft_pixel1.getGreen()>20&&
-					ft_pixel1.getBlue()<90&&ft_pixel1.getBlue()>20
-				&&ft_pixel2.getRed()<60&&ft_pixel2.getRed()>=0&&
-				ft_pixel2.getGreen()<90&&ft_pixel2.getGreen()>20&&
-				ft_pixel2.getBlue()<90&&ft_pixel2.getBlue()>20);
+			ColorRegion ft_results = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(70,30,70,30));
+			//System.out.println(ft_results);
+			return ft_results.getAllRange(30,150,60,180,60,180);
 		}
 	}
 
@@ -782,7 +773,7 @@ public class MyRobot{
 		selectedSong=new SongData("LIKE THE WIND",0,0,0);
 		difficulty="H";
 
-		RunTest("test56.png",405,105,17,8,41,63.72f,"EX","",109,453145,false,Mode.FUTURETONE);
+		RunTest("test56.png",405,105,17,8,41,63.72f,"EX","",109,453145,true,Mode.FUTURETONE);
 		RunTest("test55.png",421,50,1,0,3,98.37f,"EXEX","",406,689821,false,Mode.FUTURETONE);
 		RunTest("test54.png",448,129,20,6,35,74.89f,"EXEX","",247,678260,true,Mode.FUTURETONE);
 		RunTest("test53.png",456,163,31,7,47,75.89f,"EXEX","",105,736989,false,Mode.FUTURETONE);
@@ -887,11 +878,11 @@ public class MyRobot{
 		RunTest("test46.png",452,25,0,0,1,103.16f,"EXEX","HS",260,750134,false,Mode.FUTURETONE);
 	}
 	
-	static void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail, Mode _mode) throws IOException {
+	static void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail, Mode _mode) throws IOException{
 		RunTest(_img,_cool,_fine,_safe,_sad,_worst,_percent,_difficulty,_mod,_combo,_score,_fail,_mode,false);
 	}
 	
-	static void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail,Mode _mode,boolean debug) throws IOException {
+	static void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail,Mode _mode,boolean debug) throws IOException{
 		System.out.println("Running test "+_img);
 		long startTime = System.currentTimeMillis();
 		String testdir="testsuite";
@@ -945,7 +936,7 @@ public class MyRobot{
 		System.out.println("\tPassed ("+(System.currentTimeMillis()-startTime)+"ms)!");
 	}
 	
-	public static boolean checkSongSelect() throws IOException {
+	public static boolean checkSongSelect() throws Exception {
 		ColorRegion cr = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(842,635,5,5));
 		onSongSelect = cr.getAllRange(15,45,75,90,200,230);
 		

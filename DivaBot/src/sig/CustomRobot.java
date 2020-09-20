@@ -57,6 +57,7 @@ public class CustomRobot extends Robot{
 		calibration_data[1]=Integer.parseInt(data[1]);
 		calibration_data[2]=Integer.parseInt(data[2]);
 		calibration_data[3]=Integer.parseInt(data[3]);
+		TypeFace2.deepCopyDefaultOfficialYPointers();
 	}
 
 	private boolean CalibrationDataChanged() {

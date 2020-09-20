@@ -104,8 +104,8 @@ public class Calibrator2 {
 		Overlay.OVERLAY.setVisible(true);
 		
 		MyRobot.CALIBRATIONSTATUS="Calibration is complete! - X"+(MyRobot.STARTDRAG.x)+" Y"+(MyRobot.STARTDRAG.y)+" W"+(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)+" H"+(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y)+" R"+((float)(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)/(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y));
-		if (((float)(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)/(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y))<=16/9f-0.04||
-				((float)(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)/(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y))>=16/9f+0.04) {
+		if (((float)(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)/(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y))<=16/9f-0.015||
+				((float)(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)/(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y))>=16/9f+0.015) {
 			int dialogResult = JOptionPane.showConfirmDialog (null, "Could not detect the game properly!\n\nYour calibration cut a bit "+((((float)(MyRobot.ENDDRAG.x-MyRobot.STARTDRAG.x)/(MyRobot.ENDDRAG.y-MyRobot.STARTDRAG.y))<=16/9f-0.04)?"more":"less")+" than expected. Do you want to try selecting a more accurate region?","Warning",JOptionPane.YES_NO_OPTION);
 			if(dialogResult == JOptionPane.YES_OPTION){
 				MyRobot.STARTDRAG=null;

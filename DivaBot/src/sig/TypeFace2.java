@@ -67,6 +67,7 @@ public class TypeFace2 {
 
     public final static int[] DEFAULT_YPOINTERS = new int[] {-1,-1,-1,-1,-1,-1,-1,-1}; 
 	public static int[] ypointers = new int[] {-1,-1,-1,-1,-1,-1,-1,-1};
+	public static int[] officialypointers = new int[] {-1,-1,-1,-1,-1,-1,-1,-1};
 	
 	public static void deepCopyDefaultYPointers() {
 		ypointers = new int[DEFAULT_YPOINTERS.length];
@@ -74,8 +75,21 @@ public class TypeFace2 {
 			ypointers[i]=DEFAULT_YPOINTERS[i];
 		}
 	}
+	public static void deepCopyDefaultOfficialYPointers() {
+		officialypointers = new int[DEFAULT_YPOINTERS.length];
+		for (int i=0;i<DEFAULT_YPOINTERS.length;i++) {
+			officialypointers[i]=DEFAULT_YPOINTERS[i];
+		}
+	}
+	public static void deepCopyOfficialYPointersFromPointers() {
+		officialypointers = new int[ypointers.length];
+		for (int i=0;i<ypointers.length;i++) {
+			officialypointers[i]=ypointers[i];
+		}
+	}
 
 	public Result getAllData(BufferedImage img, boolean debug) throws IOException {
+		deepCopyDefaultYPointers();
 		BufferedImage img2 = ImageUtils.toBufferedImage(img.getScaledInstance(1280 , 720, Image.SCALE_SMOOTH));
 		Result result = new Result("","",-1,-1,-1,-1,-1,-1f);
 		int[] finalNumbers = new int[5];
@@ -135,10 +149,10 @@ public class TypeFace2 {
 		float percent = -1f;
 		switch (result.mode) {
 			case MEGAMIX:{
-				percent = extractPercentFromImage(img2,debug);
+				percent = extractPercentFromImage(img2,debug,pointerAccumulator);
 			}break;
 			case FUTURETONE:{
-				percent = extractFutureTonePercentFromImage(img2,debug);
+				percent = extractFutureTonePercentFromImage(img2,debug,pointerAccumulator);
 			}break;
 		}
 		ypointers[pointerAccumulator++] = ypointer;
@@ -301,12 +315,8 @@ public class TypeFace2 {
 		}
 		return diffs[lowestIndex];
 	}
-
-	public float extractPercentFromImage(BufferedImage img) throws IOException {
-		return extractPercentFromImage(img,false);
-	}
 	
-	public float extractFutureTonePercentFromImage(BufferedImage img,boolean debug) throws IOException {
+	public float extractFutureTonePercentFromImage(BufferedImage img,boolean debug,int iteration) throws IOException {
 		//1180,167
 		//second part: 1123
 		String decimal = "";
@@ -314,6 +324,13 @@ public class TypeFace2 {
 		xpointer=FUTURETONE_RECT_SEARCH_PCT.x;
 		ypointer=FUTURETONE_RECT_SEARCH_PCT.y;
 		BufferedImage test = null;
+		
+		boolean startPointer=officialypointers[iteration]>=0;
+		
+		if (startPointer) {
+			ypointer=officialypointers[iteration];
+			//System.out.println("Found a saved ypointer of "+ypointer);
+		}
 		
 		trialloop:
 		while (ypointer<FUTURETONE_RECT_SEARCH_PCT.height+FUTURETONE_RECT_SEARCH_PCT.y) {
@@ -397,7 +414,20 @@ public class TypeFace2 {
 			if (decimal.length()>0) {
 				break trialloop;
 			}
-			ypointer++;
+			if (startPointer) {
+				startPointer=false;
+				ypointer=FUTURETONE_RECT_SEARCH_PCT.y;
+				//System.out.println("Could not find with saved ypointer. Switching back to old ypointer.");
+			} else {
+				ypointer++;
+			}
+		}
+		
+		startPointer=officialypointers[iteration]>=0;
+		
+		if (startPointer) {
+			ypointer=officialypointers[iteration];
+			//System.out.println("Found a saved ypointer of "+ypointer);
 		}
 
 		xpointer=FUTURETONE_RECT_SEARCH_PCT2.x;
@@ -484,7 +514,13 @@ public class TypeFace2 {
 			if (integer.length()>0) {
 				break trialloop;
 			}
-			ypointer++;
+			if (startPointer) {
+				startPointer=false;
+				ypointer=FUTURETONE_RECT_SEARCH_PCT2.y;
+				//System.out.println("Could not find with saved ypointer. Switching back to old ypointer.");
+			} else {
+				ypointer++;
+			}
 		}
 		if (integer.length()>0&&decimal.length()>0) {
 			return Float.parseFloat(integer+"."+decimal);
@@ -493,7 +529,7 @@ public class TypeFace2 {
 		}
 	}
 	
-	public float extractPercentFromImage(BufferedImage img,boolean debug) throws IOException {
+	public float extractPercentFromImage(BufferedImage img,boolean debug,int iteration) throws IOException {
 		//1180,167
 		//second part: 1123
 		String decimal = "";
@@ -501,6 +537,13 @@ public class TypeFace2 {
 		xpointer=MEGAMIX_RECT_SEARCH_PCT.x;
 		ypointer=MEGAMIX_RECT_SEARCH_PCT.y;
 		BufferedImage test = null;
+		
+		boolean startPointer=officialypointers[iteration]>=0;
+		
+		if (startPointer) {
+			ypointer=officialypointers[iteration];
+			//System.out.println("Found a saved ypointer of "+ypointer);
+		}
 		
 		trialloop:
 		while (ypointer<MEGAMIX_RECT_SEARCH_PCT.height+MEGAMIX_RECT_SEARCH_PCT.y) {
@@ -584,7 +627,20 @@ public class TypeFace2 {
 			if (decimal.length()>0) {
 				break trialloop;
 			}
-			ypointer++;
+			if (startPointer) {
+				startPointer=false;
+				ypointer=MEGAMIX_RECT_SEARCH_PCT.y;
+				//System.out.println("Could not find with saved ypointer. Switching back to old ypointer.");
+			} else {
+				ypointer++;
+			}
+		}
+		
+		startPointer=officialypointers[iteration]>=0;
+		
+		if (startPointer) {
+			ypointer=officialypointers[iteration];
+			//System.out.println("Found a saved ypointer of "+ypointer);
 		}
 
 		xpointer=MEGAMIX_RECT_SEARCH_PCT2.x;
@@ -605,29 +661,6 @@ public class TypeFace2 {
 						for (int y=0;y<29;y++) {
 							Color fontCol = new Color(percentfont.getRGB(x+i*24,y));
 							Color pixelCol = new Color(img.getRGB(xpointer-24+x+1, y+ypointer));
-							/*if (fontCol.equals(Color.RED) && pixelCol.getRed()<50
-									 && pixelCol.getGreen()<150 && pixelCol.getBlue()>150) {
-								//Breaks a rule.
-								ruleBreak=true;
-								if (!debug) {
-									break colorloop;
-								} else {
-									test.setRGB(x, y, Color.RED.getRGB());
-								}
-							} else
-							if (fontCol.equals(Color.GREEN) && (pixelCol.getRed()>50
-									 || pixelCol.getGreen()>170 || pixelCol.getBlue()<150)) {
-								//Breaks a rule.
-								ruleBreak=true;
-								if (!debug) {
-									break colorloop;
-								} else {
-									test.setRGB(x, y, Color.GREEN.getRGB());
-								}
-							} else
-							if (debug) {
-								test.setRGB(x, y, pixelCol.getRGB());
-							}*/
 							
 							if (fontCol.equals(Color.RED)) {
 								if (lightColorCheck(pixelCol)) {
@@ -694,7 +727,13 @@ public class TypeFace2 {
 			if (integer.length()>0) {
 				break trialloop;
 			}
-			ypointer++;
+			if (startPointer) {
+				startPointer=false;
+				ypointer=MEGAMIX_RECT_SEARCH_PCT2.y;
+				//System.out.println("Could not find with saved ypointer. Switching back to old ypointer.");
+			} else {
+				ypointer++;
+			}
 		}
 		if (integer.length()>0&&decimal.length()>0) {
 			return Float.parseFloat(integer+"."+decimal);
@@ -726,11 +765,11 @@ public class TypeFace2 {
 		ypointer=0;
 		String total = "";
 		
-		boolean startPointer=ypointers[iteration]>=0;
+		boolean startPointer=officialypointers[iteration]>=0;
 		
 		if (startPointer) {
-			ypointer=ypointers[iteration];
-			System.out.println("Found a saved ypointer of "+ypointer);
+			ypointer=officialypointers[iteration];
+			//System.out.println("Found a saved ypointer of "+ypointer);
 		}
 		
 		trialloop:
@@ -808,7 +847,7 @@ public class TypeFace2 {
 			if (startPointer) {
 				startPointer=false;
 				ypointer=0;
-				System.out.println("Could not find with saved ypointer. Switching back to old ypointer.");
+				//System.out.println("Could not find with saved ypointer. Switching back to old ypointer.");
 			} else {
 				ypointer++;
 			}
@@ -828,10 +867,10 @@ public class TypeFace2 {
 		ypointer=0;
 		String total = "";
 		
-		boolean startPointer=ypointers[iteration]>=0;
+		boolean startPointer=officialypointers[iteration]>=0;
 		
 		if (startPointer) {
-			ypointer=ypointers[iteration];
+			ypointer=officialypointers[iteration];
 		}
 		
 		trialloop:
@@ -930,10 +969,10 @@ public class TypeFace2 {
 		ypointer=0;
 		String total = "";
 		
-		boolean startPointer=ypointers[iteration]>=0;
+		boolean startPointer=officialypointers[iteration]>=0;
 		
 		if (startPointer) {
-			ypointer=ypointers[iteration];
+			ypointer=officialypointers[iteration];
 		}
 		
 		trialloop:

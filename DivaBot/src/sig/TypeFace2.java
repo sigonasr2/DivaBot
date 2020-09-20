@@ -65,14 +65,24 @@ public class TypeFace2 {
 	final static Rectangle FUTURETONE_RECT_SEARCH_SCORE=new Rectangle(866+XOFFSET,543-4,250+XOFFSET+1,32+24);
 	final static Rectangle FUTURETONE_RECT_SEARCH_COMBO=new Rectangle(1023+XOFFSET,402,100+XOFFSET+1,22+8);
 
+    public final static int[] DEFAULT_YPOINTERS = new int[] {-1,-1,-1,-1,-1,-1,-1,-1}; 
+	public static int[] ypointers = new int[] {-1,-1,-1,-1,-1,-1,-1,-1};
+	
+	public static void deepCopyDefaultYPointers() {
+		ypointers = new int[DEFAULT_YPOINTERS.length];
+		for (int i=0;i<DEFAULT_YPOINTERS.length;i++) {
+			ypointers[i]=DEFAULT_YPOINTERS[i];
+		}
+	}
+
 	public Result getAllData(BufferedImage img, boolean debug) throws IOException {
 		BufferedImage img2 = ImageUtils.toBufferedImage(img.getScaledInstance(1280 , 720, Image.SCALE_SMOOTH));
 		Result result = new Result("","",-1,-1,-1,-1,-1,-1f);
 		int[] finalNumbers = new int[5];
 		
-		Rectangle[] ranges = null;
+		int pointerAccumulator = 0;
 		
-		//result.isResult=MyRobot.IsResultsScreenshot(ImageUtils.toBufferedImage(img2.getScaledInstance(1227, 690, Image.SCALE_SMOOTH)));
+		Rectangle[] ranges = null;
 		
 		result.mode = getMode(img2);
 		
@@ -110,7 +120,8 @@ public class TypeFace2 {
 			}
 
 			finalNumbers[i]=extractNumbersFromImage(img2.getSubimage(
-					r.x,r.y,r.width,r.height),debug);
+					r.x,r.y,r.width,r.height),debug,pointerAccumulator);
+			ypointers[pointerAccumulator++] = ypointer;
 			//System.out.println(finalNumbers[i]);
 			if (finalNumbers[i]==-1) {
 				return result;
@@ -130,6 +141,7 @@ public class TypeFace2 {
 				percent = extractFutureTonePercentFromImage(img2,debug);
 			}break;
 		}
+		ypointers[pointerAccumulator++] = ypointer;
 		if (percent<0) {
 			return result;
 		}
@@ -186,30 +198,34 @@ public class TypeFace2 {
 			case MEGAMIX:{
 				//1109,435
 				result.combo = extractNumbersFromImage(img2.getSubimage(
-						MEGAMIX_RECT_SEARCH_COMBO.x,MEGAMIX_RECT_SEARCH_COMBO.y,MEGAMIX_RECT_SEARCH_COMBO.width,MEGAMIX_RECT_SEARCH_COMBO.height),debug);
+						MEGAMIX_RECT_SEARCH_COMBO.x,MEGAMIX_RECT_SEARCH_COMBO.y,MEGAMIX_RECT_SEARCH_COMBO.width,MEGAMIX_RECT_SEARCH_COMBO.height),debug,pointerAccumulator);
 				if (result.combo<0) {
 					return result;
 				}
+				ypointers[pointerAccumulator++] = ypointer;
 				
 				result.score = extractScoreNumbersFromImage(img2.getSubimage(
-						MEGAMIX_RECT_SEARCH_SCORE.x,MEGAMIX_RECT_SEARCH_SCORE.y,MEGAMIX_RECT_SEARCH_SCORE.width,MEGAMIX_RECT_SEARCH_SCORE.height),debug);
+						MEGAMIX_RECT_SEARCH_SCORE.x,MEGAMIX_RECT_SEARCH_SCORE.y,MEGAMIX_RECT_SEARCH_SCORE.width,MEGAMIX_RECT_SEARCH_SCORE.height),debug,pointerAccumulator);
 				if (result.score<0) {
 					return result;
 				}
+				ypointers[pointerAccumulator++] = ypointer;
 			}break;
 			case FUTURETONE:{
 				//1109,435
 				result.combo = extractNumbersFromImage(img2.getSubimage(
-						FUTURETONE_RECT_SEARCH_COMBO.x,FUTURETONE_RECT_SEARCH_COMBO.y,FUTURETONE_RECT_SEARCH_COMBO.width,FUTURETONE_RECT_SEARCH_COMBO.height),debug);
+						FUTURETONE_RECT_SEARCH_COMBO.x,FUTURETONE_RECT_SEARCH_COMBO.y,FUTURETONE_RECT_SEARCH_COMBO.width,FUTURETONE_RECT_SEARCH_COMBO.height),debug,pointerAccumulator);
 				if (result.combo<0) {
 					return result;
 				}
+				ypointers[pointerAccumulator++] = ypointer;
 				
 				result.score = extractFutureToneScoreNumbersFromImage(img2.getSubimage(
-						FUTURETONE_RECT_SEARCH_SCORE.x,FUTURETONE_RECT_SEARCH_SCORE.y,FUTURETONE_RECT_SEARCH_SCORE.width,FUTURETONE_RECT_SEARCH_SCORE.height),debug);
+						FUTURETONE_RECT_SEARCH_SCORE.x,FUTURETONE_RECT_SEARCH_SCORE.y,FUTURETONE_RECT_SEARCH_SCORE.width,FUTURETONE_RECT_SEARCH_SCORE.height),debug,pointerAccumulator);
 				if (result.score<0) {
 					return result;
 				}
+				ypointers[pointerAccumulator++] = ypointer;
 			}break;
 		}
 		
@@ -315,29 +331,6 @@ public class TypeFace2 {
 						for (int y=0;y<18;y++) {
 							Color fontCol = new Color(futuretone_percentfont.getRGB(x+i*18,y));
 							Color pixelCol = new Color(img.getRGB(xpointer-18+x+1, y+ypointer));
-							/*if (fontCol.equals(Color.RED) && pixelCol.getRed()<50
-									 && pixelCol.getGreen()<150 && pixelCol.getBlue()>150) {
-								//Breaks a rule.
-								ruleBreak=true;
-								if (!debug) {
-									break colorloop;
-								} else {
-									test.setRGB(x, y, Color.RED.getRGB());
-								}
-							} else
-							if (fontCol.equals(Color.GREEN) && (pixelCol.getRed()>50
-									 || pixelCol.getGreen()>170 || pixelCol.getBlue()<150)) {
-								//Breaks a rule.
-								ruleBreak=true;
-								if (!debug) {
-									break colorloop;
-								} else {
-									test.setRGB(x, y, Color.GREEN.getRGB());
-								}
-							} else
-							if (debug) {
-								test.setRGB(x, y, pixelCol.getRGB());
-							}*/
 							
 							if (fontCol.equals(Color.RED)) {
 								if (lightColorCheck(pixelCol)) {
@@ -425,29 +418,6 @@ public class TypeFace2 {
 						for (int y=0;y<18;y++) {
 							Color fontCol = new Color(futuretone_percentfont.getRGB(x+i*18,y));
 							Color pixelCol = new Color(img.getRGB(xpointer-18+x+1, y+ypointer));
-							/*if (fontCol.equals(Color.RED) && pixelCol.getRed()<50
-									 && pixelCol.getGreen()<150 && pixelCol.getBlue()>150) {
-								//Breaks a rule.
-								ruleBreak=true;
-								if (!debug) {
-									break colorloop;
-								} else {
-									test.setRGB(x, y, Color.RED.getRGB());
-								}
-							} else
-							if (fontCol.equals(Color.GREEN) && (pixelCol.getRed()>50
-									 || pixelCol.getGreen()>170 || pixelCol.getBlue()<150)) {
-								//Breaks a rule.
-								ruleBreak=true;
-								if (!debug) {
-									break colorloop;
-								} else {
-									test.setRGB(x, y, Color.GREEN.getRGB());
-								}
-							} else
-							if (debug) {
-								test.setRGB(x, y, pixelCol.getRGB());
-							}*/
 							
 							if (fontCol.equals(Color.RED)) {
 								if (lightColorCheck(pixelCol)) {
@@ -548,29 +518,6 @@ public class TypeFace2 {
 						for (int y=0;y<29;y++) {
 							Color fontCol = new Color(percentfont.getRGB(x+i*24,y));
 							Color pixelCol = new Color(img.getRGB(xpointer-24+x+1, y+ypointer));
-							/*if (fontCol.equals(Color.RED) && pixelCol.getRed()<50
-									 && pixelCol.getGreen()<150 && pixelCol.getBlue()>150) {
-								//Breaks a rule.
-								ruleBreak=true;
-								if (!debug) {
-									break colorloop;
-								} else {
-									test.setRGB(x, y, Color.RED.getRGB());
-								}
-							} else
-							if (fontCol.equals(Color.GREEN) && (pixelCol.getRed()>50
-									 || pixelCol.getGreen()>170 || pixelCol.getBlue()<150)) {
-								//Breaks a rule.
-								ruleBreak=true;
-								if (!debug) {
-									break colorloop;
-								} else {
-									test.setRGB(x, y, Color.GREEN.getRGB());
-								}
-							} else
-							if (debug) {
-								test.setRGB(x, y, pixelCol.getRGB());
-							}*/
 							
 							if (fontCol.equals(Color.RED)) {
 								if (lightColorCheck(pixelCol)) {
@@ -770,23 +717,26 @@ public class TypeFace2 {
 		return pixel.getRed()<176
 				 && pixel.getGreen()<178 && pixel.getBlue()>100;
 	}
-
-	public int extractNumbersFromImage(BufferedImage img) throws IOException {
-		return extractNumbersFromImage(img,false);
-	}
 	
-	public int extractNumbersFromImage(BufferedImage img,boolean debug) throws IOException {
+	public int extractNumbersFromImage(BufferedImage img,boolean debug,int iteration) throws IOException {
 		this.img=img;
 		File f = null;
 		BufferedImage test = null;
 		xpointer=MEGAMIX_RECT_SEARCH_COOL.width-1;
 		ypointer=0;
 		String total = "";
+		
+		boolean startPointer=ypointers[iteration]>=0;
+		
+		if (startPointer) {
+			ypointer=ypointers[iteration];
+			System.out.println("Found a saved ypointer of "+ypointer);
+		}
+		
 		trialloop:
 		while (ypointer<8) {
 			xpointer=MEGAMIX_RECT_SEARCH_COOL.width-1;
 			while (xpointer>22) {
-				int distance = 0;
 				int foundIndex = -1;
 				//Compare the 22x21 range.
 				for (int i=0;i<10;i++) {
@@ -855,9 +805,14 @@ public class TypeFace2 {
 			if (total.length()>0) {
 				break trialloop;
 			}
-			ypointer++;
+			if (startPointer) {
+				startPointer=false;
+				ypointer=0;
+				System.out.println("Could not find with saved ypointer. Switching back to old ypointer.");
+			} else {
+				ypointer++;
+			}
 		}
-		
 		if (total.equals("")) {
 			return -1;
 		} else {
@@ -865,13 +820,20 @@ public class TypeFace2 {
 		}
 	}
 	
-	public int extractFutureToneScoreNumbersFromImage(BufferedImage img,boolean debug) throws IOException {
+	public int extractFutureToneScoreNumbersFromImage(BufferedImage img,boolean debug,int iteration) throws IOException {
 		this.img=img;
 		File f = null;
 		BufferedImage test = null;
 		xpointer=FUTURETONE_RECT_SEARCH_SCORE.width-1;
 		ypointer=0;
 		String total = "";
+		
+		boolean startPointer=ypointers[iteration]>=0;
+		
+		if (startPointer) {
+			ypointer=ypointers[iteration];
+		}
+		
 		trialloop:
 		while (ypointer<20) {
 			xpointer=FUTURETONE_RECT_SEARCH_SCORE.width-1;
@@ -945,7 +907,12 @@ public class TypeFace2 {
 			if (total.length()>0) {
 				break trialloop;
 			}
-			ypointer++;
+			if (startPointer) {
+				startPointer=false;
+				ypointer=0;
+			} else {
+				ypointer++;
+			}
 		}
 		
 		if (total.equals("")) {
@@ -955,13 +922,20 @@ public class TypeFace2 {
 		}
 	}
 	
-	public int extractScoreNumbersFromImage(BufferedImage img,boolean debug) throws IOException {
+	public int extractScoreNumbersFromImage(BufferedImage img,boolean debug,int iteration) throws IOException {
 		this.img=img;
 		File f = null;
 		BufferedImage test = null;
 		xpointer=MEGAMIX_RECT_SEARCH_SCORE.width-1;
 		ypointer=0;
 		String total = "";
+		
+		boolean startPointer=ypointers[iteration]>=0;
+		
+		if (startPointer) {
+			ypointer=ypointers[iteration];
+		}
+		
 		trialloop:
 		while (ypointer<12) {
 			xpointer=MEGAMIX_RECT_SEARCH_SCORE.width-1;
@@ -1035,7 +1009,12 @@ public class TypeFace2 {
 			if (total.length()>0) {
 				break trialloop;
 			}
-			ypointer++;
+			if (startPointer) {
+				startPointer=false;
+				ypointer=0;
+			} else {
+				ypointer++;
+			}
 		}
 		
 		if (total.equals("")) {

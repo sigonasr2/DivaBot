@@ -942,6 +942,7 @@ public class MyRobot{
 			}
 			System.exit(1);
 		}
+		TypeFace2.deepCopyDefaultYPointers();
 		System.out.println("\tPassed ("+(System.currentTimeMillis()-startTime)+"ms)!");
 	}
 	
@@ -956,6 +957,7 @@ public class MyRobot{
 				System.out.println("Switching to Megamix");
 				SongData.loadSongsFromFile();
 				LASTMODE_FUTURETONE=false;
+				TypeFace2.deepCopyDefaultYPointers();
 			}
 		} else
 		{
@@ -968,6 +970,7 @@ public class MyRobot{
 					System.out.println("Switching to Future Tone");
 					SongData.loadSongsFromFile();
 					LASTMODE_FUTURETONE=true;
+					TypeFace2.deepCopyDefaultYPointers();
 				}
 			} else {
 				stillOnSongSelect=0;

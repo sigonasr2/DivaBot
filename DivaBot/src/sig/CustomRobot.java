@@ -21,23 +21,23 @@ public class CustomRobot extends Robot{
 	BufferedImage scoreCurrentScreen;
 	int[] calibration_data = new int[]{0,0,1,1};
 	long lastCalibrationTime = 0;
-	GraphicsEnvironment ge;
-	GraphicsDevice[] gs;
+	public static GraphicsEnvironment ge;
+	public static GraphicsDevice[] gs;
 	
 	public CustomRobot() throws AWTException {
 		super();
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 	    GraphicsDevice[] gs = ge.getScreenDevices();
-		this.ge=ge;
-		this.gs=gs;
+		CustomRobot.ge=ge;
+		CustomRobot.gs=gs;
 	}
 
 	public CustomRobot(GraphicsDevice screen) throws AWTException {
 		super(screen);
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 	    GraphicsDevice[] gs = ge.getScreenDevices();
-		this.ge=ge;
-		this.gs=gs;
+	    CustomRobot.ge=ge;
+	    CustomRobot.gs=gs;
 	}
 	
 	public synchronized BufferedImage getSizedCapture(Rectangle r) {

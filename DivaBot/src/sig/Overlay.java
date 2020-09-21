@@ -179,7 +179,7 @@ public class Overlay extends JPanel implements MouseMotionListener,MouseListener
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		if (started) {
-			MyRobot.ENDDRAG=e.getLocationOnScreen();
+			MyRobot.ENDDRAG=e.getPoint();
 		}
 	}
 

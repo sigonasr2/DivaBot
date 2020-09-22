@@ -145,34 +145,10 @@ public class ReloadSong extends JPanel implements ItemListener,MouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) {
 		BufferedImage img = null;
-		long totalr=0;
-		long totalg=0;
-		long totalb=0;
-    	try {
-    		if (MyRobot.FUTURETONE) {
-    			ImageIO.write(img=MyRobot.MYROBOT.createScreenCapture(new Rectangle(610,214,600,246)),"png",new File("test.png"));
-    			for (int i=0;i<600;i++) {
-    				for (int j=0;j<246;j++) {
-    					totalr+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
-    					totalg+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
-    					totalb+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
-    				}
-    			}
-    		} else {
-    			ImageIO.write(img=MyRobot.MYROBOT.createScreenCapture(new Rectangle(630,80,580,380)),"png",new File("test.png"));
-    			for (int i=0;i<580;i++) {
-    				for (int j=0;j<380;j++) {
-    					totalr+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
-    					totalg+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
-    					totalb+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
-    				}
-    			}
-    		}
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		ColorDistance cd1=new ColorDistance(),cd2=new ColorDistance(),cd3=new ColorDistance(),cd4=new ColorDistance();
+    	MyRobot.GetColorData(cd1, cd2, cd3, cd4);
 		try {
-			SongData.saveSongToFile(((SongInfo)songs.getSelectedItem()).name,totalr,totalg,totalb);
+			SongData.saveSongToFile(((SongInfo)songs.getSelectedItem()).name,cd1,cd2,cd3,cd4);
 		} catch (JSONException | IOException e2) {
 			e2.printStackTrace();
 		}

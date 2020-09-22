@@ -98,7 +98,19 @@ public class TypeFace2 {
 		
 		Rectangle[] ranges = null;
 		
-		result.mode = getMode(img2);
+		result.mode = getMode(img2,debug);
+		
+		if (MyRobot.FUTURETONE) {
+			/*if (result.mode!=Mode.FUTURETONE) {
+				System.out.println("The current mode is "+result.mode+", but the results screen thinks this is Megamix... We're going to manually fix it for now. Let sig know this is appearing.");
+			}*/
+			result.mode=Mode.FUTURETONE;
+		} else {
+			/*if (result.mode!=Mode.MEGAMIX) {
+				System.out.println("The current mode is "+result.mode+", but the results screen thinks this is Future Tone... We're going to manually fix it for now. Let sig know this is appearing.");
+			}*/
+			result.mode=Mode.MEGAMIX;
+		}
 		
 		switch (result.mode) {
 			case MEGAMIX:{
@@ -246,9 +258,11 @@ public class TypeFace2 {
 		return result;
 	}
 	
-	private Mode getMode(BufferedImage img2) {
+	private Mode getMode(BufferedImage img2,boolean debug) {
 		ColorRegion ft_results = new ColorRegion(img2,new Rectangle(81,35,80,37));
-		//System.out.println("Mode Check:"+ft_results);
+		if (debug) {
+			System.out.println("Mode Check:"+ft_results);
+		}
 		if (ft_results.getAllRange(30,150,60,180,60,180)) {
 			return Mode.FUTURETONE;
 		}

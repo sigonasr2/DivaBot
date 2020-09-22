@@ -90,12 +90,10 @@ public class MyRobot{
 	Color SCREEN[][];
 	static SongData SONGS[];
 	public static JFrame FRAME;
-	/*static String SONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","packaged","Palette","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失 -DEAD END-","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク","ブレス・ユア・ブレス","恋は戦争","あなたの歌姫","Starduster","StargazeR","リンリンシグナル","Rosary Pale","多重未来のカルテット～QUARTET THEME～","LIKE THE WIND","AFTER BURNER",
-			"ストロボナイツ","VOiCE","恋色病棟","ねこみみスイッチ","パラジクロロベンゼン","カラフル×セクシィ","劣等上等","Star Story","パズル","キップル・インダストリー","夢の続き","MEGANE","Change me"};*/
-	/*static String FUTURETONESONGNAMES[] = new String[] {"Yellow","The secret garden","Tell Your World","愛言葉","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","ハジメテノオト","初めての恋が終わる時","packaged","Palette","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","Catch the Wave","キャットフード","サマーアイドル","shake it!","Just Be Friends","スイートマジック","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","忘却心中","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","メランコリック","リモコン","ルカルカ★ナイトフィーバー","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","SING&SMILE","スノーマン","DYE","なりすましゲンガー","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","初音ミクの消失 -DEAD END-","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜","ピアノ×フォルテ×スキャンダル","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ココロ","システマティック・ラヴ","Knife","二息歩行","PIANOGIRL","夢喰い白黒バク","ブレス・ユア・ブレス","恋は戦争","あなたの歌姫","Starduster","StargazeR","リンリンシグナル","Rosary Pale","多重未来のカルテット～QUARTET THEME～","LIKE THE WIND","AFTER BURNER",
-	"ストロボナイツ","VOiCE","恋色病棟","ねこみみスイッチ","パラジクロロベンゼン","カラフル×セクシィ","劣等上等","Star Story","パズル","キップル・インダストリー","夢の続き","MEGANE","Change me"};*/
+	/*static String SONGNAMES[] = new String[] {"Yellow","The secret garden","Starduster","Tell Your World","パズル","夢の続き","Last Night, Good Night","愛言葉","あなたの歌姫","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","ココロ","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","Star Story","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","Change me","ハジメテノオト","初めての恋が終わる時","packaged","Palette","ファインダー (DSLR remix - re:edit)","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","リンリンシグナル","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","Stay with me","ストロボナイツ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","ねこみみスイッチ","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アドレサンス","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","キップル・インダストリー","Catch the Wave","キャットフード","恋は戦争","サウンド","サマーアイドル","shake it!","Just Be Friends","スイートマジック","StargazeR","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","二息歩行","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","巴里映画少女","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","Promise","VOiCE","忘却心中","星屑ユートピア","マージナル","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","MEGANE","メランコリック","夢喰い白黒バク","LIKE THE WIND","リモコン","ルカルカ★ナイトフィーバー","Leia","Rosary Pale","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","AFTER BURNER","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","カラフル×セクシィ","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","システマティック・ラヴ","SING&SMILE","スノーマン","DYE","多重未来のカルテット～QUARTET THEME～","Knife","なりすましゲンガー","PIANOGIRL","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","恋色病棟","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","Nyanyanyanyanyanyanya!","初音ミクの消失 -DEAD END-","パラジクロロベンゼン","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜 -F edition-","ピアノ×フォルテ×スキャンダル","フキゲンワルツ","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ブレス・ユア・ブレス","劣等上等","グリーンライツ・セレナーデ","ドラマツルギー"};*/
+	/*static String FUTURETONESONGNAMES[] = new String[] {"Yellow","Innocence","いのちの歌","The secret garden","Far Away","荒野と森と魔法の歌","Starduster","Dear cocoa girls","Tell Your World","ナイトメア☆パーティーナイト","パズル","天鵞絨アラベスク","悠久","夢の続き","Last Night, Good Night","愛言葉","あなたの歌姫","数多の舞 -Dance of many-","雨のちSweetDrops","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","唐傘さんが通る","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","ココロ","桜ノ雨","サヨナラ・グッバイ","39","深海シティアンダーグラウンド","深海少女","Star Story","積乱雲グラフィティ","千年の独奏歌","その一秒 スローモーション","ダブルラリアット","Change me","那由他の彼方まで","ハジメテノオト","初めての恋が終わる時","packaged","ハト","Palette","ファインダー (DSLR remix - re:edit)","FREELY TOMORROW","from Y to Y","Holy Star -2010 DIVA mix-","ほんとは分かってる","迷子ライフ","みくみくにしてあげる♪","moon","メルト","モノクロ∞ブルースカイ","ゆめゆめ","ラブリスト更新中？","リンリンシグナル","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","オオカミガール","片想いサンバ","偶像無線","Glory 3usi9","恋ノート","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","Stay with me","ストロボナイツ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","ナイト・オブ・ライト","ねこみみスイッチ","Nostalogic","花舞月詠譚","Hand in Hand","ひねくれ者","ピンクムーン","Fire◎Flower","ふたりで。","ブラック★ロックシューター","ペリコ・スペースシッパー","メテオ","ワールドイズマイン","アウトオブエデン","アドレサンス","アマツキツネ","Ievan Polkka","erase or zero","嘘つきベティ","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","ぎずも","キップル・インダストリー","Catch the Wave","キャットフード","恋は戦争","孤独の果て","さあ、どっち？","サウンド","サマーアイドル","shake it!","ZIGG-ZAGG","Just Be Friends","スイートマジック","StargazeR","Starlite★Lydian","SPiCa -39's Giving Day Edition-","千本桜","So much loving you★ -DIVA Edit-","タイムリミット","番凩","月向うまでのトラベル","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","Dreaming Leaf -ユメミルコトノハ-","どりーみんチュチュ","トリノコシティ","二息歩行","ネトゲ廃人シュプレヒコール","No Logic","ハイスクール","ハイハハイニ","はじめまして地球人さん","巴里映画少女","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","ブラックノートに溺れさせて","break;down","Promise","VOiCE","崩壊歌姫 -disruptive diva-","忘却心中","星屑ユートピア","ほしをつくるひと","マージナル","magnet","右肩の蝶","みくみく菌にご注意♪","結ンデ開イテ羅刹ト骸","迷的サイバネティックス","MEGANE","メランコリック","Mellow Yellow","melody...","夢喰い白黒バク","LIKE THE WIND","リモコン","ルカルカ★ナイトフィーバー","ルシッドドリーミング","Leia","Rosary Pale","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","Absolunote","AFTER BURNER","Equation+","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","カラフル×セクシィ","キミに","君の体温","金の聖夜霜雪に朽ちて","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","システマティック・ラヴ","ジュゲムシーケンサー","SING&SMILE","SYMPHONIC DIVE - DIVA edit -","スノーマン","slump","そいやっさぁ!!","DYE","多重未来のカルテット～QUARTET THEME～","透明水彩","Knife","なりすましゲンガー","ネコミミアーカイブ","Pane dhiria","PIANOGIRL","ヒバナ","ヒビカセ","ブラックゴールド","Magical Sound Shower","マスターオブパペッツ","右肩の蝶 -39's Giving Day Edition-","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","いろは唄","大江戸ジュリアナイト","おはヨーデル","恋色病棟","ゴーストルール","Gothic and Loneliness ～I'm the very DIVA～","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","ステップフォワード","砂の惑星","テオ","どうしてこうなった","Nyanyanyanyanyanyanya!","初音ミクの消失 -DEAD END-","パラジクロロベンゼン","秘密警察","フランシスカ","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","イヤイヤ星人","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜 -F edition-","ピアノ×フォルテ×スキャンダル","フキゲンワルツ","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール"};*/
 	static SongInfo SONGNAMES[] = new SongInfo[] {};
-	static String NEWSONGS[] = new String[] {};
+	static String NEWSONGS[] = new String[] {"Yellow","The secret garden","Starduster","Tell Your World","パズル","夢の続き","Last Night, Good Night","愛言葉","あなたの歌姫","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","ココロ","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","Star Story","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","Change me","ハジメテノオト","初めての恋が終わる時","packaged","Palette","ファインダー (DSLR remix - re:edit)","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","リンリンシグナル","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","Stay with me","ストロボナイツ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","ねこみみスイッチ","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アドレサンス","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","キップル・インダストリー","Catch the Wave","キャットフード","恋は戦争","サウンド","サマーアイドル","shake it!","Just Be Friends","スイートマジック","StargazeR","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","二息歩行","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","巴里映画少女","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","Promise","VOiCE","忘却心中","星屑ユートピア","マージナル","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","MEGANE","メランコリック","夢喰い白黒バク","LIKE THE WIND","リモコン","ルカルカ★ナイトフィーバー","Leia","Rosary Pale","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","AFTER BURNER","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","カラフル×セクシィ","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","システマティック・ラヴ","SING&SMILE","スノーマン","DYE","多重未来のカルテット～QUARTET THEME～","Knife","なりすましゲンガー","PIANOGIRL","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","恋色病棟","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","Nyanyanyanyanyanyanya!","初音ミクの消失 -DEAD END-","パラジクロロベンゼン","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜 -F edition-","ピアノ×フォルテ×スキャンダル","フキゲンワルツ","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ブレス・ユア・ブレス","劣等上等","グリーンライツ・セレナーデ","ドラマツルギー"};
 	int SCREEN_X;
 	int SCREEN_Y;
 	int WINDOW_X;
@@ -128,7 +126,6 @@ public class MyRobot{
     static boolean CALIBRATION = true;
     static Point STARTDRAG = null;
     static Point ENDDRAG = null;
-    public static long smallestSongColor = Long.MAX_VALUE;
     public static int[] firstTwentyPixels = new int[20];
     
     int lastcool=-1,lastfine=-1,lastsafe=-1,lastsad=-1,lastworst=-1,lastcombo=-1,lastscore=-1;
@@ -549,7 +546,7 @@ public class MyRobot{
 			return cr1.getAllRange(240, 255, 240, 255, 240, 255)&&cr2.getAllRange(7, 60, 180, 250, 150, 240)&&cr3.getAllRange(140, 255, 140, 255, 0, 200);
 		} else {
 			BufferedImage img2 = ImageUtils.toBufferedImage(MYROBOT.currentScreen.getScaledInstance(1280 , 720, Image.SCALE_SMOOTH));
-			ColorRegion ft_results = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(70,30,70,30));
+			ColorRegion ft_results = new ColorRegion(img2,new Rectangle(81,35,80,37));
 			//System.out.println(ft_results);
 			return ft_results.getAllRange(30,150,60,180,60,180);
 		}
@@ -594,29 +591,91 @@ public class MyRobot{
 			}
 		}
 	}
+	
+	public static int scale1280(int original) {
+		return (int)(original*((double)(MyRobot.MYROBOT.calibration_data[2]-MyRobot.MYROBOT.calibration_data[0])/1280));
+	}
+	public static int scale720(int original) {
+		return (int)(original*((double)(MyRobot.MYROBOT.calibration_data[3]-MyRobot.MYROBOT.calibration_data[1])/720));
+	}
+	
 	private void GetCurrentSong() throws IOException {
 		BufferedImage img=null;
-		long r=0,g=0,b=0;
+		ColorDistance cd1=new ColorDistance(),cd2=new ColorDistance(),cd3=new ColorDistance(),cd4=new ColorDistance();
+		long startTime = System.currentTimeMillis();
+		GetColorData(cd1, cd2, cd3, cd4);
+		selectedSong = SongData.compareData(cd1,cd2,cd3,cd4);
+		//System.out.println("Analysis took "+(System.currentTimeMillis()-startTime)+"ms");
+	}
+
+	public static void GetColorData(ColorDistance cd1, ColorDistance cd2, ColorDistance cd3, ColorDistance cd4) {
 		if (!FUTURETONE) {
-			img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(630,80,580,380)));
-			for (int i=0;i<580;i++) {
-				for (int j=0;j<380;j++) {
-					r+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
-					g+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
-					b+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
+			for (int i=670;i<670+180;i++) {
+				for (int j=170;j<170+180;j++) {
+					//System.out.println("checking "+i+","+j);
+					cd1.r+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getRed(),2);
+					cd1.g+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getGreen(),2);
+					cd1.b+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getBlue(),2);
+				}
+			}
+			for (int i=607;i<607+355;i++) {
+				for (int j=367;j<367+145;j++) {
+					//System.out.println("checking "+i+","+j);
+					cd2.r+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getRed(),2);
+					cd2.g+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getGreen(),2);
+					cd2.b+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getBlue(),2);
+				}
+			}
+			for (int i=640;i<640+317;i++) {
+				for (int j=527;j<527+64;j++) {
+					//System.out.println("checking "+i+","+j);
+					cd3.r+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getRed(),2);
+					cd3.g+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getGreen(),2);
+					cd3.b+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getBlue(),2);
+				}
+			}
+			for (int i=905;i<905+276;i++) {
+				for (int j=160;j<160+254;j++) {
+					//System.out.println("checking "+i+","+j);
+					cd4.r+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getRed(),2);
+					cd4.g+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getGreen(),2);
+					cd4.b+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getBlue(),2);
 				}
 			}
 		} else {
-			img = ImageUtils.toCompatibleImage(MYROBOT.createScreenCapture(new Rectangle(610,214,600,246)));
-			for (int i=0;i<600;i++) {
-				for (int j=0;j<246;j++) {
-					r+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
-					g+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
-					b+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
+			for (int i=608;i<608+265;i++) {
+				for (int j=224;j<224+130;j++) {
+					//System.out.println("checking "+i+","+j);
+					cd1.r+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getRed(),2);
+					cd1.g+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getGreen(),2);
+					cd1.b+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getBlue(),2);
+				}
+			}
+			for (int i=579;i<579+411;i++) {
+				for (int j=360;j<360+156;j++) {
+					//System.out.println("checking "+i+","+j);
+					cd2.r+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getRed(),2);
+					cd2.g+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getGreen(),2);
+					cd2.b+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getBlue(),2);
+				}
+			}
+			for (int i=920;i<920+294;i++) {
+				for (int j=192;j<192+246;j++) {
+					//System.out.println("checking "+i+","+j);
+					cd3.r+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getRed(),2);
+					cd3.g+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getGreen(),2);
+					cd3.b+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getBlue(),2);
+				}
+			}
+			for (int i=608;i<608+180;i++) {
+				for (int j=532;j<532+136;j++) {
+					//System.out.println("checking "+i+","+j);
+					cd4.r+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getRed(),2);
+					cd4.g+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getGreen(),2);
+					cd4.b+=Math.pow(new Color(MyRobot.MYROBOT.currentScreen.getRGB(scale1280(i),scale720(j)),true).getBlue(),2);
 				}
 			}
 		}
-		selectedSong = SongData.compareData(r,g,b);
 	}
 	
 	void go() throws FontFormatException, IOException {
@@ -669,34 +728,10 @@ public class MyRobot{
 						e2.printStackTrace();
 					}
 	            	BufferedImage img = null;
-	    			long totalr=0;
-	    			long totalg=0;
-	    			long totalb=0;
-	            	try {
-	            		if (FUTURETONE) {
-	            			ImageIO.write(img=MYROBOT.createScreenCapture(new Rectangle(610,214,600,246)),"png",new File("test.png"));
-	    	    			for (int i=0;i<600;i++) {
-	    	    				for (int j=0;j<246;j++) {
-	    	    					totalr+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
-	    	    					totalg+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
-	    	    					totalb+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
-	    	    				}
-	    	    			}
-	            		} else {
-	            			ImageIO.write(img=MYROBOT.createScreenCapture(new Rectangle(630,80,580,380)),"png",new File("test.png"));
-	    	    			for (int i=0;i<580;i++) {
-	    	    				for (int j=0;j<380;j++) {
-	    	    					totalr+=Math.pow(new Color(img.getRGB(i,j),true).getRed(),2);
-	    	    					totalg+=Math.pow(new Color(img.getRGB(i,j),true).getGreen(),2);
-	    	    					totalb+=Math.pow(new Color(img.getRGB(i,j),true).getBlue(),2);
-	    	    				}
-	    	    			}
-	            		}
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
+	        		ColorDistance cd1=new ColorDistance(),cd2=new ColorDistance(),cd3=new ColorDistance(),cd4=new ColorDistance();
+	        		GetColorData(cd1, cd2, cd3, cd4);
 	    			try {
-						SongData.saveSongToFile(NEWSONGS[currentSong],totalr,totalg,totalb);
+						SongData.saveSongToFile(NEWSONGS[currentSong],cd1,cd2,cd3,cd4);
 					} catch (IOException e2) {
 						e2.printStackTrace();
 					}
@@ -778,9 +813,10 @@ public class MyRobot{
 	
 	static void RunTests() throws IOException {
 		
-		selectedSong=new SongData("LIKE THE WIND",0,0,0);
+		selectedSong=new SongData("LIKE THE WIND",null,null,null,null);
 		difficulty="H";
 
+		RunTest("test62.png",329,29,0,0,2,100.66f,"EXEX","",305,548735,false,Mode.FUTURETONE);
 		RunTest("test61.png",467,21,0,0,0,103.48f,"EX","HS",488,514440,false,Mode.MEGAMIX);
 		RunTest("test60.png",430,88,2,0,3,95.05f,"EX","HS",298,538510,false,Mode.MEGAMIX);
 		RunTest("test59.png",535,114,13,12,28,79.04f,"EXEX","HS",148,540700,false,Mode.MEGAMIX);
@@ -897,6 +933,7 @@ public class MyRobot{
 	
 	static void RunTest(String _img,int _cool,int _fine, int _safe, int _sad, int _worst, float _percent,String _difficulty,String _mod,int _combo,int _score,boolean _fail,Mode _mode,boolean debug) throws IOException{
 		System.out.println("Running test "+_img);
+		FUTURETONE=_mode==Mode.FUTURETONE;
 		long startTime = System.currentTimeMillis();
 		String testdir="testsuite";
 		File tmp = new File("tmp");
@@ -954,25 +991,29 @@ public class MyRobot{
 		
 		if (onSongSelect) {
 			stillOnSongSelect++;
-			FUTURETONE=false;			
-			if (LASTMODE_FUTURETONE) {
-				System.out.println("Switching to Megamix");
-				SongData.loadSongsFromFile();
-				LASTMODE_FUTURETONE=false;
-				TypeFace2.deepCopyDefaultOfficialYPointers();
+			if (stillOnSongSelect>=5) {
+				FUTURETONE=false;			
+				if (LASTMODE_FUTURETONE) {
+					System.out.println("Switching to Megamix");
+					SongData.loadSongsFromFile();
+					LASTMODE_FUTURETONE=false;
+					TypeFace2.deepCopyDefaultOfficialYPointers();
+				}
 			}
 		} else
 		{
 			cr = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(741,171,5,5));
 			if (!onSongSelect&&cr.getAllRange(160,200,0,15,170,200)) {
 				stillOnSongSelect++;
-				FUTURETONE=true;
-				onSongSelect=true;
-				if (!LASTMODE_FUTURETONE) {
-					System.out.println("Switching to Future Tone");
-					SongData.loadSongsFromFile();
-					LASTMODE_FUTURETONE=true;
-					TypeFace2.deepCopyDefaultOfficialYPointers();
+				if (stillOnSongSelect>=5) {
+					FUTURETONE=true;
+					onSongSelect=true;
+					if (!LASTMODE_FUTURETONE) {
+						System.out.println("Switching to Future Tone");
+						SongData.loadSongsFromFile();
+						LASTMODE_FUTURETONE=true;
+						TypeFace2.deepCopyDefaultOfficialYPointers();
+					}
 				}
 			} else {
 				stillOnSongSelect=0;

@@ -55,11 +55,11 @@ public class TypeFace2 {
 	final static Rectangle MEGAMIX_RECT_SEARCH_PCT2=new Rectangle(1123+XOFFSET,163,1051,8);
 	final static Rectangle MEGAMIX_RECT_SEARCH_SCORE=new Rectangle(859+XOFFSET,578-4,250+XOFFSET+1,32+14);
 	final static Rectangle MEGAMIX_RECT_SEARCH_COMBO=new Rectangle(1010+XOFFSET,435-2,100+XOFFSET+1,22+8);
-	final static Rectangle FUTURETONE_RECT_SEARCH_COOL=new Rectangle(872+XOFFSET,223,100+XOFFSET+1,22+8);
-	final static Rectangle FUTURETONE_RECT_SEARCH_FINE=new Rectangle(872+XOFFSET,258,100+XOFFSET+1,22+8);
-	final static Rectangle FUTURETONE_RECT_SEARCH_SAFE=new Rectangle(872+XOFFSET,294,100+XOFFSET+1,22+8);
-	final static Rectangle FUTURETONE_RECT_SEARCH_SAD=new Rectangle(872+XOFFSET,330,100+XOFFSET+1,22+8);
-	final static Rectangle FUTURETONE_RECT_SEARCH_WORST=new Rectangle(872+XOFFSET,367,100+XOFFSET+1,22+8);
+	final static Rectangle FUTURETONE_RECT_SEARCH_COOL=new Rectangle(850+XOFFSET,223,122+XOFFSET+1,22+8);
+	final static Rectangle FUTURETONE_RECT_SEARCH_FINE=new Rectangle(850+XOFFSET,258,122+XOFFSET+1,22+8);
+	final static Rectangle FUTURETONE_RECT_SEARCH_SAFE=new Rectangle(850+XOFFSET,294,122+XOFFSET+1,22+8);
+	final static Rectangle FUTURETONE_RECT_SEARCH_SAD=new Rectangle(850+XOFFSET,330,122+XOFFSET+1,22+8);
+	final static Rectangle FUTURETONE_RECT_SEARCH_WORST=new Rectangle(850+XOFFSET,367,122+XOFFSET+1,22+8);
 	final static Rectangle FUTURETONE_RECT_SEARCH_PCT=new Rectangle(1174+XOFFSET,152,1125,8);
 	final static Rectangle FUTURETONE_RECT_SEARCH_PCT2=new Rectangle(1114+XOFFSET,152,1045,8);
 	final static Rectangle FUTURETONE_RECT_SEARCH_SCORE=new Rectangle(866+XOFFSET,543-4,250+XOFFSET+1,32+24);
@@ -786,7 +786,7 @@ public class TypeFace2 {
 		this.img=img;
 		File f = null;
 		BufferedImage test = null;
-		xpointer=MEGAMIX_RECT_SEARCH_COOL.width-1;
+		xpointer=img.getWidth()-1;
 		ypointer=0;
 		String total = "";
 		
@@ -799,7 +799,7 @@ public class TypeFace2 {
 		
 		trialloop:
 		while (ypointer<8) {
-			xpointer=MEGAMIX_RECT_SEARCH_COOL.width-1;
+			xpointer=img.getWidth()-1;
 			while (xpointer>22) {
 				int foundIndex = -1;
 				//Compare the 22x21 range.

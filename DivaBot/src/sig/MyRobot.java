@@ -816,6 +816,7 @@ public class MyRobot{
 		selectedSong=new SongData("LIKE THE WIND",null,null,null,null);
 		difficulty="H";
 
+		RunTest("test63.png",0,0,0,0,1000,0.00f,"EX","",0,0,true,Mode.FUTURETONE);
 		RunTest("test62.png",329,29,0,0,2,100.66f,"EXEX","",305,548735,false,Mode.FUTURETONE);
 		RunTest("test61.png",467,21,0,0,0,103.48f,"EX","HS",488,514440,false,Mode.MEGAMIX);
 		RunTest("test60.png",430,88,2,0,3,95.05f,"EX","HS",298,538510,false,Mode.MEGAMIX);

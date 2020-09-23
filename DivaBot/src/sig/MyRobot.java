@@ -375,6 +375,15 @@ public class MyRobot{
 							}
 							try {
 								final Result data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
+								MYROBOT.setAutoDelay(0);
+								if (NEWSONGS.length==0) {
+									MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+									MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+									MYROBOT.keyPress(KeyEvent.VK_F11);
+									MYROBOT.keyRelease(KeyEvent.VK_F11);
+									MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+									MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+								}
 								if (data.cool==-1 || data.fine==-1 || data.safe==-1 || data.sad==-1 || data.worst==-1 || data.percent<0f || data.percent>110f || data.combo==-1 || data.score==-1) {
 									if (lastData==null || (lastData.cool!=data.cool || data.fine!=lastData.fine || data.safe!=lastData.safe || data.sad!=lastData.sad || data.worst!=lastData.worst || data.percent!=lastData.percent || data.combo!=lastData.combo || data.score!=lastData.score)) {
 										System.out.println("Waiting for results to populate...");
@@ -396,13 +405,13 @@ public class MyRobot{
 										&& data.score!=lastscore /*|| lastpercent!=percent*/){
 									System.out.println("Results for "+selectedSong.title+" "+data.difficulty+": "+data.display());
 									TypeFace2.deepCopyOfficialYPointersFromPointers();
-									File songFolder = new File(selectedSong.title+"/"+data.difficulty);
+									File songFolder = new File(selectedSong.title.replace(":","")+"/"+data.difficulty);
 									if (!songFolder.exists()) {
 										songFolder.mkdirs();
 									}
 									File[] songFolderFiles = songFolder.listFiles();
 									int playId = songFolderFiles.length;
-									final File playFolder = new File(selectedSong.title+"/"+data.difficulty+"/"+playId);
+									final File playFolder = new File(selectedSong.title.replace(":","")+"/"+data.difficulty+"/"+playId);
 									playFolder.mkdir();
 									recordedResults=true;
 									lastcool=data.cool;
@@ -414,7 +423,7 @@ public class MyRobot{
 									lastcombo=data.combo;
 									lastscore=data.score;
 									lastfail=data.fail;
-									File resultImage=new File(playFolder,selectedSong.title+"_"+data.difficulty+"play_"+data.cool+"_"+data.fine+"_"+data.safe+"_"+data.sad+"_"+data.worst+"_"+data.percent+""
+									File resultImage=new File(playFolder,selectedSong.title.replace(":","")+"_"+data.difficulty+"play_"+data.cool+"_"+data.fine+"_"+data.safe+"_"+data.sad+"_"+data.worst+"_"+data.percent+""
 											+ "_"+data.combo+"_"+data.score+".png");
 									new File("scoreimage.png").renameTo(resultImage);
 									results.add(new Result(selectedSong.title,data.difficulty,data.cool,data.fine,data.safe,data.sad,data.worst,data.percent,data.mod,data.combo,data.score,data.fail,resultImage));
@@ -422,15 +431,6 @@ public class MyRobot{
 									
 									//gotoxy(800,64);
 									//click();
-									MYROBOT.setAutoDelay(0);
-									if (NEWSONGS.length==0) {
-										MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-										MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-										MYROBOT.keyPress(KeyEvent.VK_F11);
-										MYROBOT.keyRelease(KeyEvent.VK_F11);
-										MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-										MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
-									}
 								}
 							} catch (IOException|NumberFormatException|IndexOutOfBoundsException e) {
 								e.printStackTrace();

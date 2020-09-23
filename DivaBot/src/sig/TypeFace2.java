@@ -87,6 +87,15 @@ public class TypeFace2 {
 			officialypointers[i]=ypointers[i];
 		}
 	}
+	
+	public boolean isClass(String className) {
+	    try  {
+	        Class.forName(className);
+	        return true;
+	    }  catch (ClassNotFoundException e) {
+	        return false;
+	    }
+	}
 
 	public Result getAllData(BufferedImage img, boolean debug) throws IOException {
 		deepCopyDefaultYPointers();
@@ -100,16 +109,18 @@ public class TypeFace2 {
 		
 		result.mode = getMode(img2,debug);
 		
-		if (MyRobot.FUTURETONE) {
-			/*if (result.mode!=Mode.FUTURETONE) {
-				System.out.println("The current mode is "+result.mode+", but the results screen thinks this is Megamix... We're going to manually fix it for now. Let sig know this is appearing.");
-			}*/
-			result.mode=Mode.FUTURETONE;
-		} else {
-			/*if (result.mode!=Mode.MEGAMIX) {
-				System.out.println("The current mode is "+result.mode+", but the results screen thinks this is Future Tone... We're going to manually fix it for now. Let sig know this is appearing.");
-			}*/
-			result.mode=Mode.MEGAMIX;
+		if (isClass("sig.MyRobot")) {
+			if (MyRobot.FUTURETONE) {
+				/*if (result.mode!=Mode.FUTURETONE) {
+					System.out.println("The current mode is "+result.mode+", but the results screen thinks this is Megamix... We're going to manually fix it for now. Let sig know this is appearing.");
+				}*/
+				result.mode=Mode.FUTURETONE;
+			} else {
+				/*if (result.mode!=Mode.MEGAMIX) {
+					System.out.println("The current mode is "+result.mode+", but the results screen thinks this is Future Tone... We're going to manually fix it for now. Let sig know this is appearing.");
+				}*/
+				result.mode=Mode.MEGAMIX;
+			}
 		}
 		
 		switch (result.mode) {

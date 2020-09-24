@@ -93,7 +93,7 @@ public class MyRobot{
 	/*static String SONGNAMES[] = new String[] {"Yellow","The secret garden","Starduster","Tell Your World","パズル","夢の続き","Last Night, Good Night","愛言葉","あなたの歌姫","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","ココロ","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","Star Story","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","Change me","ハジメテノオト","初めての恋が終わる時","packaged","Palette","ファインダー (DSLR remix - re:edit)","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","リンリンシグナル","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","Stay with me","ストロボナイツ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","ねこみみスイッチ","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アドレサンス","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","キップル・インダストリー","Catch the Wave","キャットフード","恋は戦争","サウンド","サマーアイドル","shake it!","Just Be Friends","スイートマジック","StargazeR","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","二息歩行","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","巴里映画少女","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","Promise","VOiCE","忘却心中","星屑ユートピア","マージナル","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","MEGANE","メランコリック","夢喰い白黒バク","LIKE THE WIND","リモコン","ルカルカ★ナイトフィーバー","Leia","Rosary Pale","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","AFTER BURNER","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","カラフル×セクシィ","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","システマティック・ラヴ","SING&SMILE","スノーマン","DYE","多重未来のカルテット～QUARTET THEME～","Knife","なりすましゲンガー","PIANOGIRL","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","恋色病棟","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","Nyanyanyanyanyanyanya!","初音ミクの消失 -DEAD END-","パラジクロロベンゼン","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜 -F edition-","ピアノ×フォルテ×スキャンダル","フキゲンワルツ","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ブレス・ユア・ブレス","劣等上等","グリーンライツ・セレナーデ","ドラマツルギー"};*/
 	/*static String FUTURETONESONGNAMES[] = new String[] {"Yellow","Innocence","いのちの歌","The secret garden","Far Away","荒野と森と魔法の歌","Starduster","Dear cocoa girls","Tell Your World","ナイトメア☆パーティーナイト","パズル","天鵞絨アラベスク","悠久","夢の続き","Last Night, Good Night","愛言葉","あなたの歌姫","数多の舞 -Dance of many-","雨のちSweetDrops","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","唐傘さんが通る","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","ココロ","桜ノ雨","サヨナラ・グッバイ","39","深海シティアンダーグラウンド","深海少女","Star Story","積乱雲グラフィティ","千年の独奏歌","その一秒 スローモーション","ダブルラリアット","Change me","那由他の彼方まで","ハジメテノオト","初めての恋が終わる時","packaged","ハト","Palette","ファインダー (DSLR remix - re:edit)","FREELY TOMORROW","from Y to Y","Holy Star -2010 DIVA mix-","ほんとは分かってる","迷子ライフ","みくみくにしてあげる♪","moon","メルト","モノクロ∞ブルースカイ","ゆめゆめ","ラブリスト更新中？","リンリンシグナル","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","オオカミガール","片想いサンバ","偶像無線","Glory 3usi9","恋ノート","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","Stay with me","ストロボナイツ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","ナイト・オブ・ライト","ねこみみスイッチ","Nostalogic","花舞月詠譚","Hand in Hand","ひねくれ者","ピンクムーン","Fire◎Flower","ふたりで。","ブラック★ロックシューター","ペリコ・スペースシッパー","メテオ","ワールドイズマイン","アウトオブエデン","アドレサンス","アマツキツネ","Ievan Polkka","erase or zero","嘘つきベティ","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","ぎずも","キップル・インダストリー","Catch the Wave","キャットフード","恋は戦争","孤独の果て","さあ、どっち？","サウンド","サマーアイドル","shake it!","ZIGG-ZAGG","Just Be Friends","スイートマジック","StargazeR","Starlite★Lydian","SPiCa -39's Giving Day Edition-","千本桜","So much loving you★ -DIVA Edit-","タイムリミット","番凩","月向うまでのトラベル","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","Dreaming Leaf -ユメミルコトノハ-","どりーみんチュチュ","トリノコシティ","二息歩行","ネトゲ廃人シュプレヒコール","No Logic","ハイスクール","ハイハハイニ","はじめまして地球人さん","巴里映画少女","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","ブラックノートに溺れさせて","break;down","Promise","VOiCE","崩壊歌姫 -disruptive diva-","忘却心中","星屑ユートピア","ほしをつくるひと","マージナル","magnet","右肩の蝶","みくみく菌にご注意♪","結ンデ開イテ羅刹ト骸","迷的サイバネティックス","MEGANE","メランコリック","Mellow Yellow","melody...","夢喰い白黒バク","LIKE THE WIND","リモコン","ルカルカ★ナイトフィーバー","ルシッドドリーミング","Leia","Rosary Pale","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","Absolunote","AFTER BURNER","Equation+","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","カラフル×セクシィ","キミに","君の体温","金の聖夜霜雪に朽ちて","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","システマティック・ラヴ","ジュゲムシーケンサー","SING&SMILE","SYMPHONIC DIVE - DIVA edit -","スノーマン","slump","そいやっさぁ!!","DYE","多重未来のカルテット～QUARTET THEME～","透明水彩","Knife","なりすましゲンガー","ネコミミアーカイブ","Pane dhiria","PIANOGIRL","ヒバナ","ヒビカセ","ブラックゴールド","Magical Sound Shower","マスターオブパペッツ","右肩の蝶 -39's Giving Day Edition-","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","いろは唄","大江戸ジュリアナイト","おはヨーデル","恋色病棟","ゴーストルール","Gothic and Loneliness ～I'm the very DIVA～","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","ステップフォワード","砂の惑星","テオ","どうしてこうなった","Nyanyanyanyanyanyanya!","初音ミクの消失 -DEAD END-","パラジクロロベンゼン","秘密警察","フランシスカ","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","イヤイヤ星人","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜 -F edition-","ピアノ×フォルテ×スキャンダル","フキゲンワルツ","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール"};*/
 	static SongInfo SONGNAMES[] = new SongInfo[] {};
-	static String NEWSONGS[] = new String[] {"Yellow","The secret garden","Starduster","Tell Your World","パズル","夢の続き","Last Night, Good Night","愛言葉","あなたの歌姫","Weekender Girl","歌に形はないけれど","えれくとりっく・えんじぇぅ","神曲","カンタレラ","巨大少女","クローバー♣クラブ","恋スルVOC@LOID","ココロ","桜ノ雨","39","深海シティアンダーグラウンド","深海少女","Star Story","積乱雲グラフィティ","千年の独奏歌","ダブルラリアット","Change me","ハジメテノオト","初めての恋が終わる時","packaged","Palette","ファインダー (DSLR remix - re:edit)","FREELY TOMORROW","from Y to Y","みくみくにしてあげる♪","メルト","モノクロ∞ブルースカイ","ゆめゆめ","リンリンシグナル","16 -out of the gravity-","ACUTE","インタビュア","LOL -lots of laugh-","Glory 3usi9","soundless voice","ジェミニ","白い雪のプリンセスは","スキキライ","Stay with me","ストロボナイツ","タイムマシン","Dear","DECORATOR","トリコロール・エア・ライン","ねこみみスイッチ","Nostalogic","Hand in Hand","Fire◎Flower","ブラック★ロックシューター","メテオ","ワールドイズマイン","アドレサンス","アマツキツネ","erase or zero","エレクトロサチュレイタ","on the rocks","からくりピエロ","カラフル×メロディ","キップル・インダストリー","Catch the Wave","キャットフード","恋は戦争","サウンド","サマーアイドル","shake it!","Just Be Friends","スイートマジック","StargazeR","SPiCa -39's Giving Day Edition-","番凩","テレカクシ思春期","天樂","どういうことなの！？","東京テディベア","どりーみんチュチュ","トリノコシティ","二息歩行","ネトゲ廃人シュプレヒコール","No Logic","ハイハハイニ","はじめまして地球人さん","巴里映画少女","＊ハロー、プラネット。 (I.M.PLSE-EDIT)","Hello, Worker","Promise","VOiCE","忘却心中","星屑ユートピア","マージナル","magnet","右肩の蝶","結ンデ開イテ羅刹ト骸","MEGANE","メランコリック","夢喰い白黒バク","LIKE THE WIND","リモコン","ルカルカ★ナイトフィーバー","Leia","Rosary Pale","炉心融解","WORLD'S END UMBRELLA","アカツキアライヴァル","アゲアゲアゲイン","AFTER BURNER","1925","え？あぁ、そう。","エイリアンエイリアン","ODDS&ENDS","カラフル×セクシィ","君の体温","こっち向いて Baby","壊セ壊セ","39みゅーじっく！","サンドリヨン","システマティック・ラヴ","SING&SMILE","スノーマン","DYE","多重未来のカルテット～QUARTET THEME～","Knife","なりすましゲンガー","PIANOGIRL","ヒバナ","ヒビカセ","ブラックゴールド","ミラクルペイント","指切り","ありふれたせかいせいふく","アンハッピーリフレイン","大江戸ジュリアナイト","恋色病棟","ゴーストルール","こちら、幸福安心委員会です。","孤独の果て -extend edition-","ジターバグ","Sweet Devil","砂の惑星","テオ","Nyanyanyanyanyanyanya!","初音ミクの消失 -DEAD END-","パラジクロロベンゼン","秘密警察","妄想スケッチ","リンちゃんなう！","ローリンガール","ロキ","ロミオとシンデレラ","エンヴィキャットウォーク","骸骨楽団とリリア","サイハテ","ジグソーパズル","千本桜 -F edition-","ピアノ×フォルテ×スキャンダル","フキゲンワルツ","Blackjack","ぽっぴっぽー","裏表ラバーズ","Sadistic.Music∞Factory","デンパラダイム","二次元ドリームフィーバー","ネガポジ＊コンティニューズ","初音ミクの激唱","ワールズエンド・ダンスホール","ブレス・ユア・ブレス","劣等上等","グリーンライツ・セレナーデ","ドラマツルギー"};
+	static String NEWSONGS[] = new String[] {};
 	int SCREEN_X;
 	int SCREEN_Y;
 	int WINDOW_X;
@@ -554,39 +554,46 @@ public class MyRobot{
 
 	private void GetCurrentDifficulty() {
 		if (FUTURETONE) {
-			Color c = new Color(MYROBOT.createScreenCapture(new Rectangle(334,267,10,10)).getRGB(0, 0));
+			ColorRegion cr = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(320,281,32,5));
 			//return c.getRed()==43 && c.getGreen()==88 && c.getBlue()==213;
-			if (c.getRed()>30 && c.getRed()<140 && c.getBlue()>80 && c.getBlue()<160 && c.getGreen()<40) {
+			//System.out.println(cr);
+			/*
+			  	EXEX 119,7,173
+				EX 169,27,58
+				H 184,126,11
+				N 25,176,32
+				E 16,135,183
+				*/
+			if (cr.getAllRange(80, 180, 0, 50, 130, 210)) {
 				difficulty="EXEX";
 			} else 
-			if (c.getRed()>50 && c.getRed()<160 && c.getBlue()<40 && c.getGreen()<40) {
+			if (cr.getAllRange(140, 220, 0, 50, 20, 100)) {
 				difficulty="EX";
 			} else 
-			if (c.getRed()>90 && c.getRed()<160 && c.getBlue()<40 && c.getGreen()>30 && c.getGreen()<120) {
+			if (cr.getAllRange(140, 225, 80, 170, 0, 50)) {
 				difficulty="H";
 			} else 
-			if (c.getRed()<40 && c.getBlue()<70 && c.getGreen()<140 && c.getGreen()>60) {
+			if (cr.getAllRange(0, 70, 130, 220, 0, 50)) {
 				difficulty="N";
 			} else 
-			if (c.getRed()<40 && c.getBlue()>70 && c.getBlue()<140 && c.getGreen()<100 && c.getGreen()>20) {
+			if (cr.getAllRange(0, 50, 100, 180, 140, 220)) {
 				difficulty="E";
 			}
 		} else {
-			Color c = new Color(MYROBOT.createScreenCapture(new Rectangle(320,274,10,10)).getRGB(0, 0));
-			//return c.getRed()==43 && c.getGreen()==88 && c.getBlue()==213;
-			if (c.getRed()>100 && c.getRed()<200 && c.getBlue()>200 && c.getBlue()<255 && c.getGreen()<50) {
+			ColorRegion cr = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(320,274,20,8));
+			if (cr.getAllRange(100,200,0,50,200,255)) {
 				difficulty="EXEX";
 			} else 
-			if (c.getRed()>150 && c.getRed()<255 && c.getBlue()<50 && c.getGreen()<50) {
+			if (cr.getAllRange(150,255,0,50,0,50)) {
 				difficulty="EX";
 			} else 
-			if (c.getRed()>175 && c.getRed()<225 && c.getBlue()<50 && c.getGreen()<175 && c.getGreen()>135) {
+			if (cr.getAllRange(175,225,135,175,0,50)) {
 				difficulty="H";
 			} else 
-			if (c.getRed()>0 && c.getRed()<50 && c.getBlue()<50 && c.getGreen()<255 && c.getGreen()>190) {
+			if (cr.getAllRange(0,50,190,255,0,50)) {
 				difficulty="N";
 			} else 
-			if (c.getRed()>0 && c.getRed()<50 && c.getBlue()>170 && c.getBlue()<230 && c.getGreen()<190 && c.getGreen()>150) {
+			if (cr.getAllRange(0,50,150,190,170,230)) {
 				difficulty="E";
 			}
 		}

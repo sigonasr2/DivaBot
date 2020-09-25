@@ -210,6 +210,7 @@ public class TypeFace2 {
 				result.difficulty = getDifficulty(difficultyRegion);
 				if (debug) {
 					System.out.println("Diff:"+result.difficulty+"/"+difficultyRegion);
+					ImageIO.write(difficultyRegion.img.getSubimage(difficultyRegion.region.x,difficultyRegion.region.y,difficultyRegion.region.width,difficultyRegion.region.height),"png",new File("debug","difficulty.png"));
 				}
 			}break;
 			case FUTURETONE:{
@@ -217,6 +218,7 @@ public class TypeFace2 {
 				result.difficulty = getFutureToneDifficulty(difficultyRegion);
 				if (debug) {
 					System.out.println("Diff:"+result.difficulty+"/"+difficultyRegion);
+					ImageIO.write(difficultyRegion.img.getSubimage(difficultyRegion.region.x,difficultyRegion.region.y,difficultyRegion.region.width,difficultyRegion.region.height),"png",new File("debug","difficulty.png"));
 				}
 			}break;
 		}

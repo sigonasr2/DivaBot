@@ -1,4 +1,4 @@
-DISPLAYDATA	-16765135*-10027060*48*Yu Gothic UI Bold*665*64*10000*Song Title (Japanese+Romanized)|Song Title (English)*80*16**~-16765135*-10027060*48*Yu Gothic UI Light*380*64*10000*Best Play*80*952**~-16765135*-10027060*48*Yu Gothic UI Light*380*64*10000*Overall Rating*560*952**~-16765135*-10027060*48*Yu Gothic UI Light*380*64*10000*Song Difficulty|Pass/Play Count (+%)|FC Count (+%)*1048*952**~-16765135*-10027060*16*Yu Gothic UI Semilight*245*14*10000*Song Artist*504*16*Artist: *
+DISPLAYDATA	-16765135*-10027060*48*Yu Gothic UI Bold*665*64*10000*Song Title (Japanese+Romanized)|Song Title (English)*80*16**~-16765135*-10027060*48*Yu Gothic UI Light*380*64*10000*Best Play*80*952**~-16765135*-10027060*48*Yu Gothic UI Light*380*64*10000*Overall Rating*560*952**~-16765135*-10027060*48*Yu Gothic UI Light*380*64*10000*Song Difficulty|Pass/Play Count (+%)|FC Count (+%)*1048*952**~-16765135*-10027060*16*Yu Gothic UI Semilight*245*14*10000*Song Artist*504*16*Artist: *~-16765135*-10027060*48*Yu Gothic UI Light*380*128*10000*Song Difficulty*840*320**
 LAST_HEIGHT	128
 WIDTH	1936
 HEIGHT	1096

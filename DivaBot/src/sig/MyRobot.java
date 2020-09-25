@@ -291,8 +291,7 @@ public class MyRobot{
 			if (obj.has("rating")) {
 				p.overallrating = (int)obj.getDouble("rating");
 				if (p.lastRating<p.overallrating) {p.ratingTime=System.currentTimeMillis();}
-			}
-			
+			}	
 		} catch (JSONException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -823,6 +822,12 @@ public class MyRobot{
 		selectedSong=new SongData("LIKE THE WIND",null,null,null,null);
 		difficulty="H";
 
+		RunTest("test72.png",571,129,12,0,19,82.47f,"EX","",153,571680,false,Mode.MEGAMIX);
+		RunTest("test71.png",520,36,0,0,0,104.91f,"EX","",556,888074,false,Mode.FUTURETONE);
+		RunTest("test70.png",670,42,0,0,0,103.54f,"EX","",712,726704,false,Mode.FUTURETONE);
+		RunTest("test69.png",731,144,9,2,2,89.74f,"EX","",273,750387,false,Mode.FUTURETONE);
+		RunTest("test68.png",590,63,0,0,0,103.40f,"EX","",653,783607,false,Mode.FUTURETONE);
+		RunTest("test67.png",592,65,0,0,0,102.41f,"EX","",657,883256,false,Mode.FUTURETONE);
 		RunTest("test65.png",561,100,3,2,2,95.40f,"EX","HS",445,755216,false,Mode.FUTURETONE);
 		RunTest("test64.png",518,30,3,0,6,96.13f,"EX","HS",197,666116,false,Mode.FUTURETONE);
 		RunTest("test63.png",0,0,0,0,1000,0.00f,"EX","",0,0,true,Mode.FUTURETONE);

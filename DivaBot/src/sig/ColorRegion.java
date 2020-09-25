@@ -41,7 +41,11 @@ public class ColorRegion {
 				if (region.x+x<0||region.x+x>=region.x+region.width||region.y+y<0||region.y+y>=region.y+region.height) {
 					continue;
 				}
-				total+=new Color(img.getRGB(region.x+x, region.y+y)).getRed();
+				try {
+					total+=new Color(img.getRGB(region.x+x, region.y+y)).getRed();
+				} catch (NullPointerException|ArrayIndexOutOfBoundsException e) {
+					
+				}
 			}
 		}
 		return total/(region.width*region.height);
@@ -53,7 +57,11 @@ public class ColorRegion {
 				if (region.x+x<0||region.x+x>=region.x+region.width||region.y+y<0||region.y+y>=region.y+region.height) {
 					continue;
 				}
-				total+=new Color(img.getRGB(region.x+x, region.y+y)).getGreen();
+				try {
+					total+=new Color(img.getRGB(region.x+x, region.y+y)).getGreen();
+				} catch (NullPointerException|ArrayIndexOutOfBoundsException e) {
+					
+				}
 			}
 		}
 		return total/(region.width*region.height);
@@ -65,7 +73,11 @@ public class ColorRegion {
 				if (region.x+x<0||region.x+x>=region.x+region.width||region.y+y<0||region.y+y>=region.y+region.height) {
 					continue;
 				}
-				total+=new Color(img.getRGB(region.x+x, region.y+y)).getBlue();
+				try {
+					total+=new Color(img.getRGB(region.x+x, region.y+y)).getBlue();
+				} catch (NullPointerException|ArrayIndexOutOfBoundsException e) {
+					
+				}
 			}
 		}
 		return total/(region.width*region.height);

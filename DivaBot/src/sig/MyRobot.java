@@ -269,7 +269,7 @@ public class MyRobot{
 		    		JOptionPane.showMessageDialog(null,"Authentication Failed!\n\nPlease check your credentials and try again!");
 		    	}
 		    	instream.close();
-		    } catch (UnsupportedOperationException | IOException e) {
+		    } catch (UnsupportedOperationException | IOException e) {	
 				e.printStackTrace();
 			}
 		}
@@ -292,9 +292,7 @@ public class MyRobot{
 				p.overallrating = (int)obj.getDouble("rating");
 				if (p.lastRating<p.overallrating) {p.ratingTime=System.currentTimeMillis();}
 			}	
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (JSONException|IOException e) {
 			e.printStackTrace();
 		}
 		while (true) {
@@ -707,13 +705,13 @@ public class MyRobot{
         typeface1 = null;
         typeface2=null;
         try {
-	        	typeface1 = new TypeFace2(
-	    				ImageIO.read(new File("typeface.png")),
-	    				ImageIO.read(new File("typeface2.png")),
-	    				ImageIO.read(new File("typeface3.png")),
-	    				ImageIO.read(new File("typeface4.png")),
-	    				ImageIO.read(new File("typeface5.png"))
-	    				);
+        	typeface1 = new TypeFace2(
+				ImageIO.read(new File("typeface.png")),
+				ImageIO.read(new File("typeface2.png")),
+				ImageIO.read(new File("typeface3.png")),
+				ImageIO.read(new File("typeface4.png")),
+				ImageIO.read(new File("typeface5.png"))
+				);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -808,7 +806,6 @@ public class MyRobot{
 	    title.setSize(200,100);
 	    title.setText((currentSong>=SONGNAMES.length)?"DONE!":SONGNAMES[currentSong].name);
 	    
-	    
 	    //SongData s = SongData.getByTitle(SONGNAMES[currentSong].name);
 
 		//selectedSong=new SongData("キップル・インダストリー",0,0,0);
@@ -818,10 +815,10 @@ public class MyRobot{
 	}
 	
 	static void RunTests() throws IOException {
-		
 		selectedSong=new SongData("LIKE THE WIND",null,null,null,null);
 		difficulty="H";
 
+		RunTest("test73.png",456,207,31,11,18,71.06f,"EX","",96,544610,false,Mode.MEGAMIX);
 		RunTest("test72.png",571,129,12,0,19,82.47f,"EX","",153,571680,false,Mode.MEGAMIX);
 		RunTest("test71.png",520,36,0,0,0,104.91f,"EX","",556,888074,false,Mode.FUTURETONE);
 		RunTest("test70.png",670,42,0,0,0,103.54f,"EX","",712,726704,false,Mode.FUTURETONE);

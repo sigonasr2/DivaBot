@@ -334,13 +334,15 @@ public class MyRobot{
 							prevSongTitle=selectedSong.title;
 							prevDifficulty=difficulty;
 							MyRobot.p.repaint();
-							if (NEWSONGS.length==0) {
-								MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-								MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-								MYROBOT.keyPress(KeyEvent.VK_F11);
-								MYROBOT.keyRelease(KeyEvent.VK_F11);
-								MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-								MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+							if (DrawCanvas.configData.containsKey("EYE_TRACKING_TOGGLE")) {
+								if (NEWSONGS.length==0) {
+									MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+									MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+									MYROBOT.keyPress(KeyEvent.VK_F11);
+									MYROBOT.keyRelease(KeyEvent.VK_F11);
+									MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+									MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+								}
 							}
 						}
 					}
@@ -354,16 +356,8 @@ public class MyRobot{
 						if (OnResultsScreen() && !recordedResults && !recordingResults && results.size()==0) {
 							lastSongSelectTime=System.currentTimeMillis();
 							MYROBOT.setAutoDelay(0);
-							if (NEWSONGS.length==0) {
-								MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-								MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-								MYROBOT.keyPress(KeyEvent.VK_F12);
-								MYROBOT.keyRelease(KeyEvent.VK_F12);
-								MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-								MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
-							}
 							MYROBOT.refreshScoreScreen();
-							ImageIO.write(MYROBOT.createScoreScreenCapture(),"png",new File("scoreimage.png"));
+							//ImageIO.write(MYROBOT.createScoreScreenCapture(),"png",new File("scoreimage.png"));
 							File tmp = new File("tmp");
 							if (tmp.exists()) {
 								FileUtils.deleteFile(tmp);
@@ -371,16 +365,8 @@ public class MyRobot{
 								tmp.mkdir();
 							}
 							try {
-								final Result data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
+								Result data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
 								MYROBOT.setAutoDelay(0);
-								if (NEWSONGS.length==0) {
-									MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-									MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-									MYROBOT.keyPress(KeyEvent.VK_F11);
-									MYROBOT.keyRelease(KeyEvent.VK_F11);
-									MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-									MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
-								}
 								if (data.cool==-1 || data.fine==-1 || data.safe==-1 || data.sad==-1 || data.worst==-1 || data.percent<0f || data.percent>110f || data.combo==-1 || data.score==-1) {
 									if (lastData==null || (lastData.cool!=data.cool || data.fine!=lastData.fine || data.safe!=lastData.safe || data.sad!=lastData.sad || data.worst!=lastData.worst || data.percent!=lastData.percent || data.combo!=lastData.combo || data.score!=lastData.score)) {
 										System.out.println("Waiting for results to populate...");
@@ -400,6 +386,20 @@ public class MyRobot{
 								} else 
 								if ((data.combo!=lastcombo || data.fail!=lastfail || data.cool!=lastcool || lastfine!=data.fine || lastsafe!=data.safe || lastsad!=data.sad || lastworst!=data.worst)
 										&& data.score!=lastscore /*|| lastpercent!=percent*/){
+									if (DrawCanvas.configData.containsKey("EYE_TRACKING_TOGGLE")) {
+										if (NEWSONGS.length==0) {
+											MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+											MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+											MYROBOT.keyPress(KeyEvent.VK_F12);
+											MYROBOT.keyRelease(KeyEvent.VK_F12);
+											MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+											MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+										}
+									}
+									Thread.sleep(100);
+									MYROBOT.refreshScoreScreen();
+									ImageIO.write(MYROBOT.createScoreScreenCapture(),"png",new File("scoreimage.png"));
+									data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
 									System.out.println("Results for "+selectedSong.title+" "+data.difficulty+": "+data.display());
 									TypeFace2.deepCopyOfficialYPointersFromPointers();
 									File songFolder = new File(selectedSong.title.replace(":","")+"/"+data.difficulty);
@@ -425,7 +425,17 @@ public class MyRobot{
 									new File("scoreimage.png").renameTo(resultImage);
 									results.add(new Result(selectedSong.title,data.difficulty,data.cool,data.fine,data.safe,data.sad,data.worst,data.percent,data.mod,data.combo,data.score,data.fail,resultImage));
 									SoundUtils.playSound("collect_item.wav");
-									
+
+									if (DrawCanvas.configData.containsKey("EYE_TRACKING_TOGGLE")) {
+										if (NEWSONGS.length==0) {
+											MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+											MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+											MYROBOT.keyPress(KeyEvent.VK_F11);
+											MYROBOT.keyRelease(KeyEvent.VK_F11);
+											MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+											MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+										}
+									}
 									//gotoxy(800,64);
 									//click();
 								}

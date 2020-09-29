@@ -1024,7 +1024,7 @@ public class MyRobot{
 			}
 		} else
 		{
-			cr = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(741,171,5,5));
+			cr = new ColorRegion(MYROBOT.createScreenCapture(),new Rectangle(735,158,5,5));
 			if (!onSongSelect&&cr.getAllRange(160,200,0,15,170,200)) {
 				stillOnSongSelect++;
 				if (stillOnSongSelect>=5) {

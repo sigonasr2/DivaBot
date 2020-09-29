@@ -335,14 +335,12 @@ public class MyRobot{
 							prevDifficulty=difficulty;
 							MyRobot.p.repaint();
 							if (DrawCanvas.configData.containsKey("EYE_TRACKING_TOGGLE")) {
-								if (NEWSONGS.length==0) {
-									MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-									MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-									MYROBOT.keyPress(KeyEvent.VK_F11);
-									MYROBOT.keyRelease(KeyEvent.VK_F11);
-									MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-									MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
-								}
+								MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+								MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+								MYROBOT.keyPress(KeyEvent.VK_F11);
+								MYROBOT.keyRelease(KeyEvent.VK_F11);
+								MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+								MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
 							}
 						}
 					}
@@ -357,7 +355,7 @@ public class MyRobot{
 							lastSongSelectTime=System.currentTimeMillis();
 							MYROBOT.setAutoDelay(0);
 							MYROBOT.refreshScoreScreen();
-							//ImageIO.write(MYROBOT.createScoreScreenCapture(),"png",new File("scoreimage.png"));
+							ImageIO.write(MYROBOT.createScoreScreenCapture(),"png",new File("scoreimage.png"));
 							File tmp = new File("tmp");
 							if (tmp.exists()) {
 								FileUtils.deleteFile(tmp);
@@ -387,19 +385,19 @@ public class MyRobot{
 								if ((data.combo!=lastcombo || data.fail!=lastfail || data.cool!=lastcool || lastfine!=data.fine || lastsafe!=data.safe || lastsad!=data.sad || lastworst!=data.worst)
 										&& data.score!=lastscore /*|| lastpercent!=percent*/){
 									if (DrawCanvas.configData.containsKey("EYE_TRACKING_TOGGLE")) {
-										if (NEWSONGS.length==0) {
-											MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-											MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-											MYROBOT.keyPress(KeyEvent.VK_F12);
-											MYROBOT.keyRelease(KeyEvent.VK_F12);
-											MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-											MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
-										}
+										MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+										MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+										MYROBOT.keyPress(KeyEvent.VK_F12);
+										MYROBOT.keyRelease(KeyEvent.VK_F12);
+										MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+										MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
+										MYROBOT.refreshScoreScreen();
+										Thread.sleep(100);
+										MYROBOT.refreshScoreScreen();
+										ImageIO.write(MYROBOT.createScoreScreenCapture(),"png",new File("scoreimage.png"));
+										data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
 									}
-									Thread.sleep(100);
-									MYROBOT.refreshScoreScreen();
-									ImageIO.write(MYROBOT.createScoreScreenCapture(),"png",new File("scoreimage.png"));
-									data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
+									
 									System.out.println("Results for "+selectedSong.title+" "+data.difficulty+": "+data.display());
 									TypeFace2.deepCopyOfficialYPointersFromPointers();
 									File songFolder = new File(selectedSong.title.replace(":","")+"/"+data.difficulty);
@@ -427,14 +425,12 @@ public class MyRobot{
 									SoundUtils.playSound("collect_item.wav");
 
 									if (DrawCanvas.configData.containsKey("EYE_TRACKING_TOGGLE")) {
-										if (NEWSONGS.length==0) {
-											MYROBOT.keyPress(KeyEvent.VK_CONTROL);
-											MYROBOT.keyPress(KeyEvent.VK_SHIFT);
-											MYROBOT.keyPress(KeyEvent.VK_F11);
-											MYROBOT.keyRelease(KeyEvent.VK_F11);
-											MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
-											MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
-										}
+										MYROBOT.keyPress(KeyEvent.VK_CONTROL);
+										MYROBOT.keyPress(KeyEvent.VK_SHIFT);
+										MYROBOT.keyPress(KeyEvent.VK_F11);
+										MYROBOT.keyRelease(KeyEvent.VK_F11);
+										MYROBOT.keyRelease(KeyEvent.VK_SHIFT);
+										MYROBOT.keyRelease(KeyEvent.VK_CONTROL);
 									}
 									//gotoxy(800,64);
 									//click();

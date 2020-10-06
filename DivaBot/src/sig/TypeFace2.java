@@ -817,7 +817,7 @@ public class TypeFace2 {
 							Color fontCol = new Color(font.getRGB(x+i*22,y));
 							Color pixelCol = new Color(img.getRGB(xpointer-22+x+1, y+ypointer));
 							if (fontCol.equals(Color.RED) && pixelCol.getRed()<150
-									 && pixelCol.getGreen()<150 && pixelCol.getBlue()<150) {
+									 && pixelCol.getGreen()<150 && pixelCol.getBlue()<144) {
 								//Breaks a rule.
 								ruleBreak=true;
 								if (!debug) {

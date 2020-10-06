@@ -395,7 +395,7 @@ public class MyRobot{
 										Thread.sleep(100);
 										MYROBOT.refreshScoreScreen();
 										ImageIO.write(MYROBOT.createScoreScreenCapture(),"png",new File("scoreimage.png"));
-										data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
+										//data = typeface1.getAllData(MYROBOT.createScoreScreenCapture());
 									}
 									
 									System.out.println("Results for "+selectedSong.title+" "+data.difficulty+": "+data.display());
@@ -824,6 +824,7 @@ public class MyRobot{
 		selectedSong=new SongData("LIKE THE WIND",null,null,null,null);
 		difficulty="H";
 
+		RunTest("test74.jpg",349,36,0,0,0,101.94f,"EXEX","",385,1107029,false,Mode.FUTURETONE);
 		RunTest("test73.png",456,207,31,11,18,71.06f,"EX","",96,544610,false,Mode.MEGAMIX);
 		RunTest("test72.png",571,129,12,0,19,82.47f,"EX","",153,571680,false,Mode.MEGAMIX);
 		RunTest("test71.png",520,36,0,0,0,104.91f,"EX","",556,888074,false,Mode.FUTURETONE);
